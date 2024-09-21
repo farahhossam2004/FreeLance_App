@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:freelance_app/views/home.dart';
+import 'package:freelance_app/views/login.dart';
+import 'package:freelance_app/widgets/login_signup_helper.dart';
 import 'package:freelance_app/widgets/text_field.dart';
 
 class SignUp extends StatefulWidget {
@@ -100,31 +102,12 @@ class _SignUpState extends State<SignUp> {
                 height: 20,
               ),
               //============================================
-              SizedBox(
-              height: 50,
-              width: 150,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor:
-                      WidgetStateProperty.all<Color>(
-                          const Color.fromARGB(255, 30, 193, 18)),
-                ),
-                onPressed: () { // bool value to disable the button when he didn't choose an option 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
-                  );
-                }  ,
-                child: const Text(
-                  "Next",
-                  style:  TextStyle(
-                    color: Colors.white,
-                    fontSize:  20 ,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
+              // Next Button
+              SignUpLoginHelper().getNextButton(1, const Login(), context),
+              //==========================================================
+              const SizedBox(height: 15,),
+              //==========================================================
+              SignUpLoginHelper().getCustomLink(const Login(), context, "Login" , "Do you Have an Account ?  ")
             ],
           )),
     );

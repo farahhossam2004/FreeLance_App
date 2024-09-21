@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -8,7 +10,8 @@ class CustomTextField extends StatelessWidget {
   // ignore: non_constant_identifier_names
   final double Textfieldwidth;
   CustomTextField(
-      {super.key,
+      {
+      super.key,
       required this.text,
       this.icon, // Icon is optional
       // ignore: non_constant_identifier_names

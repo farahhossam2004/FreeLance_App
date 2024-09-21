@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:freelance_app/views/home.dart';
+import 'package:freelance_app/views/login.dart';
 import 'package:freelance_app/views/sign_up.dart';
+import 'package:freelance_app/widgets/login_signup_helper.dart';
 
 import '../widgets/choosable_contai.dart';
 
@@ -136,38 +138,7 @@ class _StartState extends State<Start> {
               height: 20,
             ),
 //==========================================================================
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Already Have An Account  ",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SignUp()),
-                      );
-                    },
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 32, 189, 40),
-                        fontSize: 17,
-                        decoration: TextDecoration
-                            .underline, // Optional: underline text
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            SignUpLoginHelper().getCustomLink(const Login(), context, "Login" , "Already Have An Account  ")
 //===============================================================================
           ],
         ),
