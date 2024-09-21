@@ -49,12 +49,12 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 198, 194, 194)),
                   child: const Text(
                     'Reset Filter',
-                    style: TextStyle(color: Color.fromARGB(255, 24, 45, 51)),
+                    style: TextStyle(color: Colors.green),
                   ),
                 ),
                 ElevatedButton(
                   onPressed: _applyFilters,
-                  style: ElevatedButton.styleFrom(backgroundColor: Color.fromARGB(255, 24, 45, 51)),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                   child: const Text(
                     'Apply Filter',
                     style: TextStyle(color: Colors.white),
@@ -74,7 +74,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
-          borderSide: const BorderSide(color: Colors.blue, width: 1),
+          borderSide: const BorderSide(color: Colors.green, width: 1),
         ),
       ),
       hint: const Text('Select Category'),
@@ -106,7 +106,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
-          borderSide: const BorderSide(color: Colors.blue, width: 1),
+          borderSide: const BorderSide(color: Colors.green, width: 1),
         ),
       ),
       hint: const Text('Select Country'),
@@ -210,7 +210,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   hintText: 'Min',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: const BorderSide(color: Colors.blue, width: 1),
+                    borderSide: const BorderSide(color: Colors.green, width: 1),
                   ),
                 ),
                 onChanged: (value) => minPrice = value,
@@ -224,7 +224,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   hintText: 'Max',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: const BorderSide(color: Colors.blue, width: 1),
+                    borderSide: const BorderSide(color: Colors.green, width: 1),
                   ),
                 ),
                 onChanged: (value) => maxPrice = value,

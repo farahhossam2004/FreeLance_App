@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/job_model.dart';
+import 'package:freelance_app/views/job_details_post.dart';
 import 'package:freelance_app/widgets/job_post.dart';
 
 class WallPage extends StatelessWidget {
@@ -11,7 +12,17 @@ class WallPage extends StatelessWidget {
           Expanded(
               child: ListView.builder(
             itemBuilder: (context, index) {
-              return JobPost(job: jobs[index]);
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => JobDetailsPost(job: jobs[index]),
+                    ),
+                  );
+                },
+                child: Expanded(child: JobPost(job: jobs[index], isPostDetailed: false,)),
+              );
             },
             itemCount: jobs.length,
           )),
