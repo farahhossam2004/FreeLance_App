@@ -8,7 +8,6 @@ import 'package:freelance_app/views/wall.dart';
 import 'package:freelance_app/widgets/bottom_nav_bar.dart';
 import 'package:freelance_app/widgets/filter_drawer.dart';
 
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -20,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedScreenIndex = 0;
 
   final List<Widget> _screens = [
-    WallPage(),
+    WallPage(),           // Home page
     ChatScreen(),
     JobsScreen(),
     BookmarkedJobsPage(),
@@ -49,31 +48,33 @@ class _HomeScreenState extends State<HomeScreen> {
             backgroundImage: AssetImage('assets/profile.jpeg'),
           ),
         ),
-        actions: [
-          Builder(
-            builder: (context) {
-              return Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.black, width: 1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                child: IconButton(
-                  onPressed: () {
-                    Scaffold.of(context).openEndDrawer();
+        // Conditionally show actions based on the selected screen
+        actions: _selectedScreenIndex == 0
+            ? [
+                Builder(
+                  builder: (context) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.black, width: 1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                      child: IconButton(
+                        onPressed: () {
+                          Scaffold.of(context).openEndDrawer();
+                        },
+                        icon: const Icon(Icons.filter_list),
+                      ),
+                    );
                   },
-                  icon: const Icon(Icons.filter_list),
                 ),
-              );
-            },
-          ),
-        ],
+              ]
+            : [], // No actions for other pages
       ),
-      endDrawer: FilterDrawer(),
+      endDrawer: _selectedScreenIndex == 0 ? FilterDrawer() : null,
       body: _screens[_selectedScreenIndex],
-      bottomNavigationBar: BottomNavBar(onTabSelected: _onTabSelected)
-
-  );
+      bottomNavigationBar: BottomNavBar(onTabSelected: _onTabSelected),
+    );
   }
 }
