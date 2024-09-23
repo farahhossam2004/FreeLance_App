@@ -1,72 +1,133 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
+  //=========================================
+  // For Decoration
   final String text;
   final IconData? icon; // Optional icon parameter
   final IconData? icontextfield;
-  bool obsecuretext;
-  // ignore: non_constant_identifier_names
+  final bool initialObsecureText; // Set initial value for obsecure text
+
+  //===================================
   final double Textfieldwidth;
-  CustomTextField(
-      {
-      super.key,
-      required this.text,
-      this.icon, // Icon is optional
-      // ignore: non_constant_identifier_names
-      required this.Textfieldwidth,
-      required this.obsecuretext,
-      this.icontextfield
-      });
+  final double Textfieldheight;
+//=============================================
+// For Form
+  final TextEditingController controller; // Add this line
+  final String ErrorText;
+
+  CustomTextField({
+    super.key,
+    required this.text,
+    this.icon, // Icon is optional
+    required this.Textfieldwidth,
+    required this.initialObsecureText,
+    this.icontextfield,
+    required this.ErrorText,
+    required this.controller,
+    required this.Textfieldheight,
+  });
+
+  @override
+  State<CustomTextField> createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  // No need for a local TextEditingController
+  // var input = TextEditingController(); // Remove this line
+
+  bool _obsecureText = true;
+  IconData _icontextfield = Icons.visibility_off;
+
+  @override
+  void initState() {
+    super.initState();
+    _obsecureText = widget.initialObsecureText;
+    if (widget.icontextfield != null) {
+      _icontextfield = widget.icontextfield!;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = Textfieldwidth;
-
+    //===============================================
+    final screenWidth = widget.Textfieldwidth;
+    final screenHeight = widget.Textfieldheight;
+    //==================================================
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // Align text to the start
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Text(
-                text, // Display the passed text
+                widget.text,
                 style: const TextStyle(
-                    fontSize: 15,
-                    fontStyle: FontStyle.normal,
-                    fontWeight: FontWeight.bold),
+                  fontSize: 15,
+                  fontStyle: FontStyle.normal,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              const SizedBox(width: 5), // Add some space between text and icon
-              if (icon != null) Icon(icon), // Display the icon if provided
+              const SizedBox(width: 5),
+              if (widget.icon != null) Icon(widget.icon),
             ],
           ),
-          const SizedBox(height: 8), // Space between text and TextField
+          const SizedBox(height: 6),
           SizedBox(
             width: screenWidth,
-            height: 40,
-            child: TextField(
-              obscureText: obsecuretext,
+            height: screenHeight,
+            //===============================For Controller==============================
+            child: TextFormField(
+              
+              controller: widget.controller, // Use the passed controller
+              
+              validator: (value) {
+                if (value == null || value.isEmpty) { // return the text error if the field is empty 
+                  return widget.ErrorText;
+                } else {
+                  return null;
+                } // Return null if valid
+              },
+
+              //=======================================For Design the text filed ================================
+              
+              obscureText: _obsecureText,
+              
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(
-                    vertical: 10.0, horizontal: 10.0), // Center the text
+                  vertical: 10.0,
+                  horizontal: 10.0,
+                ),
                 border: const OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Colors.grey), // Light grey border
+                  borderSide: BorderSide(color: Colors.grey),
                 ),
                 enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Colors.grey), // Light grey when not focused
+                  borderSide: BorderSide(color: Colors.grey),
                 ),
                 focusedBorder: const OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Colors.green), // Green when focused
+                  borderSide: BorderSide(color: Colors.green),
                 ),
-                suffixIcon: (icontextfield != null) ? Icon(icontextfield) : null  
+                suffixIcon: widget.icontextfield != null &&
+                        widget.initialObsecureText != false
+                    ? IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _obsecureText = !_obsecureText;
+                            _icontextfield = _obsecureText
+                                ? Icons.visibility_off
+                                : Icons.remove_red_eye;
+                          });
+                        },
+                        icon: Icon(_icontextfield),
+                      )
+                    : widget.icontextfield != null &&
+                            widget.initialObsecureText != true
+                        ? Icon(widget.icontextfield)
+                        : null,
               ),
             ),
-          ),
+          )
         ],
       ),
     );
