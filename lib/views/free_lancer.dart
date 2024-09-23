@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/views/login.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
 
@@ -164,7 +165,7 @@ class FreeLancer extends StatelessWidget {
                     height: screenHeight / 30,
                   ),
 
-                      ProfileHelpers().getProfileEndButton(title: "Contact", context: context, page: Login())
+                      ProfileHelpers().getProfileEndButton(title: "Contact", context: context, page: const HomeScreen())
                 ],
               ),
             ),

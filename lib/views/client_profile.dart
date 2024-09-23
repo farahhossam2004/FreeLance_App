@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/views/login.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
 
@@ -71,7 +72,7 @@ class ClientProfile extends StatelessWidget {
                   ProfileHelpers().getProfileEndButton(
                     title: "Profile Settings",
                     context: context,
-                    page: Login(),
+                    page: const HomeScreen(),
                   ),
                 ],
               ),
