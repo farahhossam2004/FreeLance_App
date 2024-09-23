@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:freelance_app/views/client_profile.dart';
+import 'package:freelance_app/views/free_lancer.dart';
 import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/views/login.dart';
 import 'package:freelance_app/views/sign_up.dart';
@@ -118,10 +120,16 @@ class _StartState extends State<Start> {
                           const Color.fromARGB(255, 86, 88, 86)),
                 ),
                 onPressed: boxSelected?() { // bool value to disable the button when he didn't choose an option 
+                  freelancerSelected?
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
-                  );
+                    MaterialPageRoute(builder: (context) => const FreeLancer()),
+                  ) :
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ClientProfile()),
+                  )
+                  ;
                 } : null ,
                 child: Text(
                   boxSelected ? (freelancerSelected? "join as freelancer" : "join as client") : "Choose a role",
