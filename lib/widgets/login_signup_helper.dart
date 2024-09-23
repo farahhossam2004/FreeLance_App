@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 
 class SignUpLoginHelper {
-  Widget getNextButton(int choice, Widget page, BuildContext context,
-      [var FormKey, List<TextEditingController>? controllers, int? option]) {
+  Widget getNextButton({
+  required int choice,
+  required Widget page,
+  required BuildContext context,
+  var FormKey, 
+  List<TextEditingController>? controllers, 
+  int? option,
+}) {
     // For Normal Buttons that navigate only to another page ================================
     if (choice == 1) {
       return SizedBox(

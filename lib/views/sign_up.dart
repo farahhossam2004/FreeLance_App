@@ -139,8 +139,7 @@ class _SignUpState extends State<SignUp> {
                 ),
                 //============================================
                 // Next Button
-                SignUpLoginHelper().getNextButton(
-                    2, Login(), context, FormKey, controllers, 1),
+                SignUpLoginHelper().getNextButton(choice :2 , page: Login(), context : context, FormKey: FormKey , controllers: controllers, option:  1),
 
                 //==========================================================
                 const SizedBox(
