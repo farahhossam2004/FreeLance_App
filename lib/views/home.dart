@@ -19,12 +19,12 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedScreenIndex = 0;
 
   final List<Widget> _screens = [
-    WallPage(),           // Home page
-    ChatScreen(),
-    JobsScreen(),
-    BookmarkedJobsPage(),
-    NotficationsScreen(),
-    Profile(),
+    const WallPage(),           // Home page
+    const ChatScreen(),
+    const JobsScreen(),
+    const BookmarkedJobsPage(),
+    const NotficationsScreen(),
+    const Profile(),
   ];
   
   void _onTabSelected(int index) {

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:freelance_app/views/client_profile.dart';
-import 'package:freelance_app/views/free_lancer.dart';
-import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/views/login.dart';
+import 'package:freelance_app/views/second_freelancer_signup.dart';
 import 'package:freelance_app/views/sign_up.dart';
 import 'package:freelance_app/widgets/login_signup_helper.dart';
 
@@ -123,11 +121,11 @@ class _StartState extends State<Start> {
                   freelancerSelected?
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const FreeLancer()),
+                    MaterialPageRoute(builder: (context) => const SignUp(role: "FreeLancer")),
                   ) :
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const ClientProfile()),
+                    MaterialPageRoute(builder: (context) => const SignUp(role: "Client")),
                   )
                   ;
                 } : null ,

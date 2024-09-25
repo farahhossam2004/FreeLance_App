@@ -1,6 +1,9 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
+import 'package:freelance_app/views/free_lancer.dart';
 import 'package:freelance_app/views/home.dart';
-import 'package:freelance_app/views/sign_up.dart';
+import 'package:freelance_app/views/start.dart';
 import 'package:freelance_app/widgets/login_signup_helper.dart';
 import 'package:freelance_app/widgets/text_field.dart';
 
@@ -10,7 +13,9 @@ class Login extends StatelessWidget {
   //========================================= For the form and custom text field ==================================
   var Email = TextEditingController();
   var Password = TextEditingController();
-  var FormKey = GlobalKey<FormState>(); // Form key
+  var FormKey = GlobalKey<FormState>();
+
+  Login({super.key}); // Form key
   //==============================================================================================================
 
   @override
@@ -110,13 +115,13 @@ class Login extends StatelessWidget {
 
               //===============================================================
               // next button
-              SignUpLoginHelper().getNextButton( choice: 2, page: const SignUp(), context:  context ,FormKey: FormKey, controllers:  controllers, option:  2),
+              SignUpLoginHelper().getNextButton( choice: 2, page:  FreeLancerProfile(), context:  context ,FormKey: FormKey, controllers:  controllers, option:  2),
               //===================================================
               const SizedBox(
                 height: 20,
               ),
               //==================================================
-              SignUpLoginHelper().getCustomLink(const SignUp(), context,
+              SignUpLoginHelper().getCustomLink(const Start(), context,
                   "Sign Up !", "Don't Have an Account  ")
             ],
           ),

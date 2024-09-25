@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:freelance_app/models/person_helpers.dart';
 import 'package:freelance_app/views/home.dart';
-import 'package:freelance_app/views/login.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
 
-class FreeLancer extends StatelessWidget {
-  const FreeLancer({super.key});
+class FreeLancerProfile extends StatelessWidget {
+  FreeLancerProfile({super.key});
 
   @override
   Widget build(BuildContext context) {
     //double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
+    List<String> skills =
+        PersonHelpers.GetCurrentfreeLancer().getFreelancerskills;
+    List<String> languages =
+        PersonHelpers.GetCurrentfreeLancer().getFreeLancerLanguages;
 
     return Scaffold(
       appBar: AppBar(
@@ -25,37 +30,48 @@ class FreeLancer extends StatelessWidget {
                 children: [
                   //==========================================
                   ProfileHelpers().getTopProfile(
-                    name: "Name ",
-                    role: "Role : FreeLancer",
-                    rate: 4.2,
+                    name: PersonHelpers.GetCurrentfreeLancer().getPersonName,
+                    role: PersonHelpers.GetCurrentfreeLancer().getPersonrole,
+                    rate: PersonHelpers.CalculatePersonRate(PersonHelpers.GetCurrentfreeLancer()),
                   ),
                   //=========================================
                   SizedBox(height: screenHeight / 20),
 
-                  const Divider(thickness: 1, color: Colors.grey,),
+                  const Divider(
+                    thickness: 1,
+                    color: Colors.grey,
+                  ),
                   SizedBox(height: screenHeight / 20),
-                  
+
                   //====================================================
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ProfileHelpers().getProfileContainer(
-                          title: "Country",
-                          item: "Egypt",
-                          ),
+                        title: "Country",
+                        item: PersonHelpers.GetCurrentfreeLancer()
+                            .getPersonCountry,
+                      ),
                       ProfileHelpers().getProfileContainer(
-                          title: "Jops",
-                          item: "14",
-                          ),
+                        title: "Jops",
+                        item: PersonHelpers.CalculatePersonJops(
+                                PersonHelpers.GetCurrentfreeLancer())
+                            .toString(),
+                      ),
                       ProfileHelpers().getProfileContainer(
-                          title: "Price",
-                          item: "30 \$/h",
-                          ),
+                        title: "Price",
+                        item: (PersonHelpers.GetCurrentfreeLancer()
+                                .getFreelancerPrice)
+                            .toString(),
+                      ),
                     ],
                   ),
                   //==============================================
                   SizedBox(height: screenHeight / 20),
-                  const Divider(thickness: 1, color: Colors.grey,),
+                  const Divider(
+                    thickness: 1,
+                    color: Colors.grey,
+                  ),
                   SizedBox(height: screenHeight / 25),
                   //=============================================
                   const Center(
@@ -77,12 +93,11 @@ class FreeLancer extends StatelessWidget {
                             8, // Adjust based on the height of your skill container
                         child: ListView(
                           scrollDirection: Axis.horizontal,
-                          children: [
-                            ProfileHelpers().skillcontainer(title: "UI/UX"),
-                            ProfileHelpers().skillcontainer(title: "Dart"),
-                            ProfileHelpers().skillcontainer(title: "Java "),
-                            ProfileHelpers().skillcontainer(title: "MobileApp"),
-                          ],
+                          children: 
+                            skills.map((skill) {
+                              return ProfileHelpers()
+                                  .skillcontainer(title: skill);
+                            }).toList()
                         ),
                       ),
                       //==================================================
@@ -93,21 +108,21 @@ class FreeLancer extends StatelessWidget {
                             13, // Adjust based on the height of your skill container
                         child: ListView(
                           scrollDirection: Axis.horizontal,
-                          children: [
-                            ProfileHelpers().skillcontainer(title: "Kotlin"),
-                            ProfileHelpers().skillcontainer(title: "C++"),
-                            ProfileHelpers().skillcontainer(title: "Android"),
-                            ProfileHelpers().skillcontainer(title: "Flutter"),
-                          ],
+                          children: skills.map((skill) {
+                              return ProfileHelpers()
+                                  .skillcontainer(title: skill);
+                            }).toList()
                         ),
                       ),
                     ],
                   ),
 
                   SizedBox(height: screenHeight / 20),
-                  const Divider(thickness: 1, color: Colors.grey,),
+                  const Divider(
+                    thickness: 1,
+                    color: Colors.grey,
+                  ),
                   SizedBox(height: screenHeight / 25),
-
 
                   const Text(
                     "About ",
@@ -123,19 +138,25 @@ class FreeLancer extends StatelessWidget {
 
                   Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: const Color.fromARGB(255, 181, 177, 177)),
-                      borderRadius: BorderRadius.circular(40)
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: Text("sdjijhbidsjfbkdjhhkfdsjfkjsdhkjhkdsjhk iwughfwigiwugh iqiejfhiehjgfi ieuufhiwefuh ddjhfbksjbhfkjfebekej kjdbfkdsbj fbksdjbgksjbdk dkjglsjknksj nljknwl jkhngklkrjgnlrjkhrglsfjkhlgjkhn l kghjolgkhlerk l" , 
-                      style:  TextStyle(fontSize: 18 , ),
+                        border: Border.all(
+                            color: const Color.fromARGB(255, 181, 177, 177)),
+                        borderRadius: BorderRadius.circular(40)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        PersonHelpers.GetCurrentfreeLancer().getFreelancerAbout,
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
                       ),
                     ),
                   ),
 
                   SizedBox(height: screenHeight / 20),
-                  const Divider(thickness: 1, color: Colors.grey,),
+                  const Divider(
+                    thickness: 1,
+                    color: Colors.grey,
+                  ),
 
                   SizedBox(
                     height: screenHeight / 30,
@@ -150,22 +171,25 @@ class FreeLancer extends StatelessWidget {
                   ),
 
                   SizedBox(
-                        height: screenHeight / 8, // Adjust based on the height of your skill container
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            ProfileHelpers().skillcontainer(title: "Englisch"),
-                            ProfileHelpers().skillcontainer(title: "Germany"),
-                            ProfileHelpers().skillcontainer(title: "Arabic"),
-                          ],
-                        ),
-                      ),
-                      
-                      SizedBox(
+                    height: screenHeight /
+                        8, // Adjust based on the height of your skill container
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: languages.map((language) {
+                              return ProfileHelpers()
+                                  .skillcontainer(title: language);
+                            }).toList()
+                    ),
+                  ),
+
+                  SizedBox(
                     height: screenHeight / 30,
                   ),
 
-                      ProfileHelpers().getProfileEndButton(title: "Contact", context: context, page: const HomeScreen())
+                  ProfileHelpers().getProfileEndButton(
+                      title: "Contact",
+                      context: context,
+                      page: const HomeScreen())
                 ],
               ),
             ),

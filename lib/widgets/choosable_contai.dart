@@ -7,12 +7,12 @@ class ChoosableContainer extends StatelessWidget {
   final Text text;
 
   const ChoosableContainer({
-    Key? key,
+    super.key,
     required this.isSelected,
     required this.onToggle,
     required this.icon,
     required this.text,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

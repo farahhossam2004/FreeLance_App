@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:freelance_app/models/person.dart';
+import 'package:freelance_app/models/person_helpers.dart';
 import 'package:freelance_app/views/home.dart';
-import 'package:freelance_app/views/login.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
 
 class ClientProfile extends StatelessWidget {
@@ -9,6 +10,7 @@ class ClientProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+    
 
     return Scaffold(
       appBar: AppBar(
@@ -23,9 +25,10 @@ class ClientProfile extends StatelessWidget {
                 children: [
                   // Top Profile section
                   ProfileHelpers().getTopProfile(
-                    name: "Client Name",
-                    role: "Role : Client",
-                    rate: 3.5,
+                    name: PersonHelpers.GetCurrentPerson().getPersonName,
+                    role: PersonHelpers.GetCurrentPerson().getPersonrole,
+                    rate: PersonHelpers.CalculatePersonRate(
+                        PersonHelpers.GetCurrentPerson()),
                   ),
 
                   SizedBox(height: screenHeight / 20),
@@ -38,11 +41,12 @@ class ClientProfile extends StatelessWidget {
                     children: [
                       ProfileHelpers().getProfileContainer(
                         title: "Country",
-                        item: "Egypt",
+                        item: PersonHelpers.GetCurrentPerson().getPersonCountry,
                       ),
                       ProfileHelpers().getProfileContainer(
                         title: "Jobs",
-                        item: "14",
+                        item: PersonHelpers.CalculatePersonJops(
+                            PersonHelpers.GetCurrentPerson()),
                       ),
                     ],
                   ),

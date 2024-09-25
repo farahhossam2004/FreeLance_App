@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class FilterDrawer extends StatefulWidget {
+  const FilterDrawer({super.key});
+
   @override
   _FilterDrawerState createState() => _FilterDrawerState();
 }

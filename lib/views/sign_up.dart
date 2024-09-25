@@ -1,14 +1,19 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
-import 'package:freelance_app/views/home.dart';
+import 'package:freelance_app/views/client_profile.dart';
 import 'package:freelance_app/views/login.dart';
+import 'package:freelance_app/views/second_freelancer_signup.dart';
 import 'package:freelance_app/widgets/drop_down_list.dart';
 import 'package:freelance_app/widgets/login_signup_helper.dart';
 import 'package:freelance_app/widgets/text_field.dart';
 
 class SignUp extends StatefulWidget {
-  //final String role;
+  final String role;
 
-  const SignUp({super.key});
+  //Person current_person = new Person(personName: personName, role: role, country: country)
+
+  const SignUp({super.key, required this.role});
 
   @override
   State<SignUp> createState() => _SignUpState();
@@ -20,9 +25,33 @@ class _SignUpState extends State<SignUp> {
   var Email = TextEditingController();
   var Password = TextEditingController();
   var CountryChoosed = TextEditingController();
-
   var FormKey = GlobalKey<FormState>();
 
+  //=======================================
+  late Widget page;
+  late int option;
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the 'page' variable based on the role
+    if (widget.role == 'FreeLancer') {
+      page =  SecondFreelancerSignup(
+        Email: Email.text,
+        country: CountryChoosed.text,
+        password: Password.text,
+        first_name: Fname.text,
+        second_name: Sname.text,
+      );
+      option = 1;
+    } else {
+      page = const ClientProfile();
+      option = 3;
+    }
+  }
+
+//===================================================================
+
+//===================================================================
   @override
   Widget build(BuildContext context) {
     //for the form
@@ -37,6 +66,7 @@ class _SignUpState extends State<SignUp> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double textformheight = screenHeight / 20;
+    //=================================================
 
     return Scaffold(
       appBar: AppBar(
@@ -139,7 +169,14 @@ class _SignUpState extends State<SignUp> {
                 ),
                 //============================================
                 // Next Button
-                SignUpLoginHelper().getNextButton(choice :2 , page: Login(), context : context, FormKey: FormKey , controllers: controllers, option:  1),
+                SignUpLoginHelper().getNextButton(
+                    choice: 2,
+                    page: page,
+                    context: context,
+                    FormKey: FormKey,
+                    controllers: controllers,
+                    option: option,
+                    ),
 
                 //==========================================================
                 const SizedBox(

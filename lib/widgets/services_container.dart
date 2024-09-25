@@ -46,7 +46,7 @@ class ServicesForYou extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          Container(
+          SizedBox(
               height: 180,
               child: ListView(
                 children: const [

@@ -16,7 +16,7 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController controller; // Add this line
   final String ErrorText;
 
-  CustomTextField({
+  const CustomTextField({
     super.key,
     required this.text,
     this.icon, // Icon is optional
