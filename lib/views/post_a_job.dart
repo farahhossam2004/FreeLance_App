@@ -1,5 +1,11 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:freelance_app/models/job_model.dart';
+import 'package:freelance_app/views/home.dart';
+import 'package:freelance_app/widgets/drop_down_list.dart';
+import 'package:freelance_app/widgets/multi_select_skills.dart';
 import 'package:freelance_app/widgets/text_field.dart';
+import 'package:freelance_app/services/array_data_for_test.dart';
 
 class PostAJobScreen extends StatefulWidget {
   const PostAJobScreen({super.key});
@@ -9,25 +15,22 @@ class PostAJobScreen extends StatefulWidget {
 }
 
 class _PostAJobScreenState extends State<PostAJobScreen> {
+  String? selectedCategory;
+  String? selectedSubcategory;
+  List<String> subcategories = [];
+  List<String?> selectedSkills = [];
+
   var titleController = TextEditingController();
   var descriptionController = TextEditingController();
   var budgetController = TextEditingController();
   var locationController = TextEditingController();
   var durationController = TextEditingController();
   var jobTypeController = TextEditingController();
+  var subCategoryController = TextEditingController();
   var clientNameController = TextEditingController();
   var formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    List<TextEditingController> controllers = [
-      titleController,
-      descriptionController,
-      budgetController,
-      locationController,
-      durationController,
-      jobTypeController,
-      clientNameController,
-    ];
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -44,53 +47,159 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          child: Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Column(
-                    children: [
-                      CustomTextField(
-                          text: 'Job Title',
-                          Textfieldwidth: screenWidth - 40,
-                          initialObsecureText: false,
-                          ErrorText: 'You should enter a job title',
-                          controller: titleController,
-                          Textfieldheight: textformheight),
-                      CustomTextField(
-                          text: 'Job Description',
-                          Textfieldwidth: screenWidth - 40,
-                          initialObsecureText: false,
-                          ErrorText: 'You shoud enter the job description',
-                          controller: descriptionController,
-                          Textfieldheight: textformheight),
-                      Row(
-                        children: [
-                          CustomTextField(
-                              text: '\$ Budget',
-                              Textfieldwidth: screenWidth / 2 - 40,
-                              initialObsecureText: false,
-                              ErrorText: 'Enter a budget',
-                              controller: budgetController,
-                              Textfieldheight: textformheight),
-                              const SizedBox(width: 10,),
-                              CustomTextField(
-                                text: 'Location',
+          child: SingleChildScrollView(
+            child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Column(
+                      children: [
+                        CustomTextField(
+                            text: 'Job Title',
+                            Textfieldwidth: screenWidth - 40,
+                            initialObsecureText: false,
+                            ErrorText: 'You should enter a job title',
+                            controller: titleController,
+                            dataType: 'str',
+                            Textfieldheight: textformheight),
+                        CustomTextField(
+                            text: 'Job Description',
+                            Textfieldwidth: screenWidth - 40,
+                            initialObsecureText: false,
+                            ErrorText: 'You shoud enter the job description',
+                            controller: descriptionController,
+                            dataType: 'str',
+                            Textfieldheight: textformheight),
+                        Row(
+                          children: [
+                            CustomTextField(
+                                text: '\$ Budget',
                                 Textfieldwidth: screenWidth / 2 - 40,
                                 initialObsecureText: false,
-                                ErrorText: 'Enter a location',
-                                controller: locationController,
-                                Textfieldheight: textformheight,
-                              ),
-                        ],
-                      )
-                    ],
-                  )
-                ],
-              )),
+                                ErrorText: 'Enter a budget',
+                                controller: budgetController,
+                                dataType: 'num',
+                                Textfieldheight: textformheight),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            CustomTextField(
+                              text: 'Duration',
+                              Textfieldwidth: screenWidth / 2 - 40,
+                              initialObsecureText: false,
+                              ErrorText: 'Enter the duration',
+                              controller: durationController,
+                              dataType: '',
+                              Textfieldheight: textformheight,
+                            ),
+                          ],
+                        ),
+                        DropDownList(
+                          TextError: "Enter job location ",
+                          controller: locationController,
+                          items: locationsList,
+                          title: 'Location',
+                        ),
+                        DropDownList(
+                          TextError: 'Enter the category of the job',
+                          controller: jobTypeController,
+                          items: jobCategories.keys.toList(),
+                          title: 'Job Type',
+                          onChanged: (newValue) {
+                            setState(() {
+                              selectedCategory = newValue;
+                              if (selectedCategory != null) {
+                                selectedSubcategory = null;
+                                subcategories = selectedCategory != null
+                                    ? jobCategories[selectedCategory]!
+                                        .keys
+                                        .toList()
+                                    : [];
+                                subCategoryController.clear();
+                              } else {
+                                subcategories = [];
+                              }
+                            });
+                          },
+                        ),
+                        DropDownList(
+                          TextError: 'Enter the sub category',
+                          controller: subCategoryController,
+                          items: subcategories,
+                          title: 'Select Subcategory',
+                          onChanged: (newValue) {
+                            setState(() {
+                              selectedSubcategory = newValue;
+                            });
+                          },
+                        ),
+                        // Multi Select Skills
+                        if (selectedCategory != null &&
+                            selectedSubcategory != null)
+                          MultiSelectSkills(
+                              category: selectedCategory!,
+                              subCategory: selectedSubcategory!,
+                              onSelectionChanged: (List<String?> skills) {
+                                setState(() {
+                                  selectedSkills = skills;
+                                });
+                              },
+                              jobCategories: jobCategories),
+
+                        ElevatedButton(
+                          onPressed: _savePost,
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 12),
+                            backgroundColor:
+                                Colors.green, // Change color as needed
+                          ),
+                          child: const Text(
+                            'Save Job Post',
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                )),
+          ),
         ));
+  }
+
+  void _savePost() {
+    if (formKey.currentState?.validate() ?? false) {
+      // Collect all data
+      final jobData = JobModel(
+          title: titleController.text,
+          description: descriptionController.text,
+          budget: budgetController.text,
+          tags: selectedSkills,
+          location: locationController.text,
+          duration: durationController.text,
+          jobType: jobTypeController.text,
+          clientName: 'client');
+      jobs.add(jobData);
+
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.success,
+        animType: AnimType.rightSlide,
+        title: 'Success',
+        desc: 'Job posted successfully',
+        btnCancelOnPress: () {},
+        btnOkOnPress: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()));
+        },
+      ).show();
+      // Navigator.pushReplacementNamed(context, '/home', arguments: jobData);
+    }
   }
 }

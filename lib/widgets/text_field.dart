@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatefulWidget {
@@ -15,6 +17,7 @@ class CustomTextField extends StatefulWidget {
 // For Form
   final TextEditingController controller; // Add this line
   final String ErrorText;
+  final String dataType;
 
   const CustomTextField({
     super.key,
@@ -26,6 +29,7 @@ class CustomTextField extends StatefulWidget {
     required this.ErrorText,
     required this.controller,
     required this.Textfieldheight,
+    required this.dataType,
   });
 
   @override
@@ -79,21 +83,38 @@ class _CustomTextFieldState extends State<CustomTextField> {
             height: screenHeight,
             //===============================For Controller==============================
             child: TextFormField(
-              
               controller: widget.controller, // Use the passed controller
-              
+
               validator: (value) {
-                if (value == null || value.isEmpty) { // return the text error if the field is empty 
+                if (value == null || value.isEmpty) {
+                  // return the text error if the field is empty
                   return widget.ErrorText;
+                } else if (widget.dataType == 'str') {
+                  if (RegExp(r'\d').hasMatch(value)) {
+                    return 'Please enter a valid string (no numbers allowed)';
+                  }
+                } else if (widget.dataType == 'num') {
+                  if (double.tryParse(value) == null) {
+                    return 'Please enter a valid number';
+                  }
+                } else if (widget.dataType == 'email') {
+                  // Regex for validating an email address
+                  final emailRegex = RegExp(
+                    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                  );
+                  if (!emailRegex.hasMatch(value)) {
+                    return 'Please enter a valid email address';
+                  }
                 } else {
                   return null;
-                } // Return null if valid
+                }
+                 // Return null if valid
               },
 
               //=======================================For Design the text filed ================================
-              
+
               obscureText: _obsecureText,
-              
+
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(
                   vertical: 10.0,

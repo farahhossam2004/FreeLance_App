@@ -36,94 +36,98 @@ class Login extends StatelessWidget {
       ),
 
       //==============================================
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-
-        // ==============================================Form start pass the key ==========================
-        child: Form(
-          key: FormKey, // form key 
-          child: Column(
-            children: [
-              const SizedBox(height: 50),
-
-              const Center(
-                child: Text(
-                  "Login",
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 4, 4, 4),
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+        
+          // ==============================================Form start pass the key ==========================
+          child: Form(
+            key: FormKey, // form key 
+            child: Column(
+              children: [
+                const SizedBox(height: 50),
+        
+                const Center(
+                  child: Text(
+                    "Login",
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 4, 4, 4),
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-
-              const SizedBox(height: 10),
-
-              const Divider(
-                color: Colors.black, // Color of the line
-                thickness: 1, // Thickness of the line
-              ),
-              //========================================================================
-              const SizedBox(
-                height: 50,
-              ),
-              //==================================================================================
-              CustomTextField(
-                text: "Email",
-                Textfieldwidth: screenWidth,
-                Textfieldheight: textFieldHeight,
-                initialObsecureText: false,
-                icon: Icons.email_outlined,
-                ErrorText: "Enter Your Email",
-                controller: Email,
-              ),
-              //===========================
-              const SizedBox(
-                height: 20,
-              ),
-              //===========================
-              CustomTextField(
-                text: "Password",
-                Textfieldheight: textFieldHeight,
-                Textfieldwidth: screenWidth,
-                initialObsecureText: true,
-                icon: Icons.no_encryption_gmailerrorred,
-                icontextfield: Icons.remove_red_eye,
-                ErrorText: "Enter Your Password",
-                controller: Password,
-              ),
-
-              
-              SignUpLoginHelper().getCustomLink(
-                  const HomeScreen(), context, "Forget your password ? "),
-              //===============================
-              //==========================================================================
-
-              const SizedBox(
-                height: 40,
-              ),
-
-              const Divider(
-                color: Colors.black, // Color of the line
-                thickness: 1, // Thickness of the line
-              ),
-
-              //======================================================
-
-              const SizedBox(
-                height: 40,
-              ),
-
-              //===============================================================
-              // next button
-              SignUpLoginHelper().getNextButton( choice: 2, page:  FreeLancerProfile(), context:  context ,FormKey: FormKey, controllers:  controllers, option:  2),
-              //===================================================
-              const SizedBox(
-                height: 20,
-              ),
-              //==================================================
-              SignUpLoginHelper().getCustomLink(const Start(), context,
-                  "Sign Up !", "Don't Have an Account  ")
-            ],
+        
+                const SizedBox(height: 10),
+        
+                const Divider(
+                  color: Colors.black, // Color of the line
+                  thickness: 1, // Thickness of the line
+                ),
+                //========================================================================
+                const SizedBox(
+                  height: 50,
+                ),
+                //==================================================================================
+                CustomTextField(
+                  text: "Email",
+                  Textfieldwidth: screenWidth,
+                  Textfieldheight: textFieldHeight,
+                  initialObsecureText: false,
+                  icon: Icons.email_outlined,
+                  ErrorText: "Enter Your Email",
+                  controller: Email,
+                  dataType: 'email'
+                ),
+                //===========================
+                const SizedBox(
+                  height: 20,
+                ),
+                //===========================
+                CustomTextField(
+                  text: "Password",
+                  Textfieldheight: textFieldHeight,
+                  Textfieldwidth: screenWidth,
+                  initialObsecureText: true,
+                  icon: Icons.no_encryption_gmailerrorred,
+                  icontextfield: Icons.remove_red_eye,
+                  ErrorText: "Enter Your Password",
+                  controller: Password,
+                  dataType: 'num'
+                ),
+        
+                
+                SignUpLoginHelper().getCustomLink(
+                    const HomeScreen(), context, "Forget your password ? "),
+                //===============================
+                //==========================================================================
+        
+                const SizedBox(
+                  height: 40,
+                ),
+        
+                const Divider(
+                  color: Colors.black, // Color of the line
+                  thickness: 1, // Thickness of the line
+                ),
+        
+                //======================================================
+        
+                const SizedBox(
+                  height: 40,
+                ),
+        
+                //===============================================================
+                // next button
+                SignUpLoginHelper().getNextButton( choice: 2, page:  FreeLancerProfile(), context:  context ,FormKey: FormKey, controllers:  controllers, option:  2),
+                //===================================================
+                const SizedBox(
+                  height: 20,
+                ),
+                //==================================================
+                SignUpLoginHelper().getCustomLink(const Start(), context,
+                    "Sign Up !", "Don't Have an Account  ")
+              ],
+            ),
           ),
         ),
       ),

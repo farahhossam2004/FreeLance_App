@@ -23,7 +23,7 @@ class _BottomNavBarState extends State<BottomNavBar>
     _motionTabBarController = MotionTabBarController(
       initialIndex: 1, // Set the initial tab index (default is the second tab)
       length:
-          6, // Set the total number of tabs (must match the number of tabs in your TabBar)
+          5, // Set the total number of tabs (must match the number of tabs in your TabBar)
       vsync: this, // 'vsync' is necessary for controlling animations
     );
   }
@@ -44,7 +44,7 @@ class _BottomNavBarState extends State<BottomNavBar>
       initialSelectedTab: "Home",
       labels: const [
         "Home",
-        "Chat",
+        
         "Jobs",
         "Saved",
         "Notfications",
@@ -52,7 +52,7 @@ class _BottomNavBarState extends State<BottomNavBar>
       ], // Tabs labels
       icons: const [
         Icons.home,
-        Icons.chat,
+        
         Icons.list_rounded,
         Icons.bookmark,
         Icons.notifications,
