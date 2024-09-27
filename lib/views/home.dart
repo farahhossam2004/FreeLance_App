@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:freelance_app/views/bookmarked.dart';
-import 'package:freelance_app/views/chat_screen.dart';
 import 'package:freelance_app/views/jobs_screen.dart';
 import 'package:freelance_app/views/notfications_screen.dart';
 import 'package:freelance_app/views/profile.dart';
 import 'package:freelance_app/views/wall.dart';
 import 'package:freelance_app/widgets/bottom_nav_bar.dart';
 import 'package:freelance_app/widgets/filter_drawer.dart';
-
+import 'package:freelance_app/services/array_data_for_test.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -20,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _screens = [
     const WallPage(),           // Home page
-    const ChatScreen(),
+    
     const JobsScreen(),
     const BookmarkedJobsPage(),
     const NotficationsScreen(),
@@ -37,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         // Conditionally show actions based on the selected screen
-        actions: _selectedScreenIndex == 0
+        actions: _selectedScreenIndex == 0 && mainRole == 'FreeLancer'
             ? [
                 Builder(
                   builder: (context) {
@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ]
             : [], // No actions for other pages
       ),
-      endDrawer: _selectedScreenIndex == 0 ? FilterDrawer() : null,
+      endDrawer: _selectedScreenIndex == 0 && mainRole == 'FreeLancer'? const FilterDrawer() : null,
       body: _screens[_selectedScreenIndex],
       bottomNavigationBar: BottomNavBar(onTabSelected: _onTabSelected),
     );

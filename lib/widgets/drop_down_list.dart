@@ -1,29 +1,41 @@
 import 'package:flutter/material.dart';
 
-class CountryDropdown extends StatefulWidget {
+class DropDownList extends StatefulWidget {
   final String TextError;
   final TextEditingController controller; // Add this line
+  final List<String> items;
+  final IconData? icon;
+  final String title;
+  final ValueChanged<String?>? onChanged;
 
-  const CountryDropdown(
-      {super.key, required this.TextError, required this.controller});
+  const DropDownList(
+      {super.key,
+      required this.TextError,
+      required this.controller,
+      required this.items,
+      this.icon,
+      required this.title,
+      this.onChanged});
 
   @override
   // ignore: library_private_types_in_public_api
   _CountryDropdownState createState() => _CountryDropdownState();
 }
 
-class _CountryDropdownState extends State<CountryDropdown> {
-  // List of countries
-  final List<String> countries = [
-    'Egypt',
-    'Saudi arabia',
-    'Qatar',
-    'Germany',
-    'Sudan'
-  ];
+class _CountryDropdownState extends State<DropDownList> {
+  String? selecteditem;
 
-  // Selected country
-  String? selectedCountry;
+  @override
+  void didUpdateWidget(covariant DropDownList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Reset selecteditem if the items list changes
+    if (widget.items != oldWidget.items) {
+      setState(() {
+        selecteditem = null;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,18 +44,17 @@ class _CountryDropdownState extends State<CountryDropdown> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            const Row(
+            Row(
               children: [
                 Text(
-                  "Country", // Display the passed text
-                  style: TextStyle(
+                  widget.title, // Display the passed text
+                  style: const TextStyle(
                       fontSize: 15,
                       fontStyle: FontStyle.normal,
                       fontWeight: FontWeight.bold),
                 ),
-                SizedBox(width: 5), // Add some space between text and icon
-                // Display the icon if provided
-                Icon(Icons.home)
+                const SizedBox(
+                    width: 5), // Add some space between text and icon
               ],
             ),
             //===========================================================================
@@ -58,11 +69,11 @@ class _CountryDropdownState extends State<CountryDropdown> {
                     EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               ),
               //============
-              value: selectedCountry,
-              hint: const Text('Choose your country'),
+              value: selecteditem,
+              hint: const Text('Choose an option'),
               icon: const Icon(Icons.arrow_circle_down_outlined),
               //============
-              items: countries.map((String country) {
+              items: widget.items.map((String country) {
                 return DropdownMenuItem<String>(
                   value: country,
                   child: Text(country),
@@ -71,8 +82,11 @@ class _CountryDropdownState extends State<CountryDropdown> {
               //============
               onChanged: (String? newValue) {
                 setState(() {
-                  selectedCountry = newValue!;
-                  widget.controller.text = selectedCountry!;
+                  selecteditem = newValue;
+                  widget.controller.text = selecteditem!;
+                  if (widget.onChanged != null) {
+                    widget.onChanged!(newValue);
+                  }
                 });
               },
 

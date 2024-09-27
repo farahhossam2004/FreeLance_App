@@ -190,6 +190,7 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
                         initialObsecureText: false,
                         ErrorText: "Talk about yourself",
                         controller: aboutme,
+                        dataType: 'str',
                         Textfieldheight: 100),
                     //===========================================
                     const Divider(

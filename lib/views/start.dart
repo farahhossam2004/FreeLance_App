@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:freelance_app/services/array_data_for_test.dart';
 import 'package:freelance_app/views/login.dart';
-import 'package:freelance_app/views/second_freelancer_signup.dart';
 import 'package:freelance_app/views/sign_up.dart';
 import 'package:freelance_app/widgets/login_signup_helper.dart';
 
@@ -117,23 +117,35 @@ class _StartState extends State<Start> {
                       : WidgetStateProperty.all<Color>(
                           const Color.fromARGB(255, 86, 88, 86)),
                 ),
-                onPressed: boxSelected?() { // bool value to disable the button when he didn't choose an option 
-                  freelancerSelected?
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const SignUp(role: "FreeLancer")),
-                  ) :
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const SignUp(role: "Client")),
-                  )
-                  ;
-                } : null ,
+                onPressed: boxSelected
+                    ? () {
+                        if (freelancerSelected) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const SignUp(role: "FreeLancer")));
+                          mainRole = 'FreeLancer';
+                        } else {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const SignUp(role: "Client")));
+                          mainRole = 'Client';
+                        }
+                        // bool value to disable the button when he didn't choose an option
+                      }
+                    : null,
                 child: Text(
-                  boxSelected ? (freelancerSelected? "join as freelancer" : "join as client") : "Choose a role",
-                  style:  TextStyle(
+                  boxSelected
+                      ? (freelancerSelected
+                          ? "join as freelancer"
+                          : "join as client")
+                      : "Choose a role",
+                  style: TextStyle(
                     color: Colors.white,
-                    fontSize: freelancerSelected? 12 : 15 ,
+                    fontSize: freelancerSelected ? 12 : 15,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -144,7 +156,8 @@ class _StartState extends State<Start> {
               height: 20,
             ),
 //==========================================================================
-            SignUpLoginHelper().getCustomLink( Login(), context, "Login" , "Already Have An Account  ")
+            SignUpLoginHelper().getCustomLink(
+                Login(), context, "Login", "Already Have An Account  ")
 //===============================================================================
           ],
         ),

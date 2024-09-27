@@ -3,7 +3,7 @@ class JobModel {
   final String description;
   final String budget;
   // final String date;
-  final List<String> tags;
+  final List<String?> tags;
   final String location;
   final String duration;
   final int? noOfPropsals;
@@ -14,7 +14,6 @@ class JobModel {
       {required this.title,
       required this.description,
       required this.budget,
-      
       required this.tags,
       required this.location,
       required this.duration,

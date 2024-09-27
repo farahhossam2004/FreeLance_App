@@ -120,7 +120,7 @@ class JobPost extends StatelessWidget {
               children: job.tags.map((tag) {
                 return Chip(
                   label: Text(
-                    tag,
+                    tag!,
                     style: const TextStyle(
                         color: Colors.orange, fontWeight: FontWeight.bold),
                   ),
