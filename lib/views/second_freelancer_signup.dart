@@ -240,7 +240,8 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                         FreeLancerProfile()), // Change FreelancerHome to your next screen widget
+                                      FreeLancerProfile()
+                                        ), // Change FreelancerHome to your next screen widget
                               );
                             }
                           }

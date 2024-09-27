@@ -9,6 +9,7 @@ import 'package:freelance_app/widgets/login_signup_helper.dart';
 import 'package:freelance_app/widgets/text_field.dart';
 
 class SignUp extends StatefulWidget {
+  
   final String role;
 
   //Person current_person = new Person(personName: personName, role: role, country: country)
@@ -30,6 +31,7 @@ class _SignUpState extends State<SignUp> {
   //=======================================
   late Widget page;
   late int option;
+  
   @override
   void initState() {
     super.initState();
@@ -51,7 +53,6 @@ class _SignUpState extends State<SignUp> {
 
 //===================================================================
 
-//===================================================================
   @override
   Widget build(BuildContext context) {
     //for the form
