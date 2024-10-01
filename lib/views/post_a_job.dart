@@ -158,7 +158,7 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
                                 Colors.green, // Change color as needed
                           ),
                           child: const Text(
-                            'Save Job Post',
+                            'Post',
                             style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.white,

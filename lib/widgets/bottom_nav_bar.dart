@@ -23,7 +23,7 @@ class _BottomNavBarState extends State<BottomNavBar>
     _motionTabBarController = MotionTabBarController(
       initialIndex: 1, // Set the initial tab index (default is the second tab)
       length:
-          5, // Set the total number of tabs (must match the number of tabs in your TabBar)
+          3, // Set the total number of tabs (must match the number of tabs in your TabBar)
       vsync: this, // 'vsync' is necessary for controlling animations
     );
   }
@@ -46,17 +46,15 @@ class _BottomNavBarState extends State<BottomNavBar>
         "Home",
         
         "Jobs",
-        "Saved",
-        "Notfications",
-        "Profile"
+        "Chat",
+
       ], // Tabs labels
       icons: const [
         Icons.home,
         
-        Icons.list_rounded,
-        Icons.bookmark,
-        Icons.notifications,
-        Icons.person
+        Icons.task_outlined,
+        Icons.chat_bubble,
+
       ], // Icons for the tabs
       tabSize: 50,
       tabBarHeight: 55,

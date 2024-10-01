@@ -1,6 +1,66 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:freelance_app/models/job_model.dart';
+import 'package:freelance_app/models/chat_converstaion.dart';
 
-String mainRole = '';
+String mainRole = 'FreeLancer';
+
+// ========== Inbox Massages ======
+final conversations = [
+  ChatConverstaion(
+    user: types.User(id: '1', firstName: 'Alice'),
+    userAvatar: 'assets/profile.jpeg',
+    lastMessage: 'Hey! How are you?',
+  ),
+  ChatConverstaion(
+    user: types.User(id: '2', firstName: 'Bob'),
+    userAvatar: 'assets/profile.jpeg',
+    lastMessage: 'Let’s catch up soon!',
+  ),
+  // Add more conversations as needed
+];
+
+//========== test user for chat =========
+final types.User currentUser = types.User(
+  id: 'user123',
+  firstName: 'Alice',
+  imageUrl: 'https://example.com/avatar.png',
+);
+//============= Top Rated Freelancers ============
+final List<Map<String, dynamic>> freelancers = [
+  {
+    'name': 'Will Parker',
+    'rating': 4.8,
+    'image': 'assets/profile.jpeg',
+    'bio':
+        'An experienced web developer specializing in frontend technologies.',
+  },
+  {
+    'name': 'Alan Robert',
+    'rating': 4.2,
+    'image': 'assets/profile.jpeg',
+    'bio': 'A mobile app developer with a focus on iOS and Android.',
+  },
+  {
+    'name': 'Ran Williams',
+    'rating': 4.8,
+    'image': 'assets/profile.jpeg',
+    'bio': 'A UX/UI designer with a passion for user-centered design.',
+  },
+  {
+    'name': 'Ran Williams',
+    'rating': 4.8,
+    'image': 'assets/profile.jpeg',
+    'bio': 'A UX/UI designer with a passion for user-centered design.',
+  },
+  {
+    'name': 'Ran Williams',
+    'rating': 4.8,
+    'image': 'assets/profile.jpeg',
+    'bio': 'A UX/UI designer with a passion for user-centered design.',
+  },
+];
+
 //============= LOCATION ==================
 List<String> locationsList = [
   'Remotly',
