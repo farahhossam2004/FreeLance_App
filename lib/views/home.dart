@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:freelance_app/views/bookmarked.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:freelance_app/views/chats_inbox_screen.dart';
+import 'package:freelance_app/views/client_profile.dart';
+import 'package:freelance_app/views/client_wall.dart';
+import 'package:freelance_app/views/free_lancer.dart';
+import 'package:freelance_app/views/freelancer_wall.dart';
 import 'package:freelance_app/views/jobs_screen.dart';
 import 'package:freelance_app/views/notfications_screen.dart';
-import 'package:freelance_app/views/profile.dart';
-import 'package:freelance_app/views/wall.dart';
 import 'package:freelance_app/widgets/bottom_nav_bar.dart';
 import 'package:freelance_app/widgets/filter_drawer.dart';
 import 'package:freelance_app/services/array_data_for_test.dart';
+import 'package:freelance_app/widgets/menu_drawer_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -17,15 +22,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedScreenIndex = 0;
 
-  final List<Widget> _screens = [
-    const WallPage(),           // Home page
-    
+  final List<Widget> _freelancerScreens = [
+    const FreelancerWall(), // Home page
     const JobsScreen(),
-    const BookmarkedJobsPage(),
-    const NotficationsScreen(),
-    const Profile(),
+    ChatsInboxScreen(conversations: conversations),
   ];
-  
+  final List<Widget> _clientScreens = [
+    const ClientWall(), // Home page
+    const JobsScreen(),
+    ChatsInboxScreen(conversations: conversations),
+  ];
+
   void _onTabSelected(int index) {
     setState(() {
       _selectedScreenIndex = index;
@@ -36,16 +43,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.green,
         elevation: 0,
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 12),
-          child: CircleAvatar(
-            backgroundImage: AssetImage('assets/profile.jpeg'),
+        leading: Builder(
+          builder:(context) => Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: GestureDetector(
+              onTap: () {
+                  Scaffold.of(context).openDrawer();
+                
+              },
+              child: const CircleAvatar(
+                backgroundImage: AssetImage('assets/profile.jpeg'),
+              ),
+            ),
           ),
         ),
         // Conditionally show actions based on the selected screen
@@ -59,7 +73,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         border: Border.all(color: Colors.black, width: 1),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 10),
                       child: IconButton(
                         onPressed: () {
                           Scaffold.of(context).openEndDrawer();
@@ -72,8 +87,13 @@ class _HomeScreenState extends State<HomeScreen> {
               ]
             : [], // No actions for other pages
       ),
-      endDrawer: _selectedScreenIndex == 0 && mainRole == 'FreeLancer'? const FilterDrawer() : null,
-      body: _screens[_selectedScreenIndex],
+      drawer: MenuDrawerScreen(),
+      endDrawer: _selectedScreenIndex == 0 && mainRole == 'FreeLancer'
+          ? const FilterDrawer()
+          : null,
+      body: mainRole == 'FreeLancer'
+          ? _freelancerScreens[_selectedScreenIndex]
+          : _clientScreens[_selectedScreenIndex],
       bottomNavigationBar: BottomNavBar(onTabSelected: _onTabSelected),
     );
   }
