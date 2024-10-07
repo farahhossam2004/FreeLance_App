@@ -3,15 +3,19 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:freelance_app/helpers/helpers.dart';
+import 'package:freelance_app/services/client_provider.dart';
 import 'package:freelance_app/views/client_profile.dart';
 import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/views/start.dart';
 import 'package:freelance_app/widgets/login_signup_helper.dart';
 import 'package:freelance_app/widgets/text_field.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   Login({super.key});
+
   @override
   State<Login> createState() => _LoginState();
 }
@@ -136,32 +140,33 @@ class _LoginState extends State<Login> {
                           isLoading = true;
                           setState(() {});
                           await Userlogin();
-                          SignUpLoginHelper.showAwesomeDialog(
-                              context: context,
-                              title: 'Succussefully logged in',
-                              description: 'Welcome back!',
-                              type: DialogType.success,
-                              page: ClientProfile(email: Email.text));
+
+                          // SignUpLoginHelper.showAwesomeDialog(
+                          //     context: context,
+                          //     title: 'Succussefully logged in',
+                          //     description: 'Welcome back!',
+                          //     type: DialogType.success,
+                          //     page: ClientProfile(email: Email.text));
                         } on FirebaseAuthException catch (e) {
-                          if (e.code == 'user-not-found') {
-                            SignUpLoginHelper.showAwesomeDialog(
-                                context: context,
-                                title: 'User not found',
-                                description: 'Try again, or sign up!',
-                                type: DialogType.error);
-                          } else if (e.code == 'wrong-password') {
-                            SignUpLoginHelper.showAwesomeDialog(
-                                context: context,
-                                title: 'Wrong password',
-                                description: 'Try again!',
-                                type: DialogType.error);
-                          } else {
-                              SignUpLoginHelper.showAwesomeDialog(
-                                  context: context,
-                                  title: 'Error occured',
-                                  description: 'Try again',
-                                  type: DialogType.error);
-                            }
+                          // if (e.code == 'user-not-found') {
+                          //   SignUpLoginHelper.showAwesomeDialog(
+                          //       context: context,
+                          //       title: 'User not found',
+                          //       description: 'Try again, or sign up!',
+                          //       type: DialogType.error);
+                          // } else if (e.code == 'wrong-password') {
+                          //   SignUpLoginHelper.showAwesomeDialog(
+                          //       context: context,
+                          //       title: 'Wrong password',
+                          //       description: 'Try again!',
+                          //       type: DialogType.error);
+                          // } else {
+                          //   SignUpLoginHelper.showAwesomeDialog(
+                          //       context: context,
+                          //       title: 'Error occured',
+                          //       description: 'Try again',
+                          //       type: DialogType.error);
+                          // }
                         }
                         isLoading = false;
                         setState(() {});
@@ -185,7 +190,43 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> Userlogin() async {
-    final credential = await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: Email.text, password: Password.text);
+    try {
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: Email.text, password: Password.text);
+          if (isClient == true) {
+        // Fetch user data from 'Clients' collection using ClientProvider
+        final clientProvider =
+            Provider.of<ClientProvider>(context, listen: false);
+        await clientProvider.fetchClientData(credential.user!.email!);
+      }
+      else {}
+          SignUpLoginHelper.showAwesomeDialog(
+                              context: context,
+                              title: 'Succussefully logged in',
+                              description: 'Welcome back!',
+                              type: DialogType.success,
+                              page: ClientProfile(email: Email.text));
+      
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        SignUpLoginHelper.showAwesomeDialog(
+            context: context,
+            title: 'User not found',
+            description: 'Try again, or sign up!',
+            type: DialogType.error);
+      } else if (e.code == 'wrong-password') {
+        SignUpLoginHelper.showAwesomeDialog(
+            context: context,
+            title: 'Wrong password',
+            description: 'Try again!',
+            type: DialogType.error);
+      } else {
+        SignUpLoginHelper.showAwesomeDialog(
+            context: context,
+            title: 'Error occured',
+            description: 'Try again',
+            type: DialogType.error);
+      }
+    }
   }
 }

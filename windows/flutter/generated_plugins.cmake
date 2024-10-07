@@ -3,14 +3,10 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-<<<<<<< HEAD
-  file_selector_windows
-=======
   cloud_firestore
   file_selector_windows
   firebase_auth
   firebase_core
->>>>>>> 75d144303f99c9f70e25a053641b616fc6534082
   rive_common
   url_launcher_windows
 )
