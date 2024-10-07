@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/person.dart';
 import 'package:freelance_app/models/person_helpers.dart';
@@ -5,85 +6,112 @@ import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
 
 class ClientProfile extends StatelessWidget {
-  const ClientProfile({super.key});
-
+  //=======================================================
+  ClientProfile({super.key, required this.email});
+  String email;
+  //=======================================================
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
+    CollectionReference clients =
+        FirebaseFirestore.instance.collection('Clients');
+
     
+    double screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.green,
-      ),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: Column(
-                children: [
-                  // Top Profile section
-                  ProfileHelpers().getTopProfile(
-                    name: PersonHelpers.GetCurrentPerson().getPersonName,
-                    role: PersonHelpers.GetCurrentPerson().getPersonrole,
-                    rate: PersonHelpers.CalculatePersonRate(
-                        PersonHelpers.GetCurrentPerson()),
-                  ),
+    return FutureBuilder<DocumentSnapshot>(
+        future: clients.doc(email).get(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text("Something went wrong");
+          }
 
-                  SizedBox(height: screenHeight / 20),
-                  const Divider(thickness: 1, color: Colors.grey),
-                  SizedBox(height: screenHeight / 20),
+          if (snapshot.hasData && !snapshot.data!.exists) {
+            return Text("client doesn't exist");
+          }
 
-                  // Profile containers (Country, Jobs)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ProfileHelpers().getProfileContainer(
-                        title: "Country",
-                        item: PersonHelpers.GetCurrentPerson().getPersonCountry,
-                      ),
-                      ProfileHelpers().getProfileContainer(
-                        title: "Jobs",
-                        item: PersonHelpers.CalculatePersonJops(
-                            PersonHelpers.GetCurrentPerson()),
-                      ),
-                    ],
-                  ),
+          if (snapshot.connectionState == ConnectionState.done) {
+            Map<String, dynamic> data =
+                snapshot.data!.data() as Map<String, dynamic>;
+            return Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.green,
+              ),
+              body: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 20),
+                      child: Column(
+                        children: [
+                          // Top Profile section
+                          ProfileHelpers().getTopProfile(
+                            name:
+                                data['full_name'],
+                            role:
+                                data['role'],
+                            rate: 
+                                data['rate']
+                          ),
 
-                  SizedBox(height: screenHeight / 20),
-                  const Divider(thickness: 1, color: Colors.grey),
+                          SizedBox(height: screenHeight / 20),
+                          const Divider(thickness: 1, color: Colors.grey),
+                          SizedBox(height: screenHeight / 20),
 
-                  // Posts section
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Text(
-                        "Posts",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 68, 157, 71),
-                        ),
+                          // Profile containers (Country, Jobs)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ProfileHelpers().getProfileContainer(
+                                title: 'Country',
+                                item: data['Country']
+                                    ,
+                              ),
+                              ProfileHelpers().getProfileContainer(
+                                title: "Jobs",
+                                item: '0',
+                              ),
+                            ],
+                          ),
+
+                          SizedBox(height: screenHeight / 20),
+                          const Divider(thickness: 1, color: Colors.grey),
+
+                          // Posts section
+                          const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(
+                                "Posts",
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromARGB(255, 68, 157, 71),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          // Empty space to represent post section height
+                          SizedBox(height: screenHeight / 3 + 50),
+
+                          // Profile Settings button
+                          ProfileHelpers().getProfileEndButton(
+                            title: "Profile Settings",
+                            context: context,
+                            page: const HomeScreen(),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-
-                  // Empty space to represent post section height
-                  SizedBox(height: screenHeight / 3 + 50),
-
-                  // Profile Settings button
-                  ProfileHelpers().getProfileEndButton(
-                    title: "Profile Settings",
-                    context: context,
-                    page: const HomeScreen(),
-                  ),
                 ],
               ),
-            ),
-          ),
-        ],
-      ),
-    );
+            );
+          }
+
+          return Text("loading",);
+        });
   }
 }

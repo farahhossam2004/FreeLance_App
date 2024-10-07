@@ -1,19 +1,21 @@
 // ignore_for_file: non_constant_identifier_names, prefer_interpolation_to_compose_strings
 
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/free_lancer.dart';
 import 'package:freelance_app/models/person.dart';
 import 'package:freelance_app/models/person_helpers.dart';
 
 class SignUpLoginHelper {
-  Widget getNextButton({
-    required int choice,
-    required Widget page,
-    required BuildContext context,
-    var FormKey,
-    List<TextEditingController>? controllers,
-    int? option,
-  }) {
+  Widget getNextButton(
+      {required int choice,
+      required Widget page,
+      required BuildContext context,
+      var FormKey,
+      List<TextEditingController>? controllers,
+      int? option,
+      VoidCallback? onTap}) {
     // For Normal Buttons that navigate only to another page ================================
     if (choice == 1) {
       return SizedBox(
@@ -25,12 +27,7 @@ class SignUpLoginHelper {
               const Color.fromARGB(255, 30, 193, 18),
             ),
           ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => page),
-            );
-          },
+          onPressed: onTap,
           child: const Text(
             "Next",
             style: TextStyle(
@@ -190,5 +187,26 @@ class SignUpLoginHelper {
         ),
       ],
     );
+  }
+
+  static void showAwesomeDialog(
+      {required BuildContext context,
+      required String title,
+      required String description,
+      required DialogType type,
+      Widget? page}) {
+    AwesomeDialog(
+      context: context,
+      dialogType: type,
+      animType: AnimType.rightSlide,
+      title: title,
+      desc: description,
+      btnCancelOnPress: () {},
+      btnOkOnPress: () {
+        if(page !=null){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => page!));
+        }
+      },
+    ).show();
   }
 }

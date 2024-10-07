@@ -6,7 +6,7 @@ import 'package:freelance_app/widgets/drop_down_list.dart';
 import 'package:freelance_app/widgets/multi_select_skills.dart';
 import 'package:freelance_app/widgets/text_field.dart';
 import 'package:freelance_app/services/array_data_for_test.dart';
-
+import 'package:freelance_app/widgets/login_signup_helper.dart';
 class PostAJobScreen extends StatefulWidget {
   const PostAJobScreen({super.key});
 
@@ -187,19 +187,11 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
           clientName: 'client');
       jobs.add(jobData);
 
-      AwesomeDialog(
-        context: context,
-        dialogType: DialogType.success,
-        animType: AnimType.rightSlide,
-        title: 'Success',
-        desc: 'Job posted successfully',
-        btnCancelOnPress: () {},
-        btnOkOnPress: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()));
-        },
-      ).show();
+      SignUpLoginHelper.showAwesomeDialog(context: context, title: 'Success', description: 'Job Posted Successfully', type: DialogType.success, page: HomeScreen());
       // Navigator.pushReplacementNamed(context, '/home', arguments: jobData);
     }
   }
-}
+
+  
+  }
+
