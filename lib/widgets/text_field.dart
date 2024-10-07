@@ -9,7 +9,7 @@ class CustomTextField extends StatefulWidget {
   final IconData? icon; // Optional icon parameter
   final IconData? icontextfield;
   final bool initialObsecureText; // Set initial value for obsecure text
-
+  Function(String)? onChange;
   //===================================
   final double Textfieldwidth;
   final double Textfieldheight;
@@ -19,7 +19,7 @@ class CustomTextField extends StatefulWidget {
   final String ErrorText;
   final String dataType;
 
-  const CustomTextField({
+  CustomTextField({
     super.key,
     required this.text,
     this.icon, // Icon is optional
@@ -30,6 +30,7 @@ class CustomTextField extends StatefulWidget {
     required this.controller,
     required this.Textfieldheight,
     required this.dataType,
+    this.onChange
   });
 
   @override
@@ -39,7 +40,7 @@ class CustomTextField extends StatefulWidget {
 class _CustomTextFieldState extends State<CustomTextField> {
   // No need for a local TextEditingController
   // var input = TextEditingController(); // Remove this line
-
+  
   bool _obsecureText = true;
   IconData _icontextfield = Icons.visibility_off;
 
@@ -83,8 +84,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
             height: screenHeight,
             //===============================For Controller==============================
             child: TextFormField(
+              onChanged: widget.onChange,
               controller: widget.controller, // Use the passed controller
-
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   // return the text error if the field is empty

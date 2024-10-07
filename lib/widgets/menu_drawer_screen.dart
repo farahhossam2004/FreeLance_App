@@ -24,10 +24,17 @@ class MenuDrawerScreen extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.person),
             title: Text('Profile'),
+<<<<<<< HEAD
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => mainRole == 'Client' ? ClientProfile() : FreeLancerProfile() ));
             },
+=======
+            // onTap: () {
+            //   Navigator.push(context,
+            //       MaterialPageRoute(builder: (context) => mainRole == 'Client' ? ClientProfile() : FreeLancerProfile() ));
+            // },
+>>>>>>> 75d144303f99c9f70e25a053641b616fc6534082
           ),
           SizedBox(height: 5,),
           ListTile(
