@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
 class Person {
-  String? password;
   String personName;
   final String role;
   final String country;
@@ -15,7 +14,6 @@ class Person {
     required this.personName,
     required this.role,
     required this.country,
-    this.password,
   });
 
   // getters
@@ -23,7 +21,6 @@ class Person {
   String get getPersonrole => role;
   List<double> get getPersonrate => rate;
   List<int> get getPersonJobs => jobsFinished;
-  String get getPersonPassword => password!;
   String get getPersonCountry => country;
     String get getPersonEmail => Email;
 
@@ -41,7 +38,5 @@ class Person {
     jobsFinished = jobs;
   }
 
-  set setPersonPassword(String password) {
-    password = password;
-  }
+  
 }

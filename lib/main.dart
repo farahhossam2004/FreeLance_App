@@ -16,11 +16,9 @@ void main() async {
       ChangeNotifierProvider(create: (_) => ClientProvider())
     ],
     child: const MaterialApp(
-    
       debugShowCheckedModeBanner: false,
       home: 
       Start(),
-    
           // HomeScreen(), 
     ),
   ));

@@ -12,14 +12,18 @@ class MenuDrawerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final clientProvider = Provider.of<ClientProvider>(context);
     final clientData = clientProvider.client!;
+    final freelancerProvider = Provider.of<ClientProvider>(context);
+    final freeLancerData = freelancerProvider.freelancer!;
+
     return Drawer(
       child: Column(
         children: [
           UserAccountsDrawerHeader(
-            decoration: const BoxDecoration(
-              color: Colors.green
+            decoration: const BoxDecoration(color: Colors.green),
+            accountName: Text(
+              isClient == true ? clientData!.personName : 'freelancer',
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
-            accountName: Text(isClient == true  ? clientData!.personName : 'freelancer', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
             accountEmail: null,
             currentAccountPicture: const CircleAvatar(
               backgroundImage: AssetImage('assets/profile.jpeg'),
@@ -27,13 +31,23 @@ class MenuDrawerScreen extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.person),
-            title:const Text('Profile'),
+            title: const Text('Profile'),
             onTap: () async {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => isClient == true ? ClientProfile(email: clientData.Email,) : FreeLancerProfile() ));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => isClient == true
+                          ? ClientProfile(
+                              email: clientData.Email,
+                            )
+                          : FreeLancerProfile(
+                            email: freeLancerData.Email,
+                          )));
             },
           ),
-          SizedBox(height: 5,),
+          SizedBox(
+            height: 5,
+          ),
           ListTile(
             leading: Icon(Icons.logout),
             title: Text('Logout'),

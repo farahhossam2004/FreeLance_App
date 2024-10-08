@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:freelance_app/models/person.dart';
 
 class Client extends Person {
@@ -8,7 +10,7 @@ class Client extends Person {
       required super.role,
       required super.country,
       required super.Email,
-      super.password, this.clientRate = 0});
+      this.clientRate = 0});
 
   factory Client.fromMap(Map<String, dynamic> data) {
     return Client(

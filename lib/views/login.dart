@@ -129,11 +129,10 @@ class _LoginState extends State<Login> {
                   //===============================================================
                   // next button
                   SignUpLoginHelper().getNextButton(
-                    choice: 1,
+                    
                     page: const Start(),
                     context: context,
                     FormKey: FormKey,
-                    option: 1,
                     onTap: () async {
                       if (FormKey.currentState!.validate()) {
                         try {
@@ -193,20 +192,20 @@ class _LoginState extends State<Login> {
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: Email.text, password: Password.text);
-          if (isClient == true) {
+      if (isClient == true) {
         // Fetch user data from 'Clients' collection using ClientProvider
         final clientProvider =
             Provider.of<ClientProvider>(context, listen: false);
         await clientProvider.fetchClientData(credential.user!.email!);
+      } else {
+
       }
-      else {}
-          SignUpLoginHelper.showAwesomeDialog(
-                              context: context,
-                              title: 'Succussefully logged in',
-                              description: 'Welcome back!',
-                              type: DialogType.success,
-                              page: ClientProfile(email: Email.text));
-      
+      SignUpLoginHelper.showAwesomeDialog(
+          context: context,
+          title: 'Succussefully logged in',
+          description: 'Welcome back!',
+          type: DialogType.success,
+          page: ClientProfile(email: Email.text));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         SignUpLoginHelper.showAwesomeDialog(
@@ -224,7 +223,7 @@ class _LoginState extends State<Login> {
         SignUpLoginHelper.showAwesomeDialog(
             context: context,
             title: 'Error occured',
-            description: 'Try again',
+            description: 'Check Your Email or password',
             type: DialogType.error);
       }
     }

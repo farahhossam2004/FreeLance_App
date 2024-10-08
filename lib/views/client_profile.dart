@@ -4,7 +4,7 @@ import 'package:freelance_app/models/client.dart';
 import 'package:freelance_app/models/person.dart';
 import 'package:freelance_app/models/person_helpers.dart';
 import 'package:freelance_app/services/client_provider.dart';
-import 'package:freelance_app/services/users_data.dart';
+//import 'package:freelance_app/services/users_data.dart';
 import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
 import 'package:provider/provider.dart';

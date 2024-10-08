@@ -7,6 +7,20 @@ class FreeLancer extends Person {
   double price;
   String aboutMe;
   List<String> languages;
+  
+
+  factory FreeLancer.fromMap(Map<String, dynamic> data) {
+    return FreeLancer(
+      personName: data['full_name'],
+      role: data['role'],
+      Email: data['email'],
+      country: data['Country'], 
+      skills: data['Skills'], 
+      price: data['Price'], 
+      aboutMe: data['About me'], 
+      languages: ['Languages'], 
+    );
+  }
 
   FreeLancer(
       {required super.personName,
@@ -17,19 +31,8 @@ class FreeLancer extends Person {
       required this.aboutMe,
       required this.languages,
       required super.Email,
-      required super.password});
+      });
 
-  // Overloaded constructor with only Name, Email, password, and Country
-  FreeLancer.basic(
-      {required super.personName,
-      required super.Email,
-      required super.password,
-      required super.country,
-      required super.role})
-      : skills = [],
-        price = 0.0,
-        aboutMe = '',
-        languages = [];
 
   //getters
   List<String> get getFreelancerskills => skills;

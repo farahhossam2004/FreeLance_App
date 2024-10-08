@@ -16,8 +16,6 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 class SignUp extends StatefulWidget {
   final String role;
 
-  //Person current_person = new Person(personName: personName, role: role, country: country)
-
   const SignUp({super.key, required this.role});
 
   @override
@@ -36,7 +34,7 @@ class _SignUpState extends State<SignUp> {
 
   bool isLoading = false;
   //=======================================
-  late Widget page;
+  Widget page = Start() ;
   late int option;
 
   @override
@@ -44,18 +42,8 @@ class _SignUpState extends State<SignUp> {
     super.initState();
     // Initialize the 'page' variable based on the role
     if (widget.role == 'FreeLancer') {
-      page = SecondFreelancerSignup(
-        Email: Email.text,
-        country: CountryChoosed.text,
-        password: Password.text,
-        first_name: Fname.text,
-        second_name: Sname.text,
-      );
       option = 1;
     } else {
-      page = ClientProfile(
-        email: Email.text,
-      );
       option = 3;
     }
   }
@@ -71,7 +59,7 @@ class _SignUpState extends State<SignUp> {
     //=================================================
     // Create a CollectionReference called users that references the firestore collection
     CollectionReference clients =
-        FirebaseFirestore.instance.collection('Clients');
+        FirebaseFirestore.instance.collection('Users');
 
     Future<void> addClient() async {
       try {
@@ -82,9 +70,12 @@ class _SignUpState extends State<SignUp> {
           'role': 'client',
           'rate': 0.0
         });
-        print("User added successfully.");
       } catch (error) {
-        print("Failed to add user: $error");
+        SignUpLoginHelper.showAwesomeDialog(
+            context: context,
+            title: 'Error occured',
+            description: 'oops something went wrong :( , Try again later',
+            type: DialogType.error);
       }
     }
 
@@ -202,44 +193,64 @@ class _SignUpState extends State<SignUp> {
                     //============================================
                     // Next Button
                     SignUpLoginHelper().getNextButton(
-                      choice: 1,
+                      
                       page: page,
                       context: context,
                       FormKey: FormKey,
-                      option: 1,
                       onTap: () async {
                         if (FormKey.currentState!.validate()) {
-                          try {
-                            isLoading = true;
-                            setState(() {});
-                            await UserRegister();
-                            await addClient();
+                          if (option == 1) {
+                            page = SecondFreelancerSignup(
+                              Email: Email.text,
+                              country: CountryChoosed.text,
+                              password: Password.text,
+                              first_name: Fname.text,
+                              second_name: Sname.text,
+                            );
                             SignUpLoginHelper.showAwesomeDialog(
                                 context: context,
-                                title: 'Successfully registered',
-                                description: 'Welcome, Good Luck!',
+                                title: 'One More Step :)',
+                                description: 'Continue...',
                                 type: DialogType.success,
-                                page: ClientProfile(email: Email.text));
-                          } on FirebaseAuthException catch (e) {
-                            if (e.code == 'weak-password') {
+                                page: page);
+                          } else {
+                            try {
+                              isLoading = true;
+                              setState(() {});
+                              await SignUpLoginHelper.UserRegister(
+                                  Email.text, Password.text);
+                              await addClient();
+                              page = ClientProfile(
+                                email: Email.text,
+                              );
                               SignUpLoginHelper.showAwesomeDialog(
                                   context: context,
-                                  title: 'Weak Password',
-                                  description:
-                                      'Enter a strong password and try again',
-                                  type: DialogType.error);
-                            } else if (e.code == 'email-already-in-use') {
-                              SignUpLoginHelper.showAwesomeDialog(
-                                  context: context,
-                                  title: 'Email already used before',
-                                  description: 'Log in or try an another email',
-                                  type: DialogType.error);
-                            } else {
-                              SignUpLoginHelper.showAwesomeDialog(
-                                  context: context,
-                                  title: 'Error occured',
-                                  description: 'Try again',
-                                  type: DialogType.error);
+                                  title: 'Successfully registered',
+                                  description: 'Welcome, Good Luck!',
+                                  type: DialogType.success,
+                                  page: page);
+                            } on FirebaseAuthException catch (e) {
+                              if (e.code == 'weak-password') {
+                                SignUpLoginHelper.showAwesomeDialog(
+                                    context: context,
+                                    title: 'Weak Password',
+                                    description:
+                                        'Enter a strong password and try again',
+                                    type: DialogType.error);
+                              } else if (e.code == 'email-already-in-use') {
+                                SignUpLoginHelper.showAwesomeDialog(
+                                    context: context,
+                                    title: 'Email already used before',
+                                    description:
+                                        'Log in or try an another email',
+                                    type: DialogType.error);
+                              } else {
+                                SignUpLoginHelper.showAwesomeDialog(
+                                    context: context,
+                                    title: 'Error occured',
+                                    description: 'Try again',
+                                    type: DialogType.error);
+                              }
                             }
                           }
                           isLoading = false;
@@ -262,11 +273,5 @@ class _SignUpState extends State<SignUp> {
         ),
       ),
     );
-  }
-
-  Future<void> UserRegister() async {
-    UserCredential user = await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(
-            email: Email.text, password: Password.text);
   }
 }
