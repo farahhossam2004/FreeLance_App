@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:freelance_app/helpers/helpers.dart';
 import 'package:freelance_app/services/client_provider.dart';
 import 'package:freelance_app/views/client_profile.dart';
+import 'package:freelance_app/views/free_lancer.dart';
 import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/views/start.dart';
 import 'package:freelance_app/widgets/login_signup_helper.dart';
@@ -192,20 +193,19 @@ class _LoginState extends State<Login> {
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: Email.text, password: Password.text);
-      if (isClient == true) {
+      
         // Fetch user data from 'Clients' collection using ClientProvider
         final clientProvider =
             Provider.of<ClientProvider>(context, listen: false);
         await clientProvider.fetchClientData(credential.user!.email!);
-      } else {
+      
 
-      }
       SignUpLoginHelper.showAwesomeDialog(
           context: context,
           title: 'Succussefully logged in',
           description: 'Welcome back!',
           type: DialogType.success,
-          page: ClientProfile(email: Email.text));
+          page: clientProvider.client != null ?   ClientProfile(email: Email.text) : FreeLancerProfile(email: Email.text) );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         SignUpLoginHelper.showAwesomeDialog(
