@@ -3,10 +3,10 @@
 import 'package:freelance_app/models/person.dart';
 
 class FreeLancer extends Person {
-  List<String> skills;
+  List<dynamic> skills;
   double price;
   String aboutMe;
-  List<String> languages;
+  List<dynamic> languages;
   
 
   factory FreeLancer.fromMap(Map<String, dynamic> data) {
@@ -35,10 +35,10 @@ class FreeLancer extends Person {
 
 
   //getters
-  List<String> get getFreelancerskills => skills;
+  List<dynamic> get getFreelancerskills => skills;
   double get getFreelancerPrice => price;
   String get getFreelancerAbout => aboutMe;
-  List<String> get getFreeLancerLanguages => languages;
+  List<dynamic> get getFreeLancerLanguages => languages;
 
   // Setters
   set setFreeLancerPrice(double price) {
@@ -49,11 +49,11 @@ class FreeLancer extends Person {
     aboutMe = about;
   }
 
-  set setFreeLancerSkills(List<String> List) {
+  set setFreeLancerSkills(List<dynamic> List) {
     skills = List;
   }
 
-  set setFreeLancerLanguages(List<String> list) {
+  set setFreeLancerLanguages(List<dynamic> list) {
     languages = list;
   }
 }

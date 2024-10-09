@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 class FreeLancerProfile extends StatefulWidget {
   FreeLancerProfile({super.key, required this.email});
-  String? email;
+  String email;
 
   @override
   State<FreeLancerProfile> createState() => _FreeLancerProfileState();
@@ -47,7 +47,7 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
       );
     }
 
-    if (clientProvider.freelancer != null) {
+    if (clientProvider.freelancer == null) {
       return Scaffold(
         appBar: AppBar(backgroundColor: Colors.green),
         body: const Center(child: Text("Freelancer doesn't exist")),

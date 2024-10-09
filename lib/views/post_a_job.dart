@@ -1,12 +1,17 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/job_model.dart';
+import 'package:freelance_app/services/client_provider.dart';
 import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/widgets/drop_down_list.dart';
 import 'package:freelance_app/widgets/multi_select_skills.dart';
 import 'package:freelance_app/widgets/text_field.dart';
 import 'package:freelance_app/services/array_data_for_test.dart';
 import 'package:freelance_app/widgets/login_signup_helper.dart';
+import 'package:provider/provider.dart';
+
 class PostAJobScreen extends StatefulWidget {
   const PostAJobScreen({super.key});
 
@@ -15,6 +20,7 @@ class PostAJobScreen extends StatefulWidget {
 }
 
 class _PostAJobScreenState extends State<PostAJobScreen> {
+  late ClientProvider clientProvider;
   String? selectedCategory;
   String? selectedSubcategory;
   List<String> subcategories = [];
@@ -31,7 +37,8 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
   var formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-
+      clientProvider =
+            Provider.of<ClientProvider>(context, listen: false);
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double textformheight = screenHeight / 20;
@@ -173,7 +180,7 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
         ));
   }
 
-  void _savePost() {
+  void _savePost() async {
     if (formKey.currentState?.validate() ?? false) {
       // Collect all data
       final jobData = JobModel(
@@ -184,14 +191,37 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
           location: locationController.text,
           duration: durationController.text,
           jobType: jobTypeController.text,
-          clientName: 'client');
-      jobs.add(jobData);
+          clientName: clientProvider.client!.personName,
+          time: FieldValue.serverTimestamp());
 
-      SignUpLoginHelper.showAwesomeDialog(context: context, title: 'Success', description: 'Job Posted Successfully', type: DialogType.success, page: HomeScreen());
+      try {
+        await FirebaseFirestore.instance.collection('Jobs-Posts').add({
+          'title': titleController.text,
+          'description': descriptionController.text,
+          'budget': budgetController.text,
+          'tags': selectedSkills,
+          'location': locationController.text,
+          'duration': durationController.text,
+          'jobType': jobTypeController.text,
+          'clientName': clientProvider.client!.personName,
+          'time': FieldValue.serverTimestamp()
+        });
+        // jobs.add(jobData);
+        SignUpLoginHelper.showAwesomeDialog(
+            context: context,
+            title: 'Success',
+            description: 'Job Posted Successfully',
+            type: DialogType.success,
+            page: HomeScreen());
+      } catch (e) {
+        SignUpLoginHelper.showAwesomeDialog(
+            context: context,
+            title: 'Error',
+            description: 'Failed to post job: $e',
+            type: DialogType.error);
+      }
+
       // Navigator.pushReplacementNamed(context, '/home', arguments: jobData);
     }
   }
-
-  
-  }
-
+}

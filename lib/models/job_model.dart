@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class JobModel {
   final String title;
   final String description;
@@ -9,6 +11,7 @@ class JobModel {
   final int? noOfPropsals;
   final String jobType;
   final String clientName;
+  var time;
 
   JobModel(
       {required this.title,
@@ -19,5 +22,6 @@ class JobModel {
       required this.duration,
       this.noOfPropsals = 0,
       required this.jobType,
-      required this.clientName});
+      required this.clientName,
+      required this.time});
 }

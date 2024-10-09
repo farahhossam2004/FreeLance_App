@@ -22,8 +22,13 @@ class JobPost extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const CircleAvatar(
-                  backgroundImage: AssetImage('assets/profile.jpeg'),
+                GestureDetector(
+                  onTap: () {
+                    
+                  },
+                  child: const CircleAvatar(
+                    backgroundImage: AssetImage('assets/profile.jpeg'),
+                  ),
                 ),
                 const SizedBox(
                   width: 8,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:freelance_app/services/client_provider.dart';
 import 'package:freelance_app/views/chats_inbox_screen.dart';
 import 'package:freelance_app/views/client_profile.dart';
 import 'package:freelance_app/views/client_wall.dart';
@@ -11,6 +12,7 @@ import 'package:freelance_app/widgets/bottom_nav_bar.dart';
 import 'package:freelance_app/widgets/filter_drawer.dart';
 import 'package:freelance_app/services/array_data_for_test.dart';
 import 'package:freelance_app/widgets/menu_drawer_screen.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,6 +22,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  
   int _selectedScreenIndex = 0;
 
   final List<Widget> _freelancerScreens = [
@@ -43,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+      final userProvider = Provider.of<ClientProvider>(context, listen: false);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -63,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         // Conditionally show actions based on the selected screen
-        actions: _selectedScreenIndex == 0 && mainRole == 'FreeLancer'
+        actions: _selectedScreenIndex == 0 && userProvider.freelancer != null
             ? [
                 Builder(
                   builder: (context) {
@@ -88,10 +92,10 @@ class _HomeScreenState extends State<HomeScreen> {
             : [], // No actions for other pages
       ),
       drawer: MenuDrawerScreen(),
-      endDrawer: _selectedScreenIndex == 0 && mainRole == 'FreeLancer'
+      endDrawer: _selectedScreenIndex == 0 && userProvider.freelancer != null
           ? const FilterDrawer()
           : null,
-      body: mainRole == 'FreeLancer'
+      body: userProvider.freelancer != null
           ? _freelancerScreens[_selectedScreenIndex]
           : _clientScreens[_selectedScreenIndex],
       bottomNavigationBar: BottomNavBar(onTabSelected: _onTabSelected),

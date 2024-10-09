@@ -42,4 +42,24 @@ class ClientProvider with ChangeNotifier {
       notifyListeners(); // Notify listeners when data changes
     }
   }
+
+//   Future<void> fetchOtherClientData(String email) async {
+//   _isLoading = true;
+//   notifyListeners();
+
+//   try {
+//     DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('Clients').doc(email).get();
+//     if (snapshot.exists) {
+//       _client = Client.fromMap(snapshot.data() as Map<String, dynamic>);
+//     } else {
+//       _client = null; // Client doesn't exist
+//     }
+//   } catch (e) {
+//     print('Error fetching other client data: $e');
+//     _client = null; // Handle error
+//   } finally {
+//     _isLoading = false;
+//     notifyListeners();
+//   }
+// }
 }
