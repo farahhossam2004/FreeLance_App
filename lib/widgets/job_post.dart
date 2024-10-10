@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/job_model.dart';
+import 'package:freelance_app/views/client_profile.dart';
+import 'package:freelance_app/views/other_client_profile.dart';
 
 class JobPost extends StatelessWidget {
   const JobPost({super.key, required this.job, required this.isPostDetailed});
@@ -24,7 +26,7 @@ class JobPost extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => OtherClientProfile(email: job.clientEmail)));
                   },
                   child: const CircleAvatar(
                     backgroundImage: AssetImage('assets/profile.jpeg'),
@@ -36,7 +38,7 @@ class JobPost extends StatelessWidget {
                 Text(
                   job.clientName,
                   style: const TextStyle(
-                    fontSize: 18, 
+                    fontSize: 18,
                     fontWeight: FontWeight.w300,
                     color: Colors.black54,
                     letterSpacing: 1.0,

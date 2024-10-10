@@ -11,6 +11,7 @@ class JobModel {
   final int? noOfPropsals;
   final String jobType;
   final String clientName;
+  final String clientEmail;
   var time;
 
   JobModel(
@@ -23,5 +24,6 @@ class JobModel {
       this.noOfPropsals = 0,
       required this.jobType,
       required this.clientName,
-      required this.time});
+      required this.time,
+      required this.clientEmail});
 }

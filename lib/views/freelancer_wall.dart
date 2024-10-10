@@ -5,8 +5,6 @@ import 'package:freelance_app/services/client_provider.dart';
 import 'package:freelance_app/views/job_details_post.dart';
 import 'package:freelance_app/widgets/job_post.dart';
 import 'package:freelance_app/widgets/searchbar.dart';
-import 'package:freelance_app/services/array_data_for_test.dart';
-import 'package:freelance_app/widgets/services_container.dart';
 import 'package:provider/provider.dart';
 
 class FreelancerWall extends StatefulWidget {
@@ -50,6 +48,7 @@ class _FreelancerWallState extends State<FreelancerWall> {
           jobType: data['jobType'] ?? '',
           clientName: data['clientName'] ?? '',
           time: data['time'] ?? '',
+          clientEmail: data['clientEmail'] ?? '',
         );
       }).toList();
 

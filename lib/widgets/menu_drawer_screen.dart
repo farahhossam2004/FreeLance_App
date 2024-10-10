@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:freelance_app/helpers/helpers.dart';
 import 'package:freelance_app/models/client.dart';
@@ -5,6 +6,7 @@ import 'package:freelance_app/models/free_lancer.dart';
 import 'package:freelance_app/services/client_provider.dart';
 import 'package:freelance_app/views/client_profile.dart';
 import 'package:freelance_app/views/free_lancer.dart';
+import 'package:freelance_app/views/start.dart';
 import 'package:provider/provider.dart';
 
 class MenuDrawerScreen extends StatelessWidget {
@@ -23,7 +25,9 @@ class MenuDrawerScreen extends StatelessWidget {
           UserAccountsDrawerHeader(
             decoration: const BoxDecoration(color: Colors.green),
             accountName: Text(
-              clientData != null ? clientData!.personName : freeLancerData!.personName,
+              clientData != null
+                  ? clientData!.personName
+                  : freeLancerData!.personName,
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             accountEmail: null,
@@ -32,7 +36,7 @@ class MenuDrawerScreen extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.person),
+            leading: const Icon(Icons.person),
             title: const Text('Profile'),
             onTap: () async {
               Navigator.push(
@@ -43,18 +47,20 @@ class MenuDrawerScreen extends StatelessWidget {
                               email: clientData!.Email,
                             )
                           : FreeLancerProfile(
-                            email: freeLancerData!.Email,
-                          )));
+                              email: freeLancerData!.Email,
+                            )));
             },
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           ListTile(
             leading: Icon(Icons.logout),
             title: Text('Logout'),
-            onTap: () {
-              Navigator.pop(context);
+            onTap: () async {
+              await FirebaseAuth.instance.signOut();
+              //Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const Start()));
             },
           )
         ],
