@@ -3,9 +3,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:freelance_app/models/free_lancer.dart';
-import 'package:freelance_app/models/person.dart';
-import 'package:freelance_app/models/person_helpers.dart';
+
 
 class SignUpLoginHelper {
   Widget getNextButton(
@@ -92,7 +90,7 @@ class SignUpLoginHelper {
       btnOkOnPress: () {
         if (page != null) {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => page!));
+              context, MaterialPageRoute(builder: (context) => page));
         }
       },
     ).show();

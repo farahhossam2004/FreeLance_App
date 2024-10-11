@@ -1,6 +1,7 @@
+// ignore_for_file: use_build_context_synchronously, prefer_const_constructors
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:freelance_app/helpers/helpers.dart';
 import 'package:freelance_app/models/client.dart';
 import 'package:freelance_app/models/free_lancer.dart';
 import 'package:freelance_app/services/client_provider.dart';
@@ -26,7 +27,7 @@ class MenuDrawerScreen extends StatelessWidget {
             decoration: const BoxDecoration(color: Colors.green),
             accountName: Text(
               clientData != null
-                  ? clientData!.personName
+                  ? clientData.personName
                   : freeLancerData!.personName,
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
@@ -44,7 +45,7 @@ class MenuDrawerScreen extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (context) => clientData != null
                           ? ClientProfile(
-                              email: clientData!.Email,
+                              email: clientData.Email,
                             )
                           : FreeLancerProfile(
                               email: freeLancerData!.Email,

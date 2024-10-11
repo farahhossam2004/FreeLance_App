@@ -1,13 +1,15 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
-import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+
 import 'package:freelance_app/services/client_provider.dart';
 import 'package:freelance_app/views/chats_inbox_screen.dart';
-import 'package:freelance_app/views/client_profile.dart';
+
 import 'package:freelance_app/views/client_wall.dart';
-import 'package:freelance_app/views/free_lancer.dart';
+
 import 'package:freelance_app/views/freelancer_wall.dart';
 import 'package:freelance_app/views/jobs_screen.dart';
-import 'package:freelance_app/views/notfications_screen.dart';
+
 import 'package:freelance_app/widgets/bottom_nav_bar.dart';
 import 'package:freelance_app/widgets/filter_drawer.dart';
 import 'package:freelance_app/services/array_data_for_test.dart';

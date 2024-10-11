@@ -1,10 +1,9 @@
-// ignore_for_file: non_constant_identifier_names, must_be_immutable, use_build_context_synchronously
+// ignore_for_file: non_constant_identifier_names, must_be_immutable, use_build_context_synchronously, prefer_const_constructors_in_immutables, prefer_interpolation_to_compose_strings, avoid_print
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:freelance_app/views/free_lancer.dart';
 import 'package:freelance_app/views/start.dart';
 import 'package:freelance_app/widgets/custom_multiple_dropdownlist.dart';
 import 'package:freelance_app/widgets/customslider.dart';

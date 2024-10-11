@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, must_be_immutable, body_might_complete_normally_nullable
 
 import 'package:flutter/material.dart';
 

@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:freelance_app/models/job_model.dart';
 import 'package:freelance_app/models/chat_converstaion.dart';

@@ -1,6 +1,8 @@
+// ignore_for_file: unused_local_variable, use_build_context_synchronously
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/job_model.dart';
 import 'package:freelance_app/services/client_provider.dart';
@@ -214,7 +216,7 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
             title: 'Success',
             description: 'Job Posted Successfully',
             type: DialogType.success,
-            page: HomeScreen());
+            page: const HomeScreen());
       } catch (e) {
         SignUpLoginHelper.showAwesomeDialog(
             context: context,

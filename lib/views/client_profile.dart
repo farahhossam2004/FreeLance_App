@@ -1,8 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore_for_file: must_be_immutable, unused_field
+
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/client.dart';
-import 'package:freelance_app/models/person.dart';
-import 'package:freelance_app/models/person_helpers.dart';
 import 'package:freelance_app/services/client_provider.dart';
 //import 'package:freelance_app/services/users_data.dart';
 import 'package:freelance_app/views/home.dart';

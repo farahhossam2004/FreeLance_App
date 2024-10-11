@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, annotate_overrides, unused_local_variable
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/job_model.dart';

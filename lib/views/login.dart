@@ -1,9 +1,8 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, unused_catch_clause, use_build_context_synchronously, prefer_const_constructors_in_immutables
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:freelance_app/helpers/helpers.dart';
 import 'package:freelance_app/services/client_provider.dart';
 import 'package:freelance_app/views/client_profile.dart';
 import 'package:freelance_app/views/free_lancer.dart';

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/job_model.dart';
-import 'package:freelance_app/views/client_profile.dart';
 import 'package:freelance_app/views/other_client_profile.dart';
 
 class JobPost extends StatelessWidget {

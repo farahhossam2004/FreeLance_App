@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, unused_field
+
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/free_lancer.dart';
 import 'package:freelance_app/views/home.dart';

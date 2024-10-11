@@ -1,7 +1,7 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:freelance_app/models/person.dart';
-import 'package:freelance_app/models/person_helpers.dart';
 import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
 
@@ -23,11 +23,11 @@ class OtherClientProfile extends StatelessWidget {
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasError) {
-            return Text("Something went wrong");
+            return const Text("Something went wrong");
           }
 
           if (snapshot.hasData && !snapshot.data!.exists) {
-            return Text("client doesn't exist");
+            return const Text("client doesn't exist");
           }
 
           if (snapshot.connectionState == ConnectionState.done) {
@@ -111,7 +111,7 @@ class OtherClientProfile extends StatelessWidget {
             );
           }
 
-          return Text("loading",);
+          return const Text("loading",);
         });
   }
 }
