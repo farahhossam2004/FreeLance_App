@@ -34,7 +34,7 @@ class _SignUpState extends State<SignUp> {
 
   bool isLoading = false;
   //=======================================
-  Widget page = Start() ;
+  Widget page = Start();
   late int option;
 
   @override
@@ -193,7 +193,6 @@ class _SignUpState extends State<SignUp> {
                     //============================================
                     // Next Button
                     SignUpLoginHelper().getNextButton(
-                      
                       page: page,
                       context: context,
                       FormKey: FormKey,
@@ -264,8 +263,13 @@ class _SignUpState extends State<SignUp> {
                       height: 15,
                     ),
                     //==========================================================
-                    SignUpLoginHelper().getCustomLink(Login(), context, "Login",
-                        "Do you Have an Account ?  "),
+                    SignUpLoginHelper().getCustomLink(
+                      onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Login()));
+                    },nextPageString:  "Login",
+                    firstWord:  "Do you Have an Account ?  "
+                    ),
                     //==================================
                   ],
                 ),

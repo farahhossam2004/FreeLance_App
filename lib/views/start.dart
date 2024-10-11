@@ -161,7 +161,12 @@ class _StartState extends State<Start> {
               ),
         //==========================================================================
               SignUpLoginHelper().getCustomLink(
-                  Login(), context, "Login", "Already Have An Account  ")
+                      onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Login()));
+                    },nextPageString:  "Login",
+                    firstWord:  "Do you Have an Account ?  "
+                    ),
         //===============================================================================
             ],
           ),

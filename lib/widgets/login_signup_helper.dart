@@ -37,42 +37,40 @@ class SignUpLoginHelper {
     );
   }
 
-  Widget getCustomLink(Widget page, BuildContext context, String nextpageString,
-      [String? FirstWord]) {
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (FirstWord != null)
-            Text(
-              FirstWord,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => page),
-              );
-            },
-            child: Text(
-              nextpageString,
-              style: const TextStyle(
-                color: Color.fromARGB(255, 32, 189, 40),
-                fontSize: 17,
-                decoration:
-                    TextDecoration.underline, // Optional: underline text
-              ),
+  Widget getCustomLink( {
+  required GestureTapCallback? onTap,
+  required String nextPageString,
+  String? firstWord,
+}) {
+  return Center(
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (firstWord != null)
+          Text(
+            firstWord,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
             ),
           ),
-        ],
-      ),
-    );
-  }
+        GestureDetector(
+          onTap: onTap,
+          child: Text(
+            nextPageString,
+            style: const TextStyle(
+              color: Color.fromARGB(255, 32, 189, 40),
+              fontSize: 17,
+              decoration: TextDecoration.underline,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 
   static void showAwesomeDialog(
       {required BuildContext context,

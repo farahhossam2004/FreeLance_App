@@ -67,7 +67,8 @@ class OtherFreelancerProfile extends StatelessWidget {
                               ProfileHelpers().getProfileContainer(
                                   title: "Jops", item: '0'),
                               ProfileHelpers().getProfileContainer(
-                                  title: "Price", item: data['Price']),
+                                  title: "Price",
+                                  item: data['Price'].toString()),
                             ],
                           ),
                           //==============================================
@@ -96,13 +97,13 @@ class OtherFreelancerProfile extends StatelessWidget {
                                 height: screenHeight /
                                     8, // Adjust based on the height of your skill container
                                 child: ListView(
-                                    scrollDirection: Axis.horizontal,
-                                    children: data['Skills']
-                                        .getFreelancerskills
-                                        .map((skill) {
-                                      return ProfileHelpers()
-                                          .skillcontainer(title: skill);
-                                    }).toList()),
+                                  scrollDirection: Axis.horizontal,
+                                  children: (data['Skills'] as List<dynamic>)
+                                      .map((skill) {
+                                    return ProfileHelpers()
+                                        .skillcontainer(title: skill);
+                                  }).toList(),
+                                ),
                               ),
                               //==================================================
                               SizedBox(height: screenHeight / 200),
@@ -111,13 +112,13 @@ class OtherFreelancerProfile extends StatelessWidget {
                                 height: screenHeight /
                                     13, // Adjust based on the height of your skill container
                                 child: ListView(
-                                    scrollDirection: Axis.horizontal,
-                                    children: data['Skills']
-                                        .getFreelancerskills
-                                        .map((skill) {
-                                      return ProfileHelpers()
-                                          .skillcontainer(title: skill);
-                                    }).toList()),
+                                  scrollDirection: Axis.horizontal,
+                                  children: (data['Skills'] as List<dynamic>)
+                                      .map((skill) {
+                                    return ProfileHelpers()
+                                        .skillcontainer(title: skill);
+                                  }).toList(),
+                                ),
                               ),
                             ],
                           ),
@@ -150,7 +151,7 @@ class OtherFreelancerProfile extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(15.0),
                               child: Text(
-                                data['About me'].getFreelancerAbout,
+                                data['About me'],
                                 style: const TextStyle(
                                   fontSize: 18,
                                 ),
@@ -181,8 +182,7 @@ class OtherFreelancerProfile extends StatelessWidget {
                                 8, // Adjust based on the height of your skill container
                             child: ListView(
                                 scrollDirection: Axis.horizontal,
-                                children: data['Languages']
-                                    .getFreeLancerLanguages
+                                children: (data['Languages'] as List<dynamic>)
                                     .map((language) {
                                   return ProfileHelpers()
                                       .skillcontainer(title: language);
