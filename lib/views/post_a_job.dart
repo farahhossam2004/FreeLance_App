@@ -205,6 +205,7 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
           'duration': durationController.text,
           'jobType': jobTypeController.text,
           'clientName': clientProvider.client!.personName,
+          'clientEmail': clientProvider.client!.Email,
           'time': FieldValue.serverTimestamp()
         });
         // jobs.add(jobData);

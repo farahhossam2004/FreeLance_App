@@ -13,7 +13,7 @@ class OtherClientProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CollectionReference clients =
-        FirebaseFirestore.instance.collection('Clients');
+        FirebaseFirestore.instance.collection('Users');
 
     
     double screenHeight = MediaQuery.of(context).size.height;
