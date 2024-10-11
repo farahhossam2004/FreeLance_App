@@ -78,6 +78,7 @@ class ProfileHelpers {
     required String title,
     required BuildContext context,
     required Widget page,
+    required String color
   }) {
     return ElevatedButton(
         onPressed: () {
@@ -85,8 +86,8 @@ class ProfileHelpers {
               context, MaterialPageRoute(builder: (context) => page));
         },
         style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all<Color>(
-            const Color.fromARGB(255, 72, 175, 65),
+          backgroundColor:  WidgetStateProperty.all<Color>(
+            color!='red'?const Color.fromARGB(255, 72, 175, 65):const Color.fromARGB(255, 215, 31, 7),
           ),
         ),
         child: Text(

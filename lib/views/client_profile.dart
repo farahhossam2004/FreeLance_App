@@ -116,6 +116,7 @@ class _ClientProfileState extends State<ClientProfile> {
                     title: "Profile Settings",
                     context: context,
                     page: const HomeScreen(),
+                    color: 'green'
                   ),
                 ],
               ),

@@ -101,6 +101,7 @@ class OtherClientProfile extends StatelessWidget {
                             title: "Profile Settings",
                             context: context,
                             page: const HomeScreen(),
+                            color: 'green'
                           ),
                         ],
                       ),

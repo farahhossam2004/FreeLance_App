@@ -16,11 +16,11 @@ void main() async {
     providers: [
       ChangeNotifierProvider(create: (_) => ClientProvider())
     ],
-    child: const MaterialApp(
+    child:const  MaterialApp(
       debugShowCheckedModeBanner: false,
       home: 
       //OtherFreelancerProfile(email: "ziad@gmail.com",),
-          HomeScreen(), 
+      HomeScreen(), 
     ),
   ));
 }

@@ -215,7 +215,9 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
                   ProfileHelpers().getProfileEndButton(
                       title: "Contact",
                       context: context,
-                      page: const HomeScreen())
+                      page: const HomeScreen(),
+                      color:'green'
+                      )
                 ],
               ),
             ),

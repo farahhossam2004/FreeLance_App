@@ -193,10 +193,32 @@ class OtherFreelancerProfile extends StatelessWidget {
                             height: screenHeight / 30,
                           ),
 
-                          ProfileHelpers().getProfileEndButton(
-                              title: "Contact",
-                              context: context,
-                              page: const HomeScreen())
+                          SizedBox(height: screenHeight / 20),
+                          const Divider(
+                            thickness: 1,
+                            color: Colors.grey,
+                          ),
+
+                          SizedBox(
+                            height: screenHeight / 30,
+                          ),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ProfileHelpers().getProfileEndButton(
+                                  title: "Contact",
+                                  context: context,
+                                  color: 'green',
+                                  page: const HomeScreen()),
+
+                                ProfileHelpers().getProfileEndButton(
+                                  title: "Send Money",
+                                  context: context,
+                                  color: 'red',
+                                  page: const HomeScreen()),
+                            ],
+                          )
                         ],
                       ),
                     ),
