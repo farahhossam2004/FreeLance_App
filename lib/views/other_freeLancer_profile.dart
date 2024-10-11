@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:freelance_app/models/person_helpers.dart';
 import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
 
@@ -30,6 +31,9 @@ class OtherFreelancerProfile extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
+
+            
+            
             return Scaffold(
               appBar: AppBar(
                 backgroundColor: Colors.green,
@@ -46,8 +50,8 @@ class OtherFreelancerProfile extends StatelessWidget {
                           //==========================================
                           ProfileHelpers().getTopProfile(
                             name: data['full_name'],
-                            role: data['role'],
-                            rate: 0.0,
+                            role: data['jop_title'][0],
+                            rate: PersonHelpers.CalculatePersonRate(data['rate'] ),
                           ),
                           //=========================================
                           SizedBox(height: screenHeight / 20),
@@ -189,10 +193,6 @@ class OtherFreelancerProfile extends StatelessWidget {
                                 }).toList()),
                           ),
 
-                          SizedBox(
-                            height: screenHeight / 30,
-                          ),
-
                           SizedBox(height: screenHeight / 20),
                           const Divider(
                             thickness: 1,
@@ -200,7 +200,7 @@ class OtherFreelancerProfile extends StatelessWidget {
                           ),
 
                           SizedBox(
-                            height: screenHeight / 30,
+                            height: screenHeight / 50,
                           ),
 
                           Row(
@@ -211,8 +211,7 @@ class OtherFreelancerProfile extends StatelessWidget {
                                   context: context,
                                   color: 'green',
                                   page: const HomeScreen()),
-
-                                ProfileHelpers().getProfileEndButton(
+                              ProfileHelpers().getProfileEndButton(
                                   title: "Send Money",
                                   context: context,
                                   color: 'red',

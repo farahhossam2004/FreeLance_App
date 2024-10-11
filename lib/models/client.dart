@@ -3,14 +3,14 @@
 import 'package:freelance_app/models/person.dart';
 
 class Client extends Person {
-  double clientRate;
+  
   // To Be implemented
   Client(
       {required super.personName,
       required super.role,
       required super.country,
       required super.Email,
-      this.clientRate = 0});
+      required super.rate});
 
   factory Client.fromMap(Map<String, dynamic> data) {
     return Client(
@@ -18,7 +18,7 @@ class Client extends Person {
       role: data['role'],
       Email: data['email'],
       country: data['Country'],
-      clientRate: 0.0
+      rate: data['rate']
     );
   }
 }

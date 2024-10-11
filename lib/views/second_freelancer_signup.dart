@@ -49,11 +49,12 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
         'email': widget.Email,
         'Country': widget.country,
         'role': 'free_lancer',
-        'rate': 0.0,
+        'rate': [],
         'Skills': selected_skills,
         'Languages': selected_languages,
         'About me': aboutme.text,
-        'Price': currentSliderValue
+        'Price': currentSliderValue,
+        'jop_title':Selected_joptitle
       });
     } catch (error) {
       SignUpLoginHelper.showAwesomeDialog(
@@ -66,6 +67,60 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
 
   List<String> selected_skills = [];
   List<String> selected_languages = [];
+  List<String> Selected_joptitle=[];
+  //========================================================
+  List<String> freelancerJobTitles = [
+    "Graphic Designer",
+    "Web Developer",
+    "Content Writer",
+    "Copywriter",
+    "Digital Marketer",
+    "Social Media Manager",
+    "SEO Specialist",
+    "Mobile App Developer",
+    "Video Editor",
+    "UX/UI Designer",
+    "Translator",
+    "Virtual Assistant",
+    "Photographer",
+    "Data Analyst",
+    "Software Engineer",
+    "Voice Over Artist",
+    "Motion Graphics Designer",
+    "Financial Consultant",
+    "Project Manager",
+    "Customer Support Specialist",
+    "Product Manager",
+    "Marketing Consultant",
+    "Email Marketer",
+    "Brand Strategist",
+    "Business Analyst",
+    "Blockchain Developer",
+    "Illustrator",
+    "Technical Writer",
+    "E-commerce Specialist",
+    "Sales Consultant",
+    "IT Support Specialist",
+    "Legal Consultant",
+    "Public Relations Specialist",
+    "Online Tutor",
+    "Cybersecurity Consultant",
+    "Resume Writer",
+    "CAD Designer",
+    "Event Planner",
+    "Podcast Editor",
+    "AI/ML Specialist",
+    "Accountant",
+    "Game Developer",
+    "Interior Designer",
+    "Personal Trainer",
+    "Market Researcher",
+    "Cloud Computing Specialist",
+    "Life Coach",
+    "Health and Wellness Coach",
+    "Recruitment Consultant",
+    "Scriptwriter"
+  ];
 
   List<String> skills = [
     "UI/UX",
@@ -155,6 +210,22 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
                       ),
                       SizedBox(height: screenHeight / 25),
 
+                      SizedBox(
+                        width: screenwidth,
+                        height: 150,
+                        child: MultipleChoiceDropdown(
+                          buttontext: "Jop-Title",
+                          text: "Select From Titles below",
+                          options: freelancerJobTitles,
+                          isSingleSelection: true,
+                          selectedOptions: Selected_joptitle,
+                          onOptionsChanged: (List<String> newoptions) {
+                            setState(() {
+                              Selected_joptitle = newoptions;
+                            });
+                          },
+                        ),
+                      ),
                       //========================================================
                       SizedBox(
                         width: screenwidth,
@@ -236,6 +307,7 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
                             if (selected_languages.isEmpty ||
                                 selected_skills.isEmpty ||
                                 currentSliderValue == 0 ||
+                                Selected_joptitle.isEmpty||
                                 aboutme.text.isEmpty) {
                               SignUpLoginHelper.showAwesomeDialog(
                                   context: context,

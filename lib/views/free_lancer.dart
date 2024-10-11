@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/free_lancer.dart';
+import 'package:freelance_app/models/person_helpers.dart';
 import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
 import 'package:freelance_app/services/client_provider.dart';
@@ -55,8 +56,9 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
         body: const Center(child: Text("Freelancer doesn't exist")),
       );
     }
-    _freeLancer = clientProvider.freelancer!;
 
+    _freeLancer = clientProvider.freelancer!;
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
@@ -72,8 +74,8 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
                   //==========================================
                   ProfileHelpers().getTopProfile(
                     name: _freeLancer!.personName,
-                    role: _freeLancer!.role,
-                    rate: 0.0,
+                    role: _freeLancer!.getfreeLancerJopTitle[0],
+                    rate:  PersonHelpers.CalculatePersonRate(_freeLancer!.getPersonrate),
                   ),
                   //=========================================
                   SizedBox(height: screenHeight / 20),
