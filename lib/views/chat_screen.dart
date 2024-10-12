@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -39,6 +40,7 @@ String randomString() {
 class _ChatScreenState extends State<ChatScreen> {
   final List<types.Message> _messages = [];
   final TextEditingController _controller = TextEditingController();
+  StreamSubscription? _messageSubscription;
 
   CollectionReference conversations =
       FirebaseFirestore.instance.collection('Chat-Conversations');
@@ -64,16 +66,27 @@ class _ChatScreenState extends State<ChatScreen> {
               types.User(id: data['authorID'], firstName: data['authorName']),
           id: doc.id,
           text: data['text'],
-          createdAt: data['createdAt'],
+          createdAt: data['createdAt'] ?? DateTime.now().millisecondsSinceEpoch,
         );
       }).toList();
 
-      setState(() {
-        _messages.clear();
-        _messages.addAll(messages);
-      });
+      if (mounted) {
+        setState(() {
+          _messages.clear();
+          _messages.addAll(messages);
+        });
+      }
+    }).onError((error) {
+      debugPrint('Error fetching messages: $error');
     });
   }
+
+// @override
+// void dispose() {
+//   // Cancel the Firestore listener when the widget is disposed
+//   _messageSubscription?.cancel();
+//   super.dispose();
+// }
 
   // void _loadInitialMessages() {
   //   final initialMessage = types.TextMessage(
@@ -101,99 +114,103 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future<void> _sendMessageToFirestore(types.Message message) async {
     final data = {
-    'authorID': message.author.id,
-    'authorName': widget.user.firstName,
-    'createdAt': message.createdAt,
-  };
+      'authorID': message.author.id,
+      'authorName': widget.user.firstName,
+      'createdAt': message.createdAt,
+    };
 
-  if (message is types.TextMessage) {
-    data['text'] = message.text;
-  } else if (message is types.ImageMessage) {
-    data['imageUrl'] = message.uri; // Store image URL
-    data['height'] = message.height;
-    data['width'] = message.width;
-  } else if (message is types.FileMessage) {
-    data['fileUrl'] = message.uri; // Store file URL
-    data['fileName'] = message.name;
-    data['fileSize'] = message.size;
-  }
+    if (message is types.TextMessage) {
+      data['text'] = message.text;
+    } else if (message is types.ImageMessage) {
+      data['imageUrl'] = message.uri; // Store image URL
+      data['height'] = message.height;
+      data['width'] = message.width;
+    } else if (message is types.FileMessage) {
+      data['fileUrl'] = message.uri; // Store file URL
+      data['fileName'] = message.name;
+      data['fileSize'] = message.size;
+    }
 
-  await conversations.doc(widget.conversationId).collection('messages').add(data);
+    await conversations
+        .doc(widget.conversationId)
+        .collection('messages')
+        .add(data);
 
-  await conversations.doc(widget.conversationId).update({
-    'lastMessage': message is types.TextMessage ? message.text : 'File sent',
-    'lastMessageAt': message.createdAt,
-  });
+    await conversations.doc(widget.conversationId).update({
+      'lastMessage': message is types.TextMessage ? message.text : 'File sent',
+      'lastMessageAt': message.createdAt,
+    });
   }
 
   void _handleImageSelection() async {
-  if (kIsWeb) {
-    // Web-specific logic: Use FilePicker for web
-    final result = await FilePicker.platform.pickFiles(type: FileType.image);
+    if (kIsWeb) {
+      // Web-specific logic: Use FilePicker for web
+      final result = await FilePicker.platform.pickFiles(type: FileType.image);
 
-    if (result != null && result.files.single.bytes != null) {
-      debugPrint("Image selected on web: ${result.files.single.name}");
-      
-      // Upload image to Firebase Storage
-      final fileName = result.files.single.name;
-      final storageRef = FirebaseStorage.instance.ref().child('chat_images/$fileName');
+      if (result != null && result.files.single.bytes != null) {
+        debugPrint("Image selected on web: ${result.files.single.name}");
 
-      final uploadTask = storageRef.putData(result.files.single.bytes!);
+        // Upload image to Firebase Storage
+        final fileName = result.files.single.name;
+        final storageRef =
+            FirebaseStorage.instance.ref().child('chat_images/$fileName');
 
-      final taskSnapshot = await uploadTask.whenComplete(() {});
-      final downloadUrl = await taskSnapshot.ref.getDownloadURL();
+        final uploadTask = storageRef.putData(result.files.single.bytes!);
 
-      final message = types.ImageMessage(
-        author: widget.user,
-        id: randomString(),
-        name: fileName,
-        size: result.files.single.size,
-        uri: downloadUrl,
-        createdAt: DateTime.now().microsecondsSinceEpoch,
-        height: 300, // You can set default height and width for web
-        width: 300,
-      );
+        final taskSnapshot = await uploadTask.whenComplete(() {});
+        final downloadUrl = await taskSnapshot.ref.getDownloadURL();
 
-      await _sendMessageToFirestore(message);
+        final message = types.ImageMessage(
+          author: widget.user,
+          id: randomString(),
+          name: fileName,
+          size: result.files.single.size,
+          uri: downloadUrl,
+          createdAt: DateTime.now().microsecondsSinceEpoch,
+          height: 300, // You can set default height and width for web
+          width: 300,
+        );
+
+        await _sendMessageToFirestore(message);
+      } else {
+        debugPrint("No image selected or user canceled.");
+      }
     } else {
-      debugPrint("No image selected or user canceled.");
-    }
-  } else {
-    // Mobile-specific logic: Use ImagePicker for mobile platforms
-    final result = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 70,
-      maxHeight: 1440,
-    );
-
-    if (result != null) {
-      final bytes = await result.readAsBytes();
-      final fileName = result.name;
-      final storageRef = FirebaseStorage.instance.ref().child('chat_images/$fileName');
-
-      final uploadTask = storageRef.putData(bytes);
-
-      final taskSnapshot = await uploadTask.whenComplete(() {});
-      final downloadUrl = await taskSnapshot.ref.getDownloadURL();
-
-      final image = await decodeImageFromList(bytes);
-
-      final message = types.ImageMessage(
-        author: widget.user,
-        id: randomString(),
-        name: fileName,
-        size: bytes.length,
-        uri: downloadUrl,
-        height: image.height.toDouble(),
-        width: image.width.toDouble(),
-        createdAt: DateTime.now().microsecondsSinceEpoch,
+      // Mobile-specific logic: Use ImagePicker for mobile platforms
+      final result = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 70,
+        maxHeight: 1440,
       );
 
-      await _sendMessageToFirestore(message);
+      if (result != null) {
+        final bytes = await result.readAsBytes();
+        final fileName = result.name;
+        final storageRef =
+            FirebaseStorage.instance.ref().child('chat_images/$fileName');
+
+        final uploadTask = storageRef.putData(bytes);
+
+        final taskSnapshot = await uploadTask.whenComplete(() {});
+        final downloadUrl = await taskSnapshot.ref.getDownloadURL();
+
+        final image = await decodeImageFromList(bytes);
+
+        final message = types.ImageMessage(
+          author: widget.user,
+          id: randomString(),
+          name: fileName,
+          size: bytes.length,
+          uri: downloadUrl,
+          height: image.height.toDouble(),
+          width: image.width.toDouble(),
+          createdAt: DateTime.now().microsecondsSinceEpoch,
+        );
+
+        await _sendMessageToFirestore(message);
+      }
     }
   }
-}
-
 
   void _handleMessageTap(BuildContext _, types.Message message) async {
     if (message is types.FileMessage) {
@@ -450,6 +467,7 @@ class _ChatScreenState extends State<ChatScreen> {
               onSubmitted: (text) {
                 if (text.isNotEmpty) {
                   _handleSendPressed(types.PartialText(text: text));
+                  _controller.clear();
                 }
               },
             ),
@@ -463,6 +481,7 @@ class _ChatScreenState extends State<ChatScreen> {
             onPressed: () {
               if (_controller.text.isNotEmpty) {
                 _handleSendPressed(types.PartialText(text: _controller.text));
+                _controller.clear();
               }
             },
             icon: const Icon(
@@ -494,8 +513,13 @@ class _ChatScreenState extends State<ChatScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('${message.name}', style: const TextStyle(fontWeight: FontWeight.bold),),
-              const SizedBox(height: 8,),
+              Text(
+                '${message.name}',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
               ElevatedButton(
                 onPressed: () {
                   downloadFileFromBytes(
@@ -527,8 +551,9 @@ class _ChatScreenState extends State<ChatScreen> {
             color: isCurrentUser ? Colors.green : Colors.grey[300],
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Text('${message.name}', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-          
+          child: Text('${message.name}',
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.white)),
         ),
       );
     }

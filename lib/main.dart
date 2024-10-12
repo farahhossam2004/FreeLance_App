@@ -28,9 +28,9 @@ void main() async {
       debugShowCheckedModeBanner: false,
       home:
       //TestProfile()
-      OtherFreelancerProfile(email: "memes2@gmail.com",),
+      // OtherFreelancerProfile(email: "memes2@gmail.com",),
       // HomeScreen(),
-      //Start()
+      Start(),
     ),
   ));
 }

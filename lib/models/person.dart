@@ -6,7 +6,7 @@ class Person {
   final String country;
   String Email;
   List<dynamic> rate = [];
-  List<int> jobsFinished = [];
+  List<dynamic> jobsFinished = [];
 
 // Constructor
   Person({
@@ -21,7 +21,7 @@ class Person {
   String get getPersonName => personName;
   String get getPersonrole => role;
   List<dynamic> get getPersonrate => rate;
-  List<int> get getPersonJobs => jobsFinished;
+  List<dynamic> get getPersonJobs => jobsFinished;
   String get getPersonCountry => country;
     String get getPersonEmail => Email;
 
@@ -31,11 +31,11 @@ class Person {
     personName = name;
   }
 
-  set setpersonrate(List<double> rates) {
+  set setpersonrate(List<dynamic> rates) {
     rate = rates;
   }
 
-  set setjobs_Finished(List<int> jobs) {
+  set setjobs_Finished(List<dynamic> jobs) {
     jobsFinished = jobs;
   }
 
