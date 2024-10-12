@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/person_helpers.dart';
 import 'package:freelance_app/views/home.dart';
+import 'package:freelance_app/views/payment_view.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
 
 class OtherFreelancerProfile extends StatelessWidget {
@@ -211,11 +212,12 @@ class OtherFreelancerProfile extends StatelessWidget {
                                   context: context,
                                   color: 'green',
                                   page: const HomeScreen()),
+                              
                               ProfileHelpers().getProfileEndButton(
                                   title: "Send Money",
                                   context: context,
                                   color: 'red',
-                                  page: const HomeScreen()),
+                                  page:  PaymentView(Personname: data['full_name'])),
                             ],
                           )
                         ],

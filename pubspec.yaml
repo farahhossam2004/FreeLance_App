@@ -54,6 +54,8 @@ dependencies:
   modal_progress_hud_nsn: ^0.5.1
   cloud_firestore: ^5.4.4
   provider: ^6.1.2
+  upi_payment_qrcode_generator: ^1.5.0
+  flutter_paypal_payment: ^1.0.6
 
 dev_dependencies:
   flutter_test:

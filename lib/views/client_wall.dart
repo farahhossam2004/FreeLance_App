@@ -17,19 +17,19 @@ class _ClientWallState extends State<ClientWall> {
         child: Column(
           children: [
             PostAJobCard(),
-            const SizedBox(height: 5),
+            SizedBox(height: 5),
         
             ServicesForYou(),
-            const Padding(
+            Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20),
                       child: Divider(
                         color: Colors.black,
                         thickness: 1,
                       ),
                     ),
-            const SizedBox(height: 5,),
+            SizedBox(height: 5,),
         
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.star_border, color: Colors.orange, size: 24,),

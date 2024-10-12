@@ -78,10 +78,11 @@ class ProfileHelpers {
     required String title,
     required BuildContext context,
     required Widget page,
-    required String color
+    required String color,
+    GestureTapCallback? onTap,
   }) {
     return ElevatedButton(
-        onPressed: () {
+        onPressed: onTap ?? () {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => page));
         },

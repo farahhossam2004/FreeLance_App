@@ -8,7 +8,7 @@ class MultipleChoiceDropdown extends StatefulWidget {
   final Function(List<String>) onOptionsChanged;
   final bool isSingleSelection; // Boolean to control single/multiple selection
 
-  MultipleChoiceDropdown({
+  const MultipleChoiceDropdown({
     super.key,
     required this.text,
     required this.buttontext,
@@ -94,7 +94,7 @@ class _MultipleChoiceDropdownState extends State<MultipleChoiceDropdown> {
               );
             },
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(
+              backgroundColor: WidgetStateProperty.all<Color>(
                 const Color.fromARGB(255, 72, 175, 65),
               ),
             ),
