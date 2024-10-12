@@ -57,16 +57,38 @@ class ChatsInboxScreen extends StatelessWidget {
                           usersChats[index].data() as Map<String, dynamic>;
                       final otherUserChatEmail = otherUserChatData['email'];
                       final otherUserChatName = otherUserChatData['full_name'];
+                      // final lastMessage = otherUserChatName['lastMessage'];
 
-                      return ListTile(
-                        title: Text(otherUserChatName),
-                        subtitle: Text('Start the conversation'),
-                        onTap: () {
-                          _navigateToChatScreen(context, currentUserEmail!,
-                              otherUserChatEmail, otherUserChatName);
-                          // _startConversation(
-                          //     context, currentUserEmail!, freelancerEmail);
-                        },
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey.withOpacity(0.2),
+                                    spreadRadius: 1,
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 2))
+                              ]),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.all(16),
+                            tileColor: Colors.grey[300],
+                            leading: CircleAvatar(
+                                // backgroundImage: AssetImage(conv.userAvatar),
+                                ),
+                            title: Text(otherUserChatName),
+                            subtitle: Text('lastMessage'),
+                            onTap: () {
+                              _navigateToChatScreen(context, currentUserEmail!,
+                                  otherUserChatEmail, otherUserChatName);
+                              // _startConversation(
+                              //     context, currentUserEmail!, freelancerEmail);
+                            },
+                          ),
+                        ),
                       );
                     },
                   );
@@ -133,7 +155,9 @@ class ChatsInboxScreen extends StatelessWidget {
     final conversationSnapshot = await conversationRef
         .where('clientId',
             isEqualTo: userRole == 'client' ? mainUserEmail : otherUserEmail)
-        .where('freelancerId', isEqualTo: userRole == 'free_lancer' ? mainUserEmail :  otherUserEmail)
+        .where('freelancerId',
+            isEqualTo:
+                userRole == 'free_lancer' ? mainUserEmail : otherUserEmail)
         .get();
 
     String conversationId;
@@ -142,7 +166,8 @@ class ChatsInboxScreen extends StatelessWidget {
       // No existing conversation, create a new one
       DocumentReference newConversation = await conversationRef.add({
         'clientId': userRole == 'client' ? mainUserEmail : otherUserEmail,
-        'freelancerId': userRole == 'free_lancer' ? mainUserEmail :  otherUserEmail,
+        'freelancerId':
+            userRole == 'free_lancer' ? mainUserEmail : otherUserEmail,
         'lastMessage': '', // No last message yet
         'lastMessageAt': DateTime.now(),
       });

@@ -52,75 +52,73 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _loadMessages() {
-    // Listen to the Firestore collection in real-time
-    conversations
-        .doc(widget.conversationId)
-        .collection('messages')
-        .orderBy('createdAt', descending: true)
-        .snapshots()
-        .listen((messageSnapshot) {
-      final messages = messageSnapshot.docs.map((doc) {
-        final data = doc.data() as Map<String, dynamic>;
+  // Listen to the Firestore collection in real-time
+  conversations
+      .doc(widget.conversationId)
+      .collection('messages')
+      .orderBy('createdAt', descending: true)
+      .snapshots()
+      .listen((messageSnapshot) {
+    final messages = messageSnapshot.docs.map((doc) {
+      final data = doc.data() as Map<String, dynamic>;
 
-        // Check if the message is an image or text message
-        if (data.containsKey('imageUrl')) {
-          // Handle image message
-          return types.ImageMessage(
-            name: data['imageName'] ??
-                'Unknown image name', // Add this line for the required 'name' parameter
-            size: data['imageSize'] ?? 0,
-            author: types.User(
-              id: data['authorID'],
-              firstName: data['authorName'],
-            ),
-            id: doc.id,
-            uri: data['imageUrl'], // URL of the image
-            createdAt:
-                data['createdAt'] ?? DateTime.now().millisecondsSinceEpoch,
-          );
-        } else {
-          // Handle text message
-          return types.TextMessage(
-            author: types.User(
-              id: data['authorID'],
-              firstName: data['authorName'],
-            ),
-            id: doc.id,
-            text: data['text'],
-            createdAt:
-                data['createdAt'] ?? DateTime.now().millisecondsSinceEpoch,
-          );
-        }
-      }).toList();
-
-      if (mounted) {
-        setState(() {
-          _messages.clear();
-          _messages.addAll(messages);
-        });
+      // Check if the message is an image, text, or file message
+      if (data.containsKey('imageUrl')) {
+        // Handle image message
+        return types.ImageMessage(
+          name: data['imageName'] ?? 'Unknown image name',
+          size: data['imageSize'] ?? 0,
+          author: types.User(
+            id: data['authorID'],
+            firstName: data['authorName'],
+          ),
+          id: doc.id,
+          uri: data['imageUrl'],
+          createdAt: data['createdAt'] ?? DateTime.now().millisecondsSinceEpoch,
+        );
+      } else if (data.containsKey('fileUrl')) {
+        // Handle file message
+        return types.FileMessage(
+          author: types.User(
+            id: data['authorID'],
+            firstName: data['authorName'],
+          ),
+          id: doc.id,
+          name: data['fileName'] ?? 'Unknown file name',
+          size: data['fileSize'] ?? 0,
+          uri: data['fileUrl'],
+          createdAt: data['createdAt'] ?? DateTime.now().millisecondsSinceEpoch,
+          metadata: {
+            'fileUrl': data['fileUrl'],
+            'fileName': data['fileName'],
+            'fileSize': data['fileSize'],
+          },
+        );
+      } else {
+        // Handle text message
+        return types.TextMessage(
+          author: types.User(
+            id: data['authorID'],
+            firstName: data['authorName'],
+          ),
+          id: doc.id,
+          text: data['text'],
+          createdAt: data['createdAt'] ?? DateTime.now().millisecondsSinceEpoch,
+        );
       }
-    }).onError((error) {
-      debugPrint('Error fetching messages: $error');
-    });
-  }
+    }).toList();
 
-// @override
-// void dispose() {
-//   // Cancel the Firestore listener when the widget is disposed
-//   _messageSubscription?.cancel();
-//   super.dispose();
-// }
+    if (mounted) {
+      setState(() {
+        _messages.clear();
+        _messages.addAll(messages);
+      });
+    }
+  }).onError((error) {
+    debugPrint('Error fetching messages: $error');
+  });
+}
 
-  // void _loadInitialMessages() {
-  //   final initialMessage = types.TextMessage(
-  //     id: 'msg1',
-  //     text: 'Welcome to the chat!',
-  //     author: widget.user,
-  //     createdAt: DateTime.now().millisecondsSinceEpoch,
-  //   );
-
-  //   _addMessage(initialMessage);
-  // }
 
   void _handleSendPressed(types.PartialText message) async {
     final textMessage = types.TextMessage(
@@ -132,7 +130,6 @@ class _ChatScreenState extends State<ChatScreen> {
     // _addMessage(textMessage);
     await _sendMessageToFirestore(textMessage);
 
-    // send the message to the backend
   }
 
   Future<void> _sendMessageToFirestore(types.Message message) async {
@@ -261,6 +258,29 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
+// void _handleMessageTap(BuildContext _, types.Message message) async {
+//     if (message is types.FileMessage) {
+//       var localPath = message.uri;
+
+//       if (message.uri.startsWith('http')) {
+//         try {
+//           final response = await http.get(Uri.parse(message.uri));
+//           localPath = await _saveFileLocally(response.bodyBytes, message.name);
+//         } catch (e) {
+//           debugPrint("Error fetching file: $e");
+//         }
+//       }
+//       await OpenFile.open(localPath);
+//     }
+//   }
+
+  // Future<String> _saveFileLocally(List<int> bytes, String fileName) async {
+  //   final documentsDir = (await getApplicationDocumentsDirectory()).path;
+  //   final filePath = '$documentsDir/$fileName';
+  //   final file = File(filePath);
+  //   await file.writeAsBytes(bytes);
+  //   return filePath;
+  // }
 
   void _handleMessageTap(BuildContext _, types.Message message) async {
     if (message is types.FileMessage) {
@@ -319,66 +339,63 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _handleFileSelection() async {
-    debugPrint("File selection initiated");
-    try {
-      final result = await FilePicker.platform.pickFiles(type: FileType.any);
+  debugPrint("File selection initiated");
+  try {
+    final result = await FilePicker.platform.pickFiles(type: FileType.any);
 
-      if (result != null) {
-        if (kIsWeb) {
-          // Web-specific logic: Use the bytes property
-          if (result.files.single.bytes != null) {
-            debugPrint("File picked on web: ${result.files.single.name}");
+    if (result != null) {
+      if (kIsWeb) {
+        // Web-specific logic
+        if (result.files.single.bytes != null) {
+          debugPrint("File picked on web: ${result.files.single.name}");
+          final message = await _uploadFileToStorage(result.files.single);
+            await _sendMessageToFirestore(message);
+          // Store the bytes in a map or similar structure
+          // final message = types.FileMessage(
+          //   author: widget.user,
+          //   id: randomString(),
+          //   name: result.files.single.name,
+          //   size: result.files.single.size,
+          //   uri: 'web', // Use a placeholder for the web
+          //   metadata: {
+          //     'bytes': result.files.single.bytes,
+          //   },
+          // );
 
-            // Store the bytes in a map or similar structure
-            final fileData = {
-              'name': result.files.single.name,
-              'size': result.files.single.size,
-              'bytes': result.files.single.bytes,
-            };
-
-            final message = types.FileMessage(
-              author: widget.user,
-              id: randomString(),
-              name: result.files.single.name,
-              size: result.files.single.size,
-              uri: 'web',
-              metadata: fileData,
-              // Since there's no file path on the web, use a placeholder
-            );
-
-            // _addMessage(message);
-            debugPrint(
-                "File message created on web with size: ${message.size} bytes");
-          } else {
-            debugPrint("File selection on web failed, no bytes available.");
-          }
+          // _addMessage(message); // Update to add the message
+          debugPrint("File message created on web with size: ${message.size} bytes");
         } else {
-          // Non-web logic (Android, iOS)
-          if (result.files.single.path != null) {
-            debugPrint("File picked on mobile: ${result.files.single.name}");
-
-            final message = types.FileMessage(
-              author: widget.user,
-              id: randomString(),
-              name: result.files.single.name,
-              size: result.files.single.size,
-              uri: result.files.single.path!,
-              // Use the file path for non-web platforms
-            );
-
-            debugPrint("File message created with path: ${message.uri}");
-            // _addMessage(message);
-          } else {
-            debugPrint("File path is null.");
-          }
+          debugPrint("File selection on web failed, no bytes available.");
         }
       } else {
-        debugPrint("No file selected or user canceled.");
+        // Non-web logic
+        if (result.files.single.path != null) {
+          debugPrint("File picked on mobile: ${result.files.single.name}");
+          final message = await _uploadFileToStorage(result.files.single);
+            await _sendMessageToFirestore(message);
+          // final message = types.FileMessage(
+          //   author: widget.user,
+          //   id: randomString(),
+          //   name: result.files.single.name,
+          //   size: result.files.single.size,
+          //   uri: result.files.single.path!, // Use the file path
+          // );
+
+        // await _sendMessageToFirestore(message);
+          // _addMessage(message); // Update to add the message
+          debugPrint("File message created with path: ${message.uri}");
+        } else {
+          debugPrint("File path is null.");
+        }
       }
-    } catch (e) {
-      debugPrint("Error during file selection: $e");
+    } else {
+      debugPrint("No file selected or user canceled.");
     }
+  } catch (e) {
+    debugPrint("Error during file selection: $e");
   }
+}
+
 
   void _handleAttachmentPressed() {
     showModalBottomSheet(
@@ -546,69 +563,73 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildFileMessage(types.FileMessage message) {
-    final isCurrentUser = message.author.id == widget.user.id;
+  final isCurrentUser = message.author.id == widget.user.id;
 
-    if (kIsWeb &&
-        message.metadata != null &&
-        message.metadata!['bytes'] != null) {
-      // Web rendering logic for downloading the file
-      return Align(
-        alignment: isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          margin: const EdgeInsets.symmetric(vertical: 4),
-          decoration: BoxDecoration(
-            color: isCurrentUser ? Colors.green : Colors.grey[300],
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${message.name}',
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  downloadFileFromBytes(
-                      message.metadata!['bytes'], message.name);
-                  // Logic for downloading the file on web
-                  // final blob = html.Blob([message.metadata!['bytes']]);
-                  // final url = html.Url.createObjectUrlFromBlob(blob);
-                  // final anchor = html.AnchorElement(href: url)
-                  //   ..setAttribute('download', message.name)
-                  //   ..click();
-                  // html.Url.revokeObjectUrl(url);
-                },
-                child: const Text(
-                  "Download",
-                  style: TextStyle(color: Colors.green),
-                ),
-              ),
-            ],
-          ),
+  if (kIsWeb && message.metadata != null && message.metadata!['bytes'] != null) {
+    // Web rendering logic for downloading the file
+    return Align(
+      alignment: isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        decoration: BoxDecoration(
+          color: isCurrentUser ? Colors.green : Colors.grey[300],
+          borderRadius: BorderRadius.circular(8),
         ),
-      );
-    } else {
-      return Align(
-        alignment: isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          margin: const EdgeInsets.symmetric(vertical: 4),
-          decoration: BoxDecoration(
-            color: isCurrentUser ? Colors.green : Colors.grey[300],
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text('${message.name}',
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.white)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${message.name}',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: () {
+                downloadFileFromBytes(message.metadata!['bytes'], message.name);
+              },
+              child: const Text(
+                "Download",
+                style: TextStyle(color: Colors.green),
+              ),
+            ),
+          ],
         ),
-      );
-    }
+      ),
+    );
+  } else {
+    return Align(
+      alignment: isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        decoration: BoxDecoration(
+          color: isCurrentUser ? Colors.green : Colors.grey[300],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(
+          message.name,
+          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+      ),
+    );
   }
+}
+
+Future<types.FileMessage> _uploadFileToStorage(PlatformFile file) async {
+    final storageRef = FirebaseStorage.instance.ref().child('chat_files/${file.name}');
+    await storageRef.putData(file.bytes!);
+    final downloadUrl = await storageRef.getDownloadURL();
+
+    return types.FileMessage(
+      author: widget.user,
+      id: randomString(),
+      name: file.name,
+      size: file.size,
+      uri: downloadUrl,
+    );
+  }
+
 
   Widget buildImageMessage(types.ImageMessage message) {
     return Container(
