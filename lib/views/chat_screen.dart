@@ -1,24 +1,30 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
-
 import 'package:freelance_app/widgets/custom_message_bubble.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:freelance_app/services/file_picker_mobile_desktop.dart' 
-  if (dart.library.html) 'package:freelance_app/services/file_picker_web.dart';
+import 'package:freelance_app/services/file_picker_mobile_desktop.dart'
+    if (dart.library.html) 'package:freelance_app/services/file_picker_web.dart';
 
 class ChatScreen extends StatefulWidget {
   final types.User user;
-  const ChatScreen({super.key, required this.user});
+  final String conversationId; // A unique ID for the conversation.
+  final String userRole;
+  const ChatScreen(
+      {super.key,
+      required this.user,
+      required this.conversationId,
+      required this.userRole});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -34,44 +40,126 @@ class _ChatScreenState extends State<ChatScreen> {
   final List<types.Message> _messages = [];
   final TextEditingController _controller = TextEditingController();
 
+  CollectionReference conversations =
+      FirebaseFirestore.instance.collection('Chat-Conversations');
+
   @override
   void initState() {
     super.initState();
-    _loadInitialMessages();
+    _loadMessages();
   }
 
-  void _loadInitialMessages() {
-    final initialMessage = types.TextMessage(
-      id: 'msg1',
-      text: 'Welcome to the chat!',
-      author: widget.user,
-      createdAt: DateTime.now().millisecondsSinceEpoch,
-    );
+  void _loadMessages() {
+    // Listen to the Firestore collection in real-time
+    conversations
+        .doc(widget.conversationId)
+        .collection('messages')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .listen((messageSnapshot) {
+      final messages = messageSnapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        return types.TextMessage(
+          author:
+              types.User(id: data['authorID'], firstName: data['authorName']),
+          id: doc.id,
+          text: data['text'],
+          createdAt: data['createdAt'],
+        );
+      }).toList();
 
-    _addMessage(initialMessage);
+      setState(() {
+        _messages.clear();
+        _messages.addAll(messages);
+      });
+    });
   }
 
-  void _handleSendPressed(types.PartialText message) {
+  // void _loadInitialMessages() {
+  //   final initialMessage = types.TextMessage(
+  //     id: 'msg1',
+  //     text: 'Welcome to the chat!',
+  //     author: widget.user,
+  //     createdAt: DateTime.now().millisecondsSinceEpoch,
+  //   );
+
+  //   _addMessage(initialMessage);
+  // }
+
+  void _handleSendPressed(types.PartialText message) async {
     final textMessage = types.TextMessage(
         author: widget.user,
         id: DateTime.now().toString(),
         text: message.text,
         createdAt: DateTime.now().millisecondsSinceEpoch);
 
-    _addMessage(textMessage);
+    // _addMessage(textMessage);
+    await _sendMessageToFirestore(textMessage);
 
     // send the message to the backend
   }
 
-  void _addMessage(types.Message message) {
-    setState(() {
-      _messages.insert(0, message);
-      _controller.clear();
-    });
+  Future<void> _sendMessageToFirestore(types.Message message) async {
+    final data = {
+    'authorID': message.author.id,
+    'authorName': widget.user.firstName,
+    'createdAt': message.createdAt,
+  };
+
+  if (message is types.TextMessage) {
+    data['text'] = message.text;
+  } else if (message is types.ImageMessage) {
+    data['imageUrl'] = message.uri; // Store image URL
+    data['height'] = message.height;
+    data['width'] = message.width;
+  } else if (message is types.FileMessage) {
+    data['fileUrl'] = message.uri; // Store file URL
+    data['fileName'] = message.name;
+    data['fileSize'] = message.size;
+  }
+
+  await conversations.doc(widget.conversationId).collection('messages').add(data);
+
+  await conversations.doc(widget.conversationId).update({
+    'lastMessage': message is types.TextMessage ? message.text : 'File sent',
+    'lastMessageAt': message.createdAt,
+  });
   }
 
   void _handleImageSelection() async {
-    debugPrint("Image selection initiated");
+  if (kIsWeb) {
+    // Web-specific logic: Use FilePicker for web
+    final result = await FilePicker.platform.pickFiles(type: FileType.image);
+
+    if (result != null && result.files.single.bytes != null) {
+      debugPrint("Image selected on web: ${result.files.single.name}");
+      
+      // Upload image to Firebase Storage
+      final fileName = result.files.single.name;
+      final storageRef = FirebaseStorage.instance.ref().child('chat_images/$fileName');
+
+      final uploadTask = storageRef.putData(result.files.single.bytes!);
+
+      final taskSnapshot = await uploadTask.whenComplete(() {});
+      final downloadUrl = await taskSnapshot.ref.getDownloadURL();
+
+      final message = types.ImageMessage(
+        author: widget.user,
+        id: randomString(),
+        name: fileName,
+        size: result.files.single.size,
+        uri: downloadUrl,
+        createdAt: DateTime.now().microsecondsSinceEpoch,
+        height: 300, // You can set default height and width for web
+        width: 300,
+      );
+
+      await _sendMessageToFirestore(message);
+    } else {
+      debugPrint("No image selected or user canceled.");
+    }
+  } else {
+    // Mobile-specific logic: Use ImagePicker for mobile platforms
     final result = await ImagePicker().pickImage(
       source: ImageSource.gallery,
       imageQuality: 70,
@@ -80,21 +168,32 @@ class _ChatScreenState extends State<ChatScreen> {
 
     if (result != null) {
       final bytes = await result.readAsBytes();
+      final fileName = result.name;
+      final storageRef = FirebaseStorage.instance.ref().child('chat_images/$fileName');
+
+      final uploadTask = storageRef.putData(bytes);
+
+      final taskSnapshot = await uploadTask.whenComplete(() {});
+      final downloadUrl = await taskSnapshot.ref.getDownloadURL();
+
       final image = await decodeImageFromList(bytes);
 
       final message = types.ImageMessage(
-          author: widget.user,
-          id: '1',
-          name: result.name,
-          size: bytes.length,
-          uri: result.path,
-          height: image.height.toDouble(),
-          width: image.width.toDouble(),
-          createdAt: DateTime.now().microsecondsSinceEpoch);
+        author: widget.user,
+        id: randomString(),
+        name: fileName,
+        size: bytes.length,
+        uri: downloadUrl,
+        height: image.height.toDouble(),
+        width: image.width.toDouble(),
+        createdAt: DateTime.now().microsecondsSinceEpoch,
+      );
 
-      _addMessage(message);
+      await _sendMessageToFirestore(message);
     }
   }
+}
+
 
   void _handleMessageTap(BuildContext _, types.Message message) async {
     if (message is types.FileMessage) {
@@ -180,7 +279,7 @@ class _ChatScreenState extends State<ChatScreen> {
               // Since there's no file path on the web, use a placeholder
             );
 
-            _addMessage(message);
+            // _addMessage(message);
             debugPrint(
                 "File message created on web with size: ${message.size} bytes");
           } else {
@@ -201,7 +300,7 @@ class _ChatScreenState extends State<ChatScreen> {
             );
 
             debugPrint("File message created with path: ${message.uri}");
-            _addMessage(message);
+            // _addMessage(message);
           } else {
             debugPrint("File path is null.");
           }
@@ -220,41 +319,64 @@ class _ChatScreenState extends State<ChatScreen> {
         builder: (BuildContext context) {
           debugPrint("Modal opened");
           return SizedBox(
-                      height: 160,
-                      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            const SizedBox(height: 5,),
-            TextButton(
-                onPressed: () {
-                  _handleImageSelection();
-                  // Navigator.pop(context);
-                },
-                child: const Align(
-                  alignment: AlignmentDirectional.center,
-                  child: Text('Photo', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),),
-                )),
-                const Divider(height: 1, thickness: 1, color: Color.fromARGB(255, 131, 125, 125),),
-            TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  _handleFileSelection();
-                },
-                child: const Align(
-                  alignment: AlignmentDirectional.center,
-                  child: Text('File', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black)),
-                )),
-                const Divider(height: 2, thickness: 1, color: Color.fromARGB(255, 131, 125, 125),),
-          
-            TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Align(
-                  alignment: AlignmentDirectional.center,
-                  child: Text('Cancel', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.red)),
-                ))
-          ],
+            height: 160,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                const SizedBox(
+                  height: 5,
+                ),
+                TextButton(
+                    onPressed: () {
+                      _handleImageSelection();
+                      // Navigator.pop(context);
+                    },
+                    child: const Align(
+                      alignment: AlignmentDirectional.center,
+                      child: Text(
+                        'Photo',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.black),
                       ),
-                    );
+                    )),
+                const Divider(
+                  height: 1,
+                  thickness: 1,
+                  color: Color.fromARGB(255, 131, 125, 125),
+                ),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _handleFileSelection();
+                    },
+                    child: const Align(
+                      alignment: AlignmentDirectional.center,
+                      child: Text('File',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Colors.black)),
+                    )),
+                const Divider(
+                  height: 2,
+                  thickness: 1,
+                  color: Color.fromARGB(255, 131, 125, 125),
+                ),
+                TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Align(
+                      alignment: AlignmentDirectional.center,
+                      child: Text('Cancel',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Colors.red)),
+                    ))
+              ],
+            ),
+          );
         });
   }
 
@@ -372,11 +494,17 @@ class _ChatScreenState extends State<ChatScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('${message.name}', style: const TextStyle(fontWeight: FontWeight.bold),),
-              const SizedBox(height: 8,),
+              Text(
+                '${message.name}',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
               ElevatedButton(
                 onPressed: () {
-                  downloadFileFromBytes(message.metadata!['bytes'], message.name);
+                  downloadFileFromBytes(
+                      message.metadata!['bytes'], message.name);
                   // Logic for downloading the file on web
                   // final blob = html.Blob([message.metadata!['bytes']]);
                   // final url = html.Url.createObjectUrlFromBlob(blob);
@@ -385,7 +513,10 @@ class _ChatScreenState extends State<ChatScreen> {
                   //   ..click();
                   // html.Url.revokeObjectUrl(url);
                 },
-                child: const Text("Download", style: TextStyle(color: Colors.green),),
+                child: const Text(
+                  "Download",
+                  style: TextStyle(color: Colors.green),
+                ),
               ),
             ],
           ),
@@ -401,8 +532,9 @@ class _ChatScreenState extends State<ChatScreen> {
             color: isCurrentUser ? Colors.green : Colors.grey[300],
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Text('${message.name}', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-          
+          child: Text('${message.name}',
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.white)),
         ),
       );
     }
