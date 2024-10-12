@@ -1,6 +1,5 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'package:freelance_app/models/free_lancer.dart';
 import 'package:freelance_app/models/person.dart';
 
 class PersonHelpers {
@@ -12,28 +11,8 @@ class PersonHelpers {
   }
 
 //=====================================
-  static Person? current_person;
-  static FreeLancer? current_freeLancer;
-
-  static Person GetCurrentPerson() {
-    return current_person!;
-  }
-
-  static FreeLancer GetCurrentfreeLancer() {
-    return current_freeLancer!;
-  }
-
-  static void SetCurrentPerson(Person person) {
-    current_person = person;
-  }
-
-  static void SetCurrentFreeLancer(FreeLancer freelancer) {
-    current_freeLancer = freelancer;
-  }
-
-//=====================================
-  static double CalculatePersonRate(Person person) {
-    List<double> allrates = person.getPersonrate;
+  static double CalculatePersonRate(List<dynamic> personrates) {
+    List<dynamic> allrates = personrates;
     if (allrates.isEmpty) {
       return 0;
     } else {

@@ -494,13 +494,8 @@ class _ChatScreenState extends State<ChatScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '${message.name}',
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
+              Text('${message.name}', style: const TextStyle(fontWeight: FontWeight.bold),),
+              const SizedBox(height: 8,),
               ElevatedButton(
                 onPressed: () {
                   downloadFileFromBytes(
@@ -532,9 +527,8 @@ class _ChatScreenState extends State<ChatScreen> {
             color: isCurrentUser ? Colors.green : Colors.grey[300],
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Text('${message.name}',
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.white)),
+          child: Text('${message.name}', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+          
         ),
       );
     }

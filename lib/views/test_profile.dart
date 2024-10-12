@@ -1,64 +1,26 @@
-// ignore_for_file: must_be_immutable, unused_field
+// ignore_for_file: sort_child_properties_last
 
 import 'package:flutter/material.dart';
-import 'package:freelance_app/models/free_lancer.dart';
-import 'package:freelance_app/models/person_helpers.dart';
 import 'package:freelance_app/views/home.dart';
+import 'package:freelance_app/views/payment_view.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
-import 'package:freelance_app/services/client_provider.dart';
-import 'package:provider/provider.dart';
 
-class FreeLancerProfile extends StatefulWidget {
-  FreeLancerProfile({super.key, required this.email});
-  String email;
+class TestProfile extends StatefulWidget {
+  const TestProfile({super.key});
 
   @override
-  State<FreeLancerProfile> createState() => _FreeLancerProfileState();
+  State<TestProfile> createState() => _TestProfileState();
 }
 
-class _FreeLancerProfileState extends State<FreeLancerProfile> {
-  FreeLancer? _freeLancer;
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    // Fetch client data if it's not already fetched
-    _fetchClientData();
-  }
-
-  Future<void> _fetchClientData() async {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        _isLoading = false; // Update loading state
-      });
-    });
-  }
+class _TestProfileState extends State<TestProfile> {
+  bool isselected = false;
 
   @override
   Widget build(BuildContext context) {
-    //double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    final clientProvider = Provider.of<ClientProvider>(context);
+    double screenwidth = MediaQuery.of(context).size.width;
+    List<dynamic> skills = ["Java", "kotlin", 'c++', 'c'];
 
-    // CollectionReference users = FirebaseFirestore.instance.collection('Users');
-
-    if (clientProvider.isLoading) {
-      return Scaffold(
-        appBar: AppBar(backgroundColor: Colors.green),
-        body: const Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    if (clientProvider.freelancer == null) {
-      return Scaffold(
-        appBar: AppBar(backgroundColor: Colors.green),
-        body: const Center(child: Text("Freelancer doesn't exist")),
-      );
-    }
-
-    _freeLancer = clientProvider.freelancer!;
-    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
@@ -73,9 +35,9 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
                 children: [
                   //==========================================
                   ProfileHelpers().getTopProfile(
-                    name: _freeLancer!.personName,
-                    role: _freeLancer!.getfreeLancerJopTitle[0],
-                    rate:  PersonHelpers.CalculatePersonRate(_freeLancer!.getPersonrate),
+                    name: "Ziad Yasser",
+                    role: "UI/UX",
+                    rate: 5,
                   ),
                   //=========================================
                   SizedBox(height: screenHeight / 20),
@@ -91,11 +53,13 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ProfileHelpers().getProfileContainer(
-                          title: "Country", item: _freeLancer!.country),
+                        title: "Country",
+                        item: "Egypt",
+                      ),
                       ProfileHelpers()
                           .getProfileContainer(title: "Jops", item: '0'),
-                      ProfileHelpers().getProfileContainer(
-                          title: "Price", item: _freeLancer!.getFreelancerPrice.toString()),
+                      ProfileHelpers()
+                          .getProfileContainer(title: "Price", item: "150"),
                     ],
                   ),
                   //==============================================
@@ -124,11 +88,12 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
                         height: screenHeight /
                             8, // Adjust based on the height of your skill container
                         child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: _freeLancer!.getFreelancerskills.map((skill) {
-                              return ProfileHelpers()
-                                  .skillcontainer(title: skill);
-                            }).toList()),
+                          scrollDirection: Axis.horizontal,
+                          children: skills.map((skill) {
+                            return ProfileHelpers()
+                                .skillcontainer(title: skill);
+                          }).toList(),
+                        ),
                       ),
                       //==================================================
                       SizedBox(height: screenHeight / 200),
@@ -137,11 +102,12 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
                         height: screenHeight /
                             13, // Adjust based on the height of your skill container
                         child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children:_freeLancer!.getFreelancerskills.map((skill) {
-                              return ProfileHelpers()
-                                  .skillcontainer(title: skill);
-                            }).toList()),
+                          scrollDirection: Axis.horizontal,
+                          children: skills.map((skill) {
+                            return ProfileHelpers()
+                                .skillcontainer(title: skill);
+                          }).toList(),
+                        ),
                       ),
                     ],
                   ),
@@ -170,11 +136,11 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
                         border: Border.all(
                             color: const Color.fromARGB(255, 181, 177, 177)),
                         borderRadius: BorderRadius.circular(40)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(15.0),
                       child: Text(
-                        _freeLancer!.getFreelancerAbout,
-                        style: const TextStyle(
+                        "about meeeeeeeeeeeeeee heheeeeeeee",
+                        style: TextStyle(
                           fontSize: 18,
                         ),
                       ),
@@ -204,22 +170,37 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
                         8, // Adjust based on the height of your skill container
                     child: ListView(
                         scrollDirection: Axis.horizontal,
-                        children: _freeLancer!.getFreeLancerLanguages.map((language) {
+                        children: skills.map((language) {
                           return ProfileHelpers()
                               .skillcontainer(title: language);
                         }).toList()),
                   ),
 
-                  SizedBox(
-                    height: screenHeight / 30,
+                  SizedBox(height: screenHeight / 20),
+                  const Divider(
+                    thickness: 1,
+                    color: Colors.grey,
                   ),
 
-                  ProfileHelpers().getProfileEndButton(
-                      title: "Contact",
-                      context: context,
-                      page: const HomeScreen(),
-                      color:'green'
-                      )
+                  SizedBox(
+                    height: screenHeight / 50,
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ProfileHelpers().getProfileEndButton(
+                          title: "Contact",
+                          context: context,
+                          color: 'green',
+                          page: const HomeScreen()),
+                      ProfileHelpers().getProfileEndButton(
+                          title: "Send Money",
+                          context: context,
+                          color: 'red',
+                          page: PaymentView(Personname: "Ziad Yasser")),
+                    ],
+                  )
                 ],
               ),
             ),

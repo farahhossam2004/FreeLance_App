@@ -8,7 +8,7 @@ class Customslider extends StatefulWidget {
   final double max;
   final ValueChanged<double> onChanged; // Add this to handle the change
 
-  Customslider({
+  const Customslider({
     super.key,
     required this.text,
     required this.currentSliderValue,

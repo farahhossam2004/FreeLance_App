@@ -34,7 +34,7 @@ class _SignUpState extends State<SignUp> {
 
   bool isLoading = false;
   //=======================================
-  Widget page = Start();
+  Widget page = const Start();
   late int option;
 
   @override
