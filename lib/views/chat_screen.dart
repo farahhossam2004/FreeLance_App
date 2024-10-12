@@ -61,13 +61,36 @@ class _ChatScreenState extends State<ChatScreen> {
         .listen((messageSnapshot) {
       final messages = messageSnapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
-        return types.TextMessage(
-          author:
-              types.User(id: data['authorID'], firstName: data['authorName']),
-          id: doc.id,
-          text: data['text'],
-          createdAt: data['createdAt'] ?? DateTime.now().millisecondsSinceEpoch,
-        );
+
+        // Check if the message is an image or text message
+        if (data.containsKey('imageUrl')) {
+          // Handle image message
+          return types.ImageMessage(
+            name: data['imageName'] ??
+                'Unknown image name', // Add this line for the required 'name' parameter
+            size: data['imageSize'] ?? 0,
+            author: types.User(
+              id: data['authorID'],
+              firstName: data['authorName'],
+            ),
+            id: doc.id,
+            uri: data['imageUrl'], // URL of the image
+            createdAt:
+                data['createdAt'] ?? DateTime.now().millisecondsSinceEpoch,
+          );
+        } else {
+          // Handle text message
+          return types.TextMessage(
+            author: types.User(
+              id: data['authorID'],
+              firstName: data['authorName'],
+            ),
+            id: doc.id,
+            text: data['text'],
+            createdAt:
+                data['createdAt'] ?? DateTime.now().millisecondsSinceEpoch,
+          );
+        }
       }).toList();
 
       if (mounted) {
@@ -143,6 +166,22 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _handleImageSelection() async {
+  // Show a loading indicator dialog
+  final loadingDialog = showDialog(
+    context: context,
+    barrierDismissible: false, // Prevent dismissing the dialog when tapping outside
+    builder: (context) => AlertDialog(
+      content: Row(
+        children: [
+          const CircularProgressIndicator(),
+          const SizedBox(width: 10),
+          const Text("Sending..."),
+        ],
+      ),
+    ),
+  );
+
+  try {
     if (kIsWeb) {
       // Web-specific logic: Use FilePicker for web
       final result = await FilePicker.platform.pickFiles(type: FileType.image);
@@ -156,22 +195,24 @@ class _ChatScreenState extends State<ChatScreen> {
             FirebaseStorage.instance.ref().child('chat_images/$fileName');
 
         final uploadTask = storageRef.putData(result.files.single.bytes!);
-
         final taskSnapshot = await uploadTask.whenComplete(() {});
         final downloadUrl = await taskSnapshot.ref.getDownloadURL();
 
+        // Create the ImageMessage with the current timestamp
         final message = types.ImageMessage(
           author: widget.user,
           id: randomString(),
           name: fileName,
           size: result.files.single.size,
           uri: downloadUrl,
-          createdAt: DateTime.now().microsecondsSinceEpoch,
-          height: 300, // You can set default height and width for web
+          createdAt: DateTime.now().millisecondsSinceEpoch, // Use the current timestamp
+          height: 300, // Set default height and width for web
           width: 300,
         );
 
         await _sendMessageToFirestore(message);
+        // Close the modal bottom sheet
+        Navigator.pop(context);
       } else {
         debugPrint("No image selected or user canceled.");
       }
@@ -190,10 +231,10 @@ class _ChatScreenState extends State<ChatScreen> {
             FirebaseStorage.instance.ref().child('chat_images/$fileName');
 
         final uploadTask = storageRef.putData(bytes);
-
         final taskSnapshot = await uploadTask.whenComplete(() {});
         final downloadUrl = await taskSnapshot.ref.getDownloadURL();
 
+        // Create the ImageMessage with the current timestamp
         final image = await decodeImageFromList(bytes);
 
         final message = types.ImageMessage(
@@ -204,13 +245,22 @@ class _ChatScreenState extends State<ChatScreen> {
           uri: downloadUrl,
           height: image.height.toDouble(),
           width: image.width.toDouble(),
-          createdAt: DateTime.now().microsecondsSinceEpoch,
+          createdAt: DateTime.now().millisecondsSinceEpoch, // Use the current timestamp
         );
 
         await _sendMessageToFirestore(message);
+        // Close the modal bottom sheet
+        Navigator.pop(context);
       }
     }
+  } catch (e) {
+    debugPrint("Error: $e");
+  } finally {
+    // Hide the loading dialog
+    Navigator.of(context).pop(); // Close the loading dialog
   }
+}
+
 
   void _handleMessageTap(BuildContext _, types.Message message) async {
     if (message is types.FileMessage) {
@@ -433,9 +483,10 @@ class _ChatScreenState extends State<ChatScreen> {
                 isCurrentUser: message.author.id == widget.user.id,
               );
             } else if (message is types.ImageMessage) {
-              return CustomMessageBubble(
-                  message: message,
-                  isCurrentUser: message.author.id == widget.user.id);
+              return buildImageMessage(message);
+              // return CustomMessageBubble(
+              //     message: message,
+              //     isCurrentUser: message.author.id == widget.user.id);
             } else if (message is types.FileMessage) {
               return _buildFileMessage(message);
             }
@@ -557,5 +608,22 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       );
     }
+  }
+
+  Widget buildImageMessage(types.ImageMessage message) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      child: Image.network(
+        message.uri, // Ensure this is the correct image URL
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Center(child: CircularProgressIndicator());
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return Text('Image failed to load'); // Handle errors
+        },
+      ),
+    );
   }
 }
