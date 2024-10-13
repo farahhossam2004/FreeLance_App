@@ -70,7 +70,7 @@ class OtherFreelancerProfile extends StatelessWidget {
                               ProfileHelpers().getProfileContainer(
                                   title: "Country", item: data['Country']),
                               ProfileHelpers().getProfileContainer(
-                                  title: "Jops", item: '0'),
+                                  title: "Jobs", item: '0'),
                               ProfileHelpers().getProfileContainer(
                                   title: "Price",
                                   item: data['Price'].toString()),
@@ -212,6 +212,8 @@ class OtherFreelancerProfile extends StatelessWidget {
                                   context: context,
                                   color: 'green',
                                   page: const HomeScreen()),
+
+                                  
                               
                               ProfileHelpers().getProfileEndButton(
                                   title: "Send Money",

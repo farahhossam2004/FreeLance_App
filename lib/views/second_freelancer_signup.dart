@@ -171,7 +171,7 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
                       //================================================
                       SizedBox(height: screenHeight / 20),
                       const Divider(
-                        thickness: 1,
+                        thickness: 2,
                         color: Colors.grey,
                       ),
                       SizedBox(height: screenHeight / 25),
@@ -205,7 +205,7 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
                       //========================================================
                       SizedBox(height: screenHeight / 20),
                       const Divider(
-                        thickness: 1,
+                        thickness: 2,
                         color: Colors.grey,
                       ),
                       SizedBox(height: screenHeight / 25),
@@ -214,7 +214,7 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
                         width: screenwidth,
                         height: 150,
                         child: MultipleChoiceDropdown(
-                          buttontext: "Jop-Title",
+                          buttontext: "Job-Title",
                           text: "Select From Titles below",
                           options: freelancerJobTitles,
                           isSingleSelection: true,
@@ -245,7 +245,7 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
                       //===================================================
                       const SizedBox(height: 0),
                       const Divider(
-                        thickness: 1,
+                        thickness: 2,
                         color: Colors.grey,
                       ),
                       const SizedBox(height: 20),
@@ -268,7 +268,7 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
                       //==================================================
                       const SizedBox(height: 0),
                       const Divider(
-                        thickness: 1,
+                        thickness: 2,
                         color: Colors.grey,
                       ),
                       const SizedBox(
@@ -292,7 +292,7 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
                           Textfieldheight: 100),
                       //===========================================
                       const Divider(
-                        thickness: 1,
+                        thickness: 2,
                         color: Colors.grey,
                       ),
                       const SizedBox(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:freelance_app/helpers/helpers.dart';
 
 class MultipleChoiceDropdown extends StatefulWidget {
   final String text;
@@ -80,11 +81,14 @@ class _MultipleChoiceDropdownState extends State<MultipleChoiceDropdown> {
                         ),
                         actions: [
                           TextButton(
+                            style: ButtonStyle(
+                              backgroundColor: WidgetStatePropertyAll(color)
+                            ),
                             onPressed: () {
                               widget.onOptionsChanged(tempSelectedOptions);
                               Navigator.of(context).pop();
                             },
-                            child: const Text("Close"),
+                            child: const Text("OK" , style: TextStyle(color: Colors.white , fontSize: 15 , fontWeight: FontWeight.bold),),
                           ),
                         ],
                       );

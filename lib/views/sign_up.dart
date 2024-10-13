@@ -68,7 +68,7 @@ class _SignUpState extends State<SignUp> {
           'email': Email.text,
           'Country': CountryChoosed.text,
           'role': 'client',
-          'rate': 0.0
+          'rate': []
         });
       } catch (error) {
         SignUpLoginHelper.showAwesomeDialog(

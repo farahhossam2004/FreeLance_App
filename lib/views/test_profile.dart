@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/views/payment_view.dart';
+import 'package:freelance_app/views/rate.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
 
 class TestProfile extends StatefulWidget {
@@ -43,7 +44,7 @@ class _TestProfileState extends State<TestProfile> {
                   SizedBox(height: screenHeight / 20),
 
                   const Divider(
-                    thickness: 1,
+                    thickness: 2,
                     color: Colors.grey,
                   ),
                   SizedBox(height: screenHeight / 20),
@@ -57,7 +58,7 @@ class _TestProfileState extends State<TestProfile> {
                         item: "Egypt",
                       ),
                       ProfileHelpers()
-                          .getProfileContainer(title: "Jops", item: '0'),
+                          .getProfileContainer(title: "Jobs", item: '0'),
                       ProfileHelpers()
                           .getProfileContainer(title: "Price", item: "150"),
                     ],
@@ -65,7 +66,7 @@ class _TestProfileState extends State<TestProfile> {
                   //==============================================
                   SizedBox(height: screenHeight / 20),
                   const Divider(
-                    thickness: 1,
+                    thickness: 2,
                     color: Colors.grey,
                   ),
                   SizedBox(height: screenHeight / 25),
@@ -114,7 +115,7 @@ class _TestProfileState extends State<TestProfile> {
 
                   SizedBox(height: screenHeight / 20),
                   const Divider(
-                    thickness: 1,
+                    thickness: 2,
                     color: Colors.grey,
                   ),
                   SizedBox(height: screenHeight / 25),
@@ -149,7 +150,7 @@ class _TestProfileState extends State<TestProfile> {
 
                   SizedBox(height: screenHeight / 20),
                   const Divider(
-                    thickness: 1,
+                    thickness: 2,
                     color: Colors.grey,
                   ),
 
@@ -178,7 +179,7 @@ class _TestProfileState extends State<TestProfile> {
 
                   SizedBox(height: screenHeight / 20),
                   const Divider(
-                    thickness: 1,
+                    thickness: 2,
                     color: Colors.grey,
                   ),
 
@@ -194,6 +195,11 @@ class _TestProfileState extends State<TestProfile> {
                           context: context,
                           color: 'green',
                           page: const HomeScreen()),
+                          ProfileHelpers().getProfileEndButton(
+                                  title: "Rate",
+                                  context: context,
+                                  color: 'yellow',
+                                  page: const Rate()),
                       ProfileHelpers().getProfileEndButton(
                           title: "Send Money",
                           context: context,

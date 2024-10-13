@@ -22,6 +22,7 @@ class _StartState extends State<Start> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         backgroundColor: Colors.green,
         title: const Center(
@@ -51,7 +52,6 @@ class _StartState extends State<Start> {
                       // condition to make sure he cant choose both
                       clientSelected = !clientSelected;
                     }
-        
                     if (freelancerSelected || clientSelected) {
                       boxSelected = true;
                     } else {
@@ -104,7 +104,7 @@ class _StartState extends State<Start> {
               ),
         //=============================================================================
               const SizedBox(
-                height: 150,
+                height: 100,
               ),
         //===============================================================================
         // The Button

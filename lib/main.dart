@@ -6,6 +6,7 @@ import 'package:freelance_app/services/payments.dart';
 import 'package:freelance_app/views/free_lancer.dart';
 import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/views/other_freeLancer_profile.dart';
+import 'package:freelance_app/views/rate.dart';
 import 'package:freelance_app/views/start.dart';
 import 'package:freelance_app/views/test_profile.dart';
 import 'package:provider/provider.dart';
@@ -24,13 +25,14 @@ void main() async {
     providers: [
       ChangeNotifierProvider(create: (_) => ClientProvider())
     ],
-    child:  MaterialApp(
+    child:  const MaterialApp(
       debugShowCheckedModeBanner: false,
       home:
       //TestProfile()
-      OtherFreelancerProfile(email: "memes2@gmail.com",),
-      // HomeScreen(),
-      //Start()
+      //OtherFreelancerProfile(email: "memes2@gmail.com",),
+      //HomeScreen(),
+      Start()
+      
     ),
   ));
 }

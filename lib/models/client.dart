@@ -18,7 +18,7 @@ class Client extends Person {
       role: data['role'],
       Email: data['email'],
       country: data['Country'],
-      rate: data['rate']
+      rate: data['rate'] 
     );
   }
 }

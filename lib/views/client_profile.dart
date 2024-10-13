@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/client.dart';
+import 'package:freelance_app/models/person_helpers.dart';
 import 'package:freelance_app/services/client_provider.dart';
 //import 'package:freelance_app/services/users_data.dart';
 import 'package:freelance_app/views/home.dart';
@@ -70,7 +71,7 @@ class _ClientProfileState extends State<ClientProfile> {
                   ProfileHelpers().getTopProfile(
                     name: _client!.personName,
                     role: _client!.role,
-                    rate: 0.0,
+                    rate: PersonHelpers.CalculatePersonRate(_client!.getPersonrate),
                   ),
                   SizedBox(height: screenHeight / 20),
                   const Divider(thickness: 1, color: Colors.grey),

@@ -11,7 +11,7 @@ import 'package:freelance_app/widgets/login_signup_helper.dart';
 import 'package:freelance_app/widgets/text_field.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
-
+import 'package:freelance_app/helpers/helpers.dart';
 class Login extends StatefulWidget {
   Login({super.key});
 
@@ -64,8 +64,8 @@ class _LoginState extends State<Login> {
                     child: Text(
                       "Login",
                       style: TextStyle(
-                          color: Color.fromARGB(255, 4, 4, 4),
-                          fontSize: 30,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                          fontSize: 35,
                           fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -74,7 +74,7 @@ class _LoginState extends State<Login> {
 
                   const Divider(
                     color: Colors.black, // Color of the line
-                    thickness: 1, // Thickness of the line
+                    thickness: 2, // Thickness of the line
                   ),
                   //========================================================================
                   const SizedBox(
@@ -119,7 +119,7 @@ class _LoginState extends State<Login> {
 
                   const Divider(
                     color: Colors.black, // Color of the line
-                    thickness: 1, // Thickness of the line
+                    thickness: 2, // Thickness of the line
                   ),
 
                   //======================================================
@@ -182,8 +182,8 @@ class _LoginState extends State<Login> {
                     onTap: () {
                     Navigator.pop(context);
                   },
-                  nextPageString: "Sign Up !",
-                  firstWord: "Don't Have an Account  "),
+                  nextPageString: "Sign Up!",
+                  firstWord: "Don't Have an Account.  "),
                 ],
               ),
             ),
