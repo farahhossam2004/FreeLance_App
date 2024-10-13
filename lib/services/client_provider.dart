@@ -7,22 +7,29 @@ class ClientProvider with ChangeNotifier {
   Client? _client;
   bool _isLoading = false;
   FreeLancer? _freeLancer;
+  String? _email;
+  String? _role;
 
   // Getters
   Client? get client => _client;
   FreeLancer? get freelancer => _freeLancer;
   bool get isLoading => _isLoading;
+  String? get email => _email;
+  String? get role => _role;
 
   Future<void> fetchClientData(String email) async {
     _isLoading = true;
+    _email = email;
+    
     notifyListeners();
 
     try {
       DocumentSnapshot snapshot =
           await FirebaseFirestore.instance.collection('Users').doc(email).get();
-
+      
       if (snapshot.exists) {
         Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+        _role = data['role'];
         if (data['role'] == 'client') {
           _client = Client.fromMap(snapshot.data() as Map<String, dynamic>);
         } else {

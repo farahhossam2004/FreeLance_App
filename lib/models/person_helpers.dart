@@ -25,7 +25,7 @@ class PersonHelpers {
   }
 
   static String CalculatePersonJops(Person person) {
-    List<int> alljops = person.getPersonJobs;
+    List<dynamic> alljops = person.getPersonJobs;
     String number = alljops.length.toString();
     if (alljops.isEmpty) {
       return '0';
