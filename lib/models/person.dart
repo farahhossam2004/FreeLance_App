@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:freelance_app/models/feedbacks.dart';
+
 class Person {
   String personName;
   final String role;
@@ -25,19 +27,6 @@ class Person {
   String get getPersonCountry => country;
     String get getPersonEmail => Email;
 
-
-  // Setters
-  set setpersonName(String name) {
-    personName = name;
-  }
-
-  set setpersonrate(List<dynamic> rates) {
-    rate = rates;
-  }
-
-  set setjobs_Finished(List<dynamic> jobs) {
-    jobsFinished = jobs;
-  }
 
   
 }

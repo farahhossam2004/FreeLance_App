@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:freelance_app/models/person_helpers.dart';
 import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/views/payment_view.dart';
+import 'package:freelance_app/views/rate.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
 
 class OtherFreelancerProfile extends StatelessWidget {
@@ -52,7 +53,7 @@ class OtherFreelancerProfile extends StatelessWidget {
                           ProfileHelpers().getTopProfile(
                             name: data['full_name'],
                             role: data['jop_title'][0],
-                            rate: PersonHelpers.CalculatePersonRate(data['rate'] ),
+                            rate:  PersonHelpers.CalculatePersonRate(data['rate'] ),
                           ),
                           //=========================================
                           SizedBox(height: screenHeight / 20),
@@ -213,7 +214,11 @@ class OtherFreelancerProfile extends StatelessWidget {
                                   color: 'green',
                                   page: const HomeScreen()),
 
-                                  
+                                  ProfileHelpers().getProfileEndButton(
+                                  title: "Rate",
+                                  context: context,
+                                  color: 'yellow',
+                                  page: Rate(email: data['email'])),
                               
                               ProfileHelpers().getProfileEndButton(
                                   title: "Send Money",

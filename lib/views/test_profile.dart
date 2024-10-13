@@ -199,7 +199,7 @@ class _TestProfileState extends State<TestProfile> {
                                   title: "Rate",
                                   context: context,
                                   color: 'yellow',
-                                  page: const Rate()),
+                                  page: Rate(email: "memes2@gmail.com")),
                       ProfileHelpers().getProfileEndButton(
                           title: "Send Money",
                           context: context,

@@ -105,7 +105,7 @@ class ProfileHelpers {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(
-            width: 80,
+            
             decoration: BoxDecoration(
               color: const Color.fromARGB(255, 232, 219, 219),
               borderRadius: BorderRadius.circular(50),

@@ -12,17 +12,19 @@ class PersonHelpers {
 
 //=====================================
   static double CalculatePersonRate(List<dynamic> personrates) {
-    List<dynamic> allrates = personrates;
-    if (allrates.isEmpty) {
-      return 0;
-    } else {
-      double sum = 0;
-      for (int i = 0; i < allrates.length; i++) {
-        sum += allrates[i];
-      }
-      return sum / allrates.length;
+  List<dynamic> allrates = personrates;
+  if (allrates.isEmpty) {
+    return 0.0;
+  } else {
+    double sum = 0;
+    for (int i = 0; i < allrates.length; i++) {
+      sum += allrates[i];
     }
+    double average = sum / allrates.length;
+    return (average * 10).round() / 10; // Round to one decimal place
   }
+}
+
 
   static String CalculatePersonJops(Person person) {
     List<dynamic> alljops = person.getPersonJobs;

@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:freelance_app/views/home.dart';
+import 'package:freelance_app/views/rate.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
 
 class OtherClientProfile extends StatelessWidget {
@@ -103,6 +104,12 @@ class OtherClientProfile extends StatelessWidget {
                             page: const HomeScreen(),
                             color: 'green'
                           ),
+
+                          ProfileHelpers().getProfileEndButton(
+                                  title: "Rate",
+                                  context: context,
+                                  color: 'yellow',
+                                  page: Rate(email: data['email'])),
                         ],
                       ),
                     ),
