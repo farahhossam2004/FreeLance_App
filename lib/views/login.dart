@@ -3,7 +3,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:freelance_app/services/client_provider.dart';
+import 'package:freelance_app/services/user_provider.dart';
 import 'package:freelance_app/views/client_profile.dart';
 import 'package:freelance_app/views/free_lancer.dart';
 import 'package:freelance_app/views/start.dart';
@@ -12,6 +12,7 @@ import 'package:freelance_app/widgets/text_field.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:freelance_app/helpers/helpers.dart';
+
 class Login extends StatefulWidget {
   Login({super.key});
 
@@ -107,9 +108,7 @@ class _LoginState extends State<Login> {
                       dataType: 'num'),
 
                   SignUpLoginHelper().getCustomLink(
-                      onTap: () {
-                        
-                      }, nextPageString: "Forget your password ? "),
+                      onTap: () {}, nextPageString: "Forget your password ? "),
                   //===============================
                   //==========================================================================
 
@@ -179,11 +178,11 @@ class _LoginState extends State<Login> {
                   ),
                   //==================================================
                   SignUpLoginHelper().getCustomLink(
-                    onTap: () {
-                    Navigator.pop(context);
-                  },
-                  nextPageString: "Sign Up!",
-                  firstWord: "Don't Have an Account.  "),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      nextPageString: "Sign Up!",
+                      firstWord: "Don't Have an Account.  "),
                 ],
               ),
             ),
@@ -199,8 +198,7 @@ class _LoginState extends State<Login> {
           email: Email.text, password: Password.text);
 
       // Fetch user data from 'Clients' collection using ClientProvider
-      final clientProvider =
-          Provider.of<ClientProvider>(context, listen: false);
+      final clientProvider = Provider.of<UserProvider>(context, listen: false);
       await clientProvider.fetchClientData(credential.user!.email!);
 
       SignUpLoginHelper.showAwesomeDialog(

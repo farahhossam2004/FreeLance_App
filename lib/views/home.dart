@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:freelance_app/services/client_provider.dart';
+import 'package:freelance_app/services/user_provider.dart';
 import 'package:freelance_app/views/chats_inbox_screen.dart';
 
 import 'package:freelance_app/views/client_wall.dart';
@@ -24,17 +24,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  
   int _selectedScreenIndex = 0;
 
   final List<Widget> _freelancerScreens = [
     const FreelancerWall(), // Home page
-    const JobsScreen(),
+    const ClientJobsScreen(),
     ChatsInboxScreen(conversations: conversations),
   ];
   final List<Widget> _clientScreens = [
     const ClientWall(), // Home page
-    const JobsScreen(),
+    const ClientJobsScreen(),
     ChatsInboxScreen(conversations: conversations),
   ];
 
@@ -48,19 +47,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-      final userProvider = Provider.of<ClientProvider>(context, listen: false);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.green,
         elevation: 0,
         leading: Builder(
-          builder:(context) => Padding(
+          builder: (context) => Padding(
             padding: const EdgeInsets.only(left: 12),
             child: GestureDetector(
               onTap: () {
-                  Scaffold.of(context).openDrawer();
-                
+                Scaffold.of(context).openDrawer();
               },
               child: const CircleAvatar(
                 backgroundImage: AssetImage('assets/profile.jpeg'),

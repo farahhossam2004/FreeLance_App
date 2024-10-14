@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:freelance_app/models/client.dart';
 import 'package:freelance_app/models/free_lancer.dart';
 
-class ClientProvider with ChangeNotifier {
+class UserProvider with ChangeNotifier {
   Client? _client;
   bool _isLoading = false;
   FreeLancer? _freeLancer;
@@ -20,13 +20,13 @@ class ClientProvider with ChangeNotifier {
   Future<void> fetchClientData(String email) async {
     _isLoading = true;
     _email = email;
-    
+
     notifyListeners();
 
     try {
       DocumentSnapshot snapshot =
           await FirebaseFirestore.instance.collection('Users').doc(email).get();
-      
+
       if (snapshot.exists) {
         Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
         _role = data['role'];
@@ -50,24 +50,11 @@ class ClientProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchOtherClientData(String email) async {
-    _isLoading = true;
-    notifyListeners();
-
-    try {
-      DocumentSnapshot snapshot =
-          await FirebaseFirestore.instance.collection('Users').doc(email).get();
-      if (snapshot.exists) {
-        _client = Client.fromMap(snapshot.data() as Map<String, dynamic>);
-      } else {
-        _client = null; // Client doesn't exist
-      }
-    } catch (e) {
-      print('Error fetching other client data: $e');
-      _client = null; // Handle error
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
+  void signOut() {
+    _client = null;
+    _freeLancer = null;
+    _email = null;
+    _role = null;
+    notifyListeners(); // Notify listeners to update UI
   }
 }

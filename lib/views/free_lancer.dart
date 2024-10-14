@@ -5,7 +5,7 @@ import 'package:freelance_app/models/free_lancer.dart';
 import 'package:freelance_app/models/person_helpers.dart';
 import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
-import 'package:freelance_app/services/client_provider.dart';
+import 'package:freelance_app/services/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class FreeLancerProfile extends StatefulWidget {
@@ -39,7 +39,7 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
   Widget build(BuildContext context) {
     //double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    final clientProvider = Provider.of<ClientProvider>(context);
+    final clientProvider = Provider.of<UserProvider>(context);
 
     // CollectionReference users = FirebaseFirestore.instance.collection('Users');
 
@@ -58,7 +58,7 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
     }
 
     _freeLancer = clientProvider.freelancer!;
-    
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
@@ -75,7 +75,8 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
                   ProfileHelpers().getTopProfile(
                     name: _freeLancer!.personName,
                     role: _freeLancer!.getfreeLancerJopTitle[0],
-                    rate:  PersonHelpers.CalculatePersonRate(_freeLancer!.getPersonrate),
+                    rate: PersonHelpers.CalculatePersonRate(
+                        _freeLancer!.getPersonrate),
                   ),
                   //=========================================
                   SizedBox(height: screenHeight / 20),
@@ -95,7 +96,8 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
                       ProfileHelpers()
                           .getProfileContainer(title: "Jops", item: '0'),
                       ProfileHelpers().getProfileContainer(
-                          title: "Price", item: _freeLancer!.getFreelancerPrice.toString()),
+                          title: "Price",
+                          item: _freeLancer!.getFreelancerPrice.toString()),
                     ],
                   ),
                   //==============================================
@@ -125,7 +127,8 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
                             8, // Adjust based on the height of your skill container
                         child: ListView(
                             scrollDirection: Axis.horizontal,
-                            children: _freeLancer!.getFreelancerskills.map((skill) {
+                            children:
+                                _freeLancer!.getFreelancerskills.map((skill) {
                               return ProfileHelpers()
                                   .skillcontainer(title: skill);
                             }).toList()),
@@ -138,7 +141,8 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
                             13, // Adjust based on the height of your skill container
                         child: ListView(
                             scrollDirection: Axis.horizontal,
-                            children:_freeLancer!.getFreelancerskills.map((skill) {
+                            children:
+                                _freeLancer!.getFreelancerskills.map((skill) {
                               return ProfileHelpers()
                                   .skillcontainer(title: skill);
                             }).toList()),
@@ -204,7 +208,8 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
                         8, // Adjust based on the height of your skill container
                     child: ListView(
                         scrollDirection: Axis.horizontal,
-                        children: _freeLancer!.getFreeLancerLanguages.map((language) {
+                        children:
+                            _freeLancer!.getFreeLancerLanguages.map((language) {
                           return ProfileHelpers()
                               .skillcontainer(title: language);
                         }).toList()),
@@ -218,8 +223,7 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
                       title: "Contact",
                       context: context,
                       page: const HomeScreen(),
-                      color:'green'
-                      )
+                      color: 'green')
                 ],
               ),
             ),

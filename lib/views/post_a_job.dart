@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/job_model.dart';
-import 'package:freelance_app/services/client_provider.dart';
+import 'package:freelance_app/services/user_provider.dart';
 import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/widgets/drop_down_list.dart';
 import 'package:freelance_app/widgets/multi_select_skills.dart';
@@ -22,7 +22,7 @@ class PostAJobScreen extends StatefulWidget {
 }
 
 class _PostAJobScreenState extends State<PostAJobScreen> {
-  late ClientProvider clientProvider;
+  late UserProvider clientProvider;
   String? selectedCategory;
   String? selectedSubcategory;
   List<String> subcategories = [];
@@ -39,8 +39,7 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
   var formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-      clientProvider =
-            Provider.of<ClientProvider>(context, listen: false);
+    clientProvider = Provider.of<UserProvider>(context, listen: false);
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double textformheight = screenHeight / 20;

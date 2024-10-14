@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:freelance_app/views/freelancers_services_list.dart';
 
 class ServiceCard extends StatelessWidget {
-  const ServiceCard({super.key, required this.title, required this.noOfFreelancers});
+  const ServiceCard(
+      {super.key, required this.title, required this.noOfFreelancers});
   final String title;
   final int noOfFreelancers;
   @override
@@ -11,13 +13,20 @@ class ServiceCard extends StatelessWidget {
       elevation: 3,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
-        title: Text(title, style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Color.fromARGB(255, 46, 117, 48)
-        ),),
+        title: Text(
+          title,
+          style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 46, 117, 48)),
+        ),
         subtitle: Text('Available Freelancers: $noOfFreelancers'),
-        trailing: const Icon(Icons.arrow_forward_ios, color: Colors.green,),
-        onTap: (){},
+        trailing: const Icon(
+          Icons.arrow_forward_ios,
+          color: Colors.green,
+        ),
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => FreelancersServicesList(serviceTitle: title)));
+        },
       ),
     );
   }

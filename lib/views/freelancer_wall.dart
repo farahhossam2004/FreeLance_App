@@ -3,7 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/job_model.dart';
-import 'package:freelance_app/services/client_provider.dart';
+import 'package:freelance_app/services/user_provider.dart';
 import 'package:freelance_app/views/job_details_post.dart';
 import 'package:freelance_app/widgets/job_post.dart';
 import 'package:freelance_app/widgets/searchbar.dart';
@@ -39,7 +39,7 @@ class _FreelancerWallState extends State<FreelancerWall> {
       // Map the snapshot data to JobModel
 
       jobs = snapshot.docs.map((doc) {
-        final data = doc.data() as Map<String, dynamic>; 
+        final data = doc.data() as Map<String, dynamic>;
         return JobModel(
           title: data['title'] ?? '',
           description: data['description'] ?? '',
@@ -63,7 +63,7 @@ class _FreelancerWallState extends State<FreelancerWall> {
   @override
   Widget build(BuildContext context) {
     final freelancerProvider =
-        Provider.of<ClientProvider>(context, listen: false);
+        Provider.of<UserProvider>(context, listen: false);
     final filteredJobs = jobs.where((job) {
       return job.title.toLowerCase().contains(searchQuery.toLowerCase());
     }).toList();

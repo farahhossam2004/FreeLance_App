@@ -4,10 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/client.dart';
 import 'package:freelance_app/models/free_lancer.dart';
-import 'package:freelance_app/services/client_provider.dart';
+import 'package:freelance_app/services/user_provider.dart';
 import 'package:freelance_app/views/client_profile.dart';
 import 'package:freelance_app/views/free_lancer.dart';
 import 'package:freelance_app/views/start.dart';
+import 'package:provider/provider.dart';
+
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MenuDrawerScreen extends StatelessWidget {
@@ -15,10 +18,9 @@ class MenuDrawerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final clientProvider = Provider.of<ClientProvider>(context);
-    Client? clientData = clientProvider.client;
-    final freelancerProvider = Provider.of<ClientProvider>(context);
-    FreeLancer? freeLancerData = freelancerProvider.freelancer;
+    final userProvider = Provider.of<UserProvider>(context);
+    Client? clientData = userProvider.client;
+    FreeLancer? freeLancerData = userProvider.freelancer;
 
     return Drawer(
       child: Column(
@@ -26,9 +28,7 @@ class MenuDrawerScreen extends StatelessWidget {
           UserAccountsDrawerHeader(
             decoration: const BoxDecoration(color: Colors.green),
             accountName: Text(
-              clientData != null
-                  ? clientData.personName
-                  : freeLancerData!.personName,
+              clientData?.personName ?? freeLancerData?.personName ?? 'User', // Safely access personName
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             accountEmail: null,
@@ -39,33 +39,47 @@ class MenuDrawerScreen extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.person),
             title: const Text('Profile'),
-            onTap: () async {
-              Navigator.push(
+            onTap: () {
+              if (clientData != null) {
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => clientData != null
-                          ? ClientProfile(
-                              email: clientData.Email,
-                            )
-                          : FreeLancerProfile(
-                              email: freeLancerData!.Email,
-                            )));
+                    builder: (context) => ClientProfile(email: clientData.Email),
+                  ),
+                );
+              } else if (freeLancerData != null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FreeLancerProfile(email: freeLancerData.Email),
+                  ),
+                );
+              } else {
+                // Handle case when both are null
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('User profile not found.')),
+                );
+              }
             },
           ),
-          const SizedBox(
-            height: 5,
-          ),
+          const SizedBox(height: 5),
           ListTile(
-            leading: Icon(Icons.logout),
-            title: Text('Logout'),
+            leading: const Icon(Icons.logout),
+            title: const Text('Logout'),
             onTap: () async {
               await FirebaseAuth.instance.signOut();
-              //Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const Start()));
+              userProvider.signOut(); // Clear the user data
+              // Redirect to Start screen after signing out
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const Start()),
+                (route) => false, // Remove all previous routes
+              );
             },
-          )
+          ),
         ],
       ),
     );
   }
 }
+

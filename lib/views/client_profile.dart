@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/client.dart';
 import 'package:freelance_app/models/person_helpers.dart';
-import 'package:freelance_app/services/client_provider.dart';
+import 'package:freelance_app/services/user_provider.dart';
 //import 'package:freelance_app/services/users_data.dart';
 import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
@@ -29,17 +29,17 @@ class _ClientProfileState extends State<ClientProfile> {
   }
 
   Future<void> _fetchClientData() async {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        setState(() {
-          _isLoading = false; // Update loading state
-        });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        _isLoading = false; // Update loading state
       });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    final clientProvider = Provider.of<ClientProvider>(context);
+    final clientProvider = Provider.of<UserProvider>(context);
     if (clientProvider.isLoading) {
       return Scaffold(
         appBar: AppBar(backgroundColor: Colors.green),
@@ -71,7 +71,8 @@ class _ClientProfileState extends State<ClientProfile> {
                   ProfileHelpers().getTopProfile(
                     name: _client!.personName,
                     role: _client!.role,
-                    rate: PersonHelpers.CalculatePersonRate(_client!.getPersonrate),
+                    rate: PersonHelpers.CalculatePersonRate(
+                        _client!.getPersonrate),
                   ),
                   SizedBox(height: screenHeight / 20),
                   const Divider(thickness: 1, color: Colors.grey),
@@ -114,11 +115,10 @@ class _ClientProfileState extends State<ClientProfile> {
 
                   // Profile Settings button
                   ProfileHelpers().getProfileEndButton(
-                    title: "Profile Settings",
-                    context: context,
-                    page: const HomeScreen(),
-                    color: 'green'
-                  ),
+                      title: "Profile Settings",
+                      context: context,
+                      page: const HomeScreen(),
+                      color: 'green'),
                 ],
               ),
             ),

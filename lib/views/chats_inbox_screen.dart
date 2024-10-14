@@ -4,7 +4,7 @@ import 'package:freelance_app/helpers/helpers.dart';
 import 'package:freelance_app/main.dart';
 import 'package:freelance_app/models/chat_converstaion.dart';
 import 'package:freelance_app/models/free_lancer.dart';
-import 'package:freelance_app/services/client_provider.dart';
+import 'package:freelance_app/services/user_provider.dart';
 import 'package:freelance_app/views/chat_screen.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:provider/provider.dart';
@@ -15,8 +15,8 @@ class ChatsInboxScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentUserEmail = Provider.of<ClientProvider>(context).email;
-    final userProvider = Provider.of<ClientProvider>(context, listen: false);
+    final currentUserEmail = Provider.of<UserProvider>(context).email;
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     // print(currentUserEmail);
     return Column(
       children: [
@@ -146,7 +146,7 @@ class ChatsInboxScreen extends StatelessWidget {
   // Function to navigate to ChatScreen with the freelancer
   Future<void> _navigateToChatScreen(BuildContext context, String mainUserEmail,
       String otherUserEmail, String otherUserName) async {
-    final userProvider = Provider.of<ClientProvider>(context, listen: false);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     String userRole = userProvider.role.toString();
     // Check if a conversation between the client and freelancer exists
     final conversationRef =

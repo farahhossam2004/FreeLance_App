@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class TopFreelancerCard extends StatelessWidget {
   final String name;
-  final double rating;
+  final String rating;
   final String imagePath;
   final String description;
 
@@ -10,7 +10,7 @@ class TopFreelancerCard extends StatelessWidget {
       {super.key,
       required this.name,
       required this.rating,
-      required this.imagePath, required this.description});
+      this.imagePath = 'assets/profile.jpeg', required this.description});
 
   @override
   Widget build(BuildContext context) {

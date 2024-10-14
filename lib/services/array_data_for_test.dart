@@ -7,6 +7,60 @@ import 'package:freelance_app/models/chat_converstaion.dart';
 
 String mainRole = 'FreeLancer';
 
+// =========== job titles for freelancers and categories in client profile =======
+List<String> freelancerJobTitles = [
+    "Graphic Designer",
+    "Web Developer",
+    "Content Writer",
+    "Copywriter",
+    "Digital Marketer",
+    "Social Media Manager",
+    "SEO Specialist",
+    "Mobile App Developer",
+    "Video Editor",
+    "UX/UI Designer",
+    "Translator",
+    "Virtual Assistant",
+    "Photographer",
+    "Data Analyst",
+    "Software Engineer",
+    "Voice Over Artist",
+    "Motion Graphics Designer",
+    "Financial Consultant",
+    "Project Manager",
+    "Customer Support Specialist",
+    "Product Manager",
+    "Marketing Consultant",
+    "Email Marketer",
+    "Brand Strategist",
+    "Business Analyst",
+    "Blockchain Developer",
+    "Illustrator",
+    "Technical Writer",
+    "E-commerce Specialist",
+    "Sales Consultant",
+    "IT Support Specialist",
+    "Legal Consultant",
+    "Public Relations Specialist",
+    "Online Tutor",
+    "Cybersecurity Consultant",
+    "Resume Writer",
+    "CAD Designer",
+    "Event Planner",
+    "Podcast Editor",
+    "AI/ML Specialist",
+    "Accountant",
+    "Game Developer",
+    "Interior Designer",
+    "Personal Trainer",
+    "Market Researcher",
+    "Cloud Computing Specialist",
+    "Life Coach",
+    "Health and Wellness Coach",
+    "Recruitment Consultant",
+    "Scriptwriter"
+  ];
+
 // ========== Inbox Massages ======
 final conversations = [
   ChatConverstaion(
