@@ -5,14 +5,6 @@ import 'package:freelance_app/services/array_data_for_test.dart';
 class ServicesScreen extends StatelessWidget {
   const ServicesScreen({super.key});
 
-  // final List<Map<String, dynamic>> services = const [
-  //   {'title': 'UI/UX Designer', 'noOfFreelancers': 200},
-  //   {'title': 'Mobile App Developer', 'noOfFreelancers': 350},
-  //   {'title': 'Web Developer', 'noOfFreelancers': 150},
-  //   {'title': 'Data Scientist', 'noOfFreelancers': 100},
-  //   {'title': 'Graphic Designer', 'noOfFreelancers': 250},
-  // ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

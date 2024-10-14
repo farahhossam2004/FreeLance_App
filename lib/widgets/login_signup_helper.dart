@@ -3,8 +3,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-
 class SignUpLoginHelper {
   Widget getNextButton(
       {
@@ -70,7 +68,6 @@ class SignUpLoginHelper {
     ),
   );
 }
-
 
   static void showAwesomeDialog(
       {required BuildContext context,

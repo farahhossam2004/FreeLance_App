@@ -40,7 +40,7 @@ String randomString() {
 class _ChatScreenState extends State<ChatScreen> {
   final List<types.Message> _messages = [];
   final TextEditingController _controller = TextEditingController();
-  StreamSubscription? _messageSubscription;
+  // StreamSubscription? _messageSubscription;
 
   CollectionReference conversations =
       FirebaseFirestore.instance.collection('Chat-Conversations');
@@ -164,15 +164,15 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _handleImageSelection() async {
   // Show a loading indicator dialog
-  final loadingDialog = showDialog(
+  showDialog(
     context: context,
     barrierDismissible: false, // Prevent dismissing the dialog when tapping outside
-    builder: (context) => AlertDialog(
+    builder: (context) => const AlertDialog(
       content: Row(
         children: [
-          const CircularProgressIndicator(),
-          const SizedBox(width: 10),
-          const Text("Sending..."),
+          CircularProgressIndicator(),
+          SizedBox(width: 10),
+          Text("Sending..."),
         ],
       ),
     ),
@@ -639,10 +639,10 @@ Future<types.FileMessage> _uploadFileToStorage(PlatformFile file) async {
         message.uri, // Ensure this is the correct image URL
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) return child;
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         },
         errorBuilder: (context, error, stackTrace) {
-          return Text('Image failed to load'); // Handle errors
+          return const Text('Image failed to load'); // Handle errors
         },
       ),
     );

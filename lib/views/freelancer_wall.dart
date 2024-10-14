@@ -32,19 +32,13 @@ class _FreelancerWallState extends State<FreelancerWall> {
       QuerySnapshot snapshot =
           await FirebaseFirestore.instance.collection('Jobs-Posts').get();
 
-      // for (var doc in snapshot.docs) {
-      //   print(
-      //       'Document ID: ${doc.id}, Data: ${doc.data()}'); // Log document data
-      // }
-      // Map the snapshot data to JobModel
-
       jobs = snapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
         return JobModel(
           title: data['title'] ?? '',
           description: data['description'] ?? '',
           budget: data['budget'] ?? '',
-          tags: List<String>.from(data['tags'] ?? []) ?? [], // Handle tags
+          tags: List<String>.from(data['tags'] ?? []) , // Handle tags
           location: data['location'] ?? '',
           duration: data['duration'] ?? '',
           jobType: data['jobType'] ?? '',

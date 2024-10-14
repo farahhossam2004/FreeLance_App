@@ -19,7 +19,7 @@ class _TestProfileState extends State<TestProfile> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    double screenwidth = MediaQuery.of(context).size.width;
+    // double screenwidth = MediaQuery.of(context).size.width;
     List<dynamic> skills = ["Java", "kotlin", 'c++', 'c'];
 
     return Scaffold(

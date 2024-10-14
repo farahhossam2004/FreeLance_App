@@ -11,7 +11,7 @@ import 'package:freelance_app/widgets/login_signup_helper.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
 import 'package:freelance_app/widgets/text_field.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-
+import 'package:freelance_app/services/array_data_for_test.dart';
 class SecondFreelancerSignup extends StatefulWidget {
   final String first_name;
   final String second_name;
@@ -69,77 +69,6 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
   List<String> selected_languages = [];
   List<String> Selected_joptitle=[];
   //========================================================
-  List<String> freelancerJobTitles = [
-    "Graphic Designer",
-    "Web Developer",
-    "Content Writer",
-    "Copywriter",
-    "Digital Marketer",
-    "Social Media Manager",
-    "SEO Specialist",
-    "Mobile App Developer",
-    "Video Editor",
-    "UX/UI Designer",
-    "Translator",
-    "Virtual Assistant",
-    "Photographer",
-    "Data Analyst",
-    "Software Engineer",
-    "Voice Over Artist",
-    "Motion Graphics Designer",
-    "Financial Consultant",
-    "Project Manager",
-    "Customer Support Specialist",
-    "Product Manager",
-    "Marketing Consultant",
-    "Email Marketer",
-    "Brand Strategist",
-    "Business Analyst",
-    "Blockchain Developer",
-    "Illustrator",
-    "Technical Writer",
-    "E-commerce Specialist",
-    "Sales Consultant",
-    "IT Support Specialist",
-    "Legal Consultant",
-    "Public Relations Specialist",
-    "Online Tutor",
-    "Cybersecurity Consultant",
-    "Resume Writer",
-    "CAD Designer",
-    "Event Planner",
-    "Podcast Editor",
-    "AI/ML Specialist",
-    "Accountant",
-    "Game Developer",
-    "Interior Designer",
-    "Personal Trainer",
-    "Market Researcher",
-    "Cloud Computing Specialist",
-    "Life Coach",
-    "Health and Wellness Coach",
-    "Recruitment Consultant",
-    "Scriptwriter"
-  ];
-
-  List<String> skills = [
-    "UI/UX",
-    "Java",
-    'Kotlin',
-    'Java Script',
-    'python',
-    'dart',
-    'angular',
-    'mongo',
-    'C++',
-    'C',
-    'Mobile app',
-    'Flutter',
-    'Android',
-    'odoo',
-  ];
-
-  List<String> languages = ["Arabic", "Englisch", "Germany", "Frensch"];
 
   @override
   Widget build(BuildContext context) {

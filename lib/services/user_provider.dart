@@ -41,7 +41,7 @@ class UserProvider with ChangeNotifier {
         _freeLancer = null; // and free lancer doesn't exist
       }
     } catch (e) {
-      print('Error fetching client data: $e');
+      // print('Error fetching client data: $e');
       _client = null; // Handle error
       _freeLancer = null;
     } finally {

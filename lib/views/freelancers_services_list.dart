@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:freelance_app/views/other_freeLancer_profile.dart';
 import 'package:freelance_app/widgets/freelancer_in_service_card.dart';
 
 class FreelancersServicesList extends StatelessWidget {
@@ -87,7 +86,6 @@ class FreelancersServicesList extends StatelessWidget {
         });
       }
     }
-
     return freelancers;
   }
 }

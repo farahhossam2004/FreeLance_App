@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/job_model.dart';
 import 'package:freelance_app/services/user_provider.dart';
-import 'package:freelance_app/views/job_details_post.dart';
 import 'package:freelance_app/widgets/job_post.dart';
 import 'package:provider/provider.dart';
 
@@ -12,7 +11,6 @@ class ClientJobsScreen extends StatefulWidget {
   @override
   State<ClientJobsScreen> createState() => _ClientJobsScreenState();
 }
-
 class _ClientJobsScreenState extends State<ClientJobsScreen> {
   List<JobModel> jobs = [];
 
@@ -78,7 +76,7 @@ class _ClientJobsScreenState extends State<ClientJobsScreen> {
           title: data['title'] ?? '',
           description: data['description'] ?? '',
           budget: data['budget'] ?? '',
-          tags: List<String>.from(data['tags'] ?? []) ?? [], // Handle tags
+          tags: List<String>.from(data['tags'] ?? []), // Handle tags
           location: data['location'] ?? '',
           duration: data['duration'] ?? '',
           jobType: data['jobType'] ?? '',

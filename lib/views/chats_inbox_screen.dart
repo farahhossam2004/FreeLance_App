@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:freelance_app/helpers/helpers.dart';
-import 'package:freelance_app/main.dart';
 import 'package:freelance_app/models/chat_converstaion.dart';
-import 'package:freelance_app/models/free_lancer.dart';
 import 'package:freelance_app/services/user_provider.dart';
 import 'package:freelance_app/views/chat_screen.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -76,11 +73,11 @@ class ChatsInboxScreen extends StatelessWidget {
                           child: ListTile(
                             contentPadding: const EdgeInsets.all(16),
                             tileColor: Colors.grey[300],
-                            leading: CircleAvatar(
+                            leading: const CircleAvatar(
                                 // backgroundImage: AssetImage(conv.userAvatar),
                                 ),
                             title: Text(otherUserChatName),
-                            subtitle: Text('lastMessage'),
+                            subtitle: const Text('lastMessage'),
                             onTap: () {
                               _navigateToChatScreen(context, currentUserEmail!,
                                   otherUserChatEmail, otherUserChatName);
@@ -92,52 +89,6 @@ class ChatsInboxScreen extends StatelessWidget {
                       );
                     },
                   );
-                  // final conversations = snapshot.data?.docs ?? [];
-
-                  // return ListView.builder(
-                  //     itemCount: conversations.length,
-                  //     itemBuilder: (context, index) {
-                  //       final conv =
-                  //           conversations[index].data() as Map<String, dynamic>;
-                  //       final user = types.User(
-                  //           id: conv['freelancerId'] ?? conv['clientId'],
-                  //           firstName: 'User');
-                  //       return Padding(
-                  //         padding: const EdgeInsets.symmetric(
-                  //             horizontal: 8, vertical: 4),
-                  //         child: Container(
-                  //           decoration: BoxDecoration(
-                  //               color: Colors.white,
-                  //               borderRadius: BorderRadius.circular(12),
-                  //               boxShadow: [
-                  //                 BoxShadow(
-                  //                     color: Colors.grey.withOpacity(0.2),
-                  //                     spreadRadius: 1,
-                  //                     blurRadius: 5,
-                  //                     offset: const Offset(0, 2))
-                  //               ]),
-                  //           child: ListTile(
-                  //             contentPadding: const EdgeInsets.all(16),
-                  //             tileColor: Colors.grey[300],
-                  //             leading: CircleAvatar(
-                  //                 // backgroundImage: AssetImage(conv.userAvatar),
-                  //                 ),
-                  //             title: Text(user.firstName ?? 'Unknown'),
-                  //             subtitle: Text(conv['lastMessage'] ?? ''),
-                  //             onTap: () {
-                  //               Navigator.push(
-                  //                   context,
-                  //                   MaterialPageRoute(
-                  //                       builder: (context) => ChatScreen(
-                  //                             user: user,
-                  //                             conversationId:
-                  //                                 conversations[index].id,
-                  //                           )));
-                  //             },
-                  //           ),
-                  //         ),
-                  //       );
-                  //     });
                 })),
       ],
     );
@@ -192,43 +143,3 @@ class ChatsInboxScreen extends StatelessWidget {
   }
 }
 
-// Function to create a new conversation or navigate to existing one
-// Future<void> _startConversation(
-//     BuildContext context, String clientEmail, String freelancerEmail) async {
-//   // Check if a conversation already exists
-//   final conversationRef =
-//       FirebaseFirestore.instance.collection('Chat-Conversations');
-
-//   final conversationSnapshot = await conversationRef
-//       .where('clientId', isEqualTo: clientEmail)
-//       .where('freelancerId', isEqualTo: freelancerEmail)
-//       .get();
-
-//   String conversationId;
-//   if (conversationSnapshot.docs.isEmpty) {
-//     // If no conversation exists, create a new one
-//     DocumentReference newConversation = await conversationRef.add({
-//       'clientId': clientEmail,
-//       'freelancerId': freelancerEmail,
-//       'lastMessage': '', // No last message yet
-//       'lastMessageAt': DateTime.now(),
-//     });
-//     conversationId = newConversation.id;
-//   } else {
-//     // If conversation exists, use its ID
-//     conversationId = conversationSnapshot.docs.first.id;
-//   }
-
-//   // Navigate to the chat screen
-//   final freelancerUser =
-//       types.User(id: freelancerEmail, firstName: 'Freelancer');
-//   Navigator.push(
-//     context,
-//     MaterialPageRoute(
-//       builder: (context) => ChatScreen(
-//         user: freelancerUser,
-//         conversationId: conversationId,
-//       ),
-//     ),
-//   );
-// }

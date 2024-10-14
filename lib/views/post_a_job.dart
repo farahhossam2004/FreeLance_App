@@ -1,8 +1,6 @@
 // ignore_for_file: unused_local_variable, use_build_context_synchronously
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/job_model.dart';
 import 'package:freelance_app/services/user_provider.dart';

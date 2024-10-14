@@ -1,14 +1,13 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, must_be_immutable
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:freelance_app/models/feedbacks.dart';
-import 'package:freelance_app/views/start.dart';
 import 'package:freelance_app/widgets/login_signup_helper.dart';
 import 'package:freelance_app/widgets/starwidget.dart';
 import 'package:freelance_app/widgets/text_field.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+
 
 class Rate extends StatefulWidget {
   Rate({super.key, required this.email});
@@ -205,7 +204,7 @@ class _RateState extends State<Rate> {
                     child: Text(
                       numberofstars.toString(),
                       style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                          const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                     ),
                   ),
                   const Starwidget(isActive: true)
@@ -248,7 +247,7 @@ class _RateState extends State<Rate> {
                 child: const Text(
                   "Send feedback",
                   style: TextStyle(
-                      color: const Color.fromARGB(255, 255, 255, 255),
+                      color: Color.fromARGB(255, 255, 255, 255),
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
                 ),

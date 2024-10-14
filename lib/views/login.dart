@@ -11,7 +11,6 @@ import 'package:freelance_app/widgets/login_signup_helper.dart';
 import 'package:freelance_app/widgets/text_field.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
-import 'package:freelance_app/helpers/helpers.dart';
 
 class Login extends StatefulWidget {
   Login({super.key});
@@ -139,33 +138,8 @@ class _LoginState extends State<Login> {
                           isLoading = true;
                           setState(() {});
                           await Userlogin();
-
-                          // SignUpLoginHelper.showAwesomeDialog(
-                          //     context: context,
-                          //     title: 'Succussefully logged in',
-                          //     description: 'Welcome back!',
-                          //     type: DialogType.success,
-                          //     page: ClientProfile(email: Email.text));
                         } on FirebaseAuthException catch (e) {
-                          // if (e.code == 'user-not-found') {
-                          //   SignUpLoginHelper.showAwesomeDialog(
-                          //       context: context,
-                          //       title: 'User not found',
-                          //       description: 'Try again, or sign up!',
-                          //       type: DialogType.error);
-                          // } else if (e.code == 'wrong-password') {
-                          //   SignUpLoginHelper.showAwesomeDialog(
-                          //       context: context,
-                          //       title: 'Wrong password',
-                          //       description: 'Try again!',
-                          //       type: DialogType.error);
-                          // } else {
-                          //   SignUpLoginHelper.showAwesomeDialog(
-                          //       context: context,
-                          //       title: 'Error occured',
-                          //       description: 'Try again',
-                          //       type: DialogType.error);
-                          // }
+                          print(e);
                         }
                         isLoading = false;
                         setState(() {});

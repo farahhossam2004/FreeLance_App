@@ -4,7 +4,6 @@ import 'package:freelance_app/services/array_data_for_test.dart';
 import 'package:freelance_app/views/login.dart';
 import 'package:freelance_app/views/sign_up.dart';
 import 'package:freelance_app/widgets/login_signup_helper.dart';
-
 import '../widgets/choosable_contai.dart';
 
 class Start extends StatefulWidget {

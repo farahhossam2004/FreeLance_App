@@ -1,7 +1,5 @@
 // ignore_for_file: non_constant_identifier_names
-
 import 'package:freelance_app/models/person.dart';
-
 class PersonHelpers {
   //==========================================
   static List<Person> allPersonList = [];

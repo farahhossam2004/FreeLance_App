@@ -1,5 +1,4 @@
 // ignore_for_file: must_be_immutable, file_names
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/person_helpers.dart';
@@ -7,7 +6,6 @@ import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/views/payment_view.dart';
 import 'package:freelance_app/views/rate.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
-
 class OtherFreelancerProfile extends StatelessWidget {
   OtherFreelancerProfile({super.key, required this.email});
   String? email;

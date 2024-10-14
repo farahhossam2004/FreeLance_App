@@ -1,7 +1,4 @@
 // ignore_for_file: non_constant_identifier_names
-
-import 'package:freelance_app/models/feedbacks.dart';
-
 class Person {
   String personName;
   final String role;

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:freelance_app/views/services_screen.dart';
 import 'package:freelance_app/widgets/services_card.dart';
 import 'package:freelance_app/services/array_data_for_test.dart';
-
 class ServicesForYou extends StatelessWidget {
   const ServicesForYou({super.key});
 

@@ -94,7 +94,7 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
                       ProfileHelpers().getProfileContainer(
                           title: "Country", item: _freeLancer!.country),
                       ProfileHelpers()
-                          .getProfileContainer(title: "Jops", item: '0'),
+                          .getProfileContainer(title: "Jobs", item: '0'),
                       ProfileHelpers().getProfileContainer(
                           title: "Price",
                           item: _freeLancer!.getFreelancerPrice.toString()),

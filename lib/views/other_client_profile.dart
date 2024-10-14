@@ -1,5 +1,4 @@
 // ignore_for_file: must_be_immutable
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:freelance_app/views/home.dart';
@@ -55,7 +54,6 @@ class OtherClientProfile extends StatelessWidget {
                             rate: 
                                 data['rate']
                           ),
-
                           SizedBox(height: screenHeight / 20),
                           const Divider(thickness: 1, color: Colors.grey),
                           SizedBox(height: screenHeight / 20),

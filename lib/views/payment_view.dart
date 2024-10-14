@@ -1,8 +1,6 @@
 // ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:freelance_app/widgets/payment_details_view_body.dart';
-
 class PaymentView extends StatelessWidget {
   PaymentView({super.key, required this.Personname});
 

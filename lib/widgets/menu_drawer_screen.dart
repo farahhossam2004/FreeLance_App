@@ -9,10 +9,6 @@ import 'package:freelance_app/views/client_profile.dart';
 import 'package:freelance_app/views/free_lancer.dart';
 import 'package:freelance_app/views/start.dart';
 import 'package:provider/provider.dart';
-
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 class MenuDrawerScreen extends StatelessWidget {
   const MenuDrawerScreen({super.key});
 

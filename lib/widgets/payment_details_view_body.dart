@@ -65,7 +65,7 @@ class _PaymentDetailsViewBodyState extends State<PaymentDetailsViewBody> {
                   fontWeight: FontWeight.bold),
             )
           else ...[
-            Text("Send to " + widget.Personname,
+            Text("Send to ${widget.Personname}",
                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 20),
             Row(

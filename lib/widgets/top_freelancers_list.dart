@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:freelance_app/services/array_data_for_test.dart';
 import 'package:freelance_app/widgets/top_freelancer_card.dart';
 
 class TopFreelancersList extends StatelessWidget {
@@ -29,7 +28,7 @@ class TopFreelancersList extends StatelessWidget {
           }
 
           final freelancers = snapshot.data!.docs;
-          print(freelancers);
+          // print(freelancers);
           // Sort the freelancers based on their average rating
           freelancers.sort((a, b) {
             final List<dynamic> ratingsA = a['rate'];
@@ -78,7 +77,7 @@ class TopFreelancersList extends StatelessWidget {
                       ),
                     ),
                   );
-               
+              
               });
         },
       ),

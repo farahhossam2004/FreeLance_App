@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Payemnt_item extends StatelessWidget {
   const Payemnt_item({super.key, this.isActive = false, required this.image});
