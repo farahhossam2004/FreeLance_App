@@ -11,10 +11,11 @@ class JobModel {
   final String jobType;
   final String clientName;
   final String clientEmail;
+  final String id;
   var time;
 
   JobModel(
-      {required this.title,
+      {required this.id, required this.title,
       required this.description,
       required this.budget,
       required this.tags,

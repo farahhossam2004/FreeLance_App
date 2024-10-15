@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:freelance_app/services/user_provider.dart';
+import 'package:freelance_app/views/bookmarked.dart';
 import 'package:freelance_app/views/chats_inbox_screen.dart';
 import 'package:freelance_app/views/client_wall.dart';
 import 'package:freelance_app/views/freelancer_wall.dart';
@@ -23,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _freelancerScreens = [
     const FreelancerWall(), // Home page
-    const ClientJobsScreen(),
+    const BookmarkedJobsPage(),
     ChatsInboxScreen(conversations: conversations),
   ];
   final List<Widget> _clientScreens = [

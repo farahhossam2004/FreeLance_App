@@ -183,6 +183,7 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
     if (formKey.currentState?.validate() ?? false) {
       // Collect all data
       final jobData = JobModel(
+          id: '',
           title: titleController.text,
           description: descriptionController.text,
           budget: budgetController.text,

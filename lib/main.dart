@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:freelance_app/firebase_options.dart';
 import 'package:freelance_app/services/user_provider.dart';
 import 'package:freelance_app/views/client_wall.dart';
+import 'package:freelance_app/views/start.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -20,8 +21,8 @@ void main() async {
           //TestProfile()
           // OtherFreelancerProfile(email: "memes2@gmail.com",),
           // HomeScreen(),
-          // Start(),
-          ClientWall()
+          Start(),
+          // ClientWall()
     ),
   ));
 }

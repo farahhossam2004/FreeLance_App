@@ -1,12 +1,28 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/job_model.dart';
+import 'package:freelance_app/services/user_provider.dart';
 import 'package:freelance_app/views/other_client_profile.dart';
+import 'package:provider/provider.dart';
 
-class JobPost extends StatelessWidget {
+class JobPost extends StatefulWidget {
   const JobPost({super.key, required this.job, required this.isPostDetailed});
   final JobModel job;
   final bool isPostDetailed;
 
+  @override
+  State<JobPost> createState() => _JobPostState();
+}
+
+
+class _JobPostState extends State<JobPost> {
+   bool isSaved = false; // Track whether the post is saved
+
+  @override
+  void initState() {
+    super.initState();
+    _checkIfSaved(); // Check if the post is saved when the widget is initialized
+  }
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -25,7 +41,11 @@ class JobPost extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => OtherClientProfile(email: job.clientEmail)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                OtherClientProfile(email: widget.job.clientEmail)));
                   },
                   child: const CircleAvatar(
                     backgroundImage: AssetImage('assets/profile.jpeg'),
@@ -35,7 +55,7 @@ class JobPost extends StatelessWidget {
                   width: 8,
                 ),
                 Text(
-                  job.clientName,
+                  widget.job.clientName,
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w300,
@@ -58,11 +78,11 @@ class JobPost extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        job.title,
-                        maxLines: isPostDetailed
+                        widget.job.title,
+                        maxLines: widget.isPostDetailed
                             ? null
                             : 2, // Set maxLines to null if detailed
-                        overflow: isPostDetailed
+                        overflow: widget.isPostDetailed
                             ? null
                             : TextOverflow.ellipsis, // No overflow if detailed
                         style: const TextStyle(
@@ -86,10 +106,11 @@ class JobPost extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.bookmark_add_outlined,
-                      color: Colors.grey),
-                  onPressed: () {},
-                ),
+                  icon: Icon(
+                    isSaved ? Icons.bookmark : Icons.bookmark_add_outlined, // Change icon based on save status
+                    color: isSaved ? const Color.fromARGB(255, 72, 82, 65) : Colors.grey,
+                  ),
+                  onPressed: _toggleSavePost,),
               ],
             ),
             const SizedBox(height: 12),
@@ -98,7 +119,7 @@ class JobPost extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    '\$${job.budget}',
+                    '\$${widget.job.budget}',
                     style: const TextStyle(
                       color: Color.fromARGB(255, 40, 122, 41),
                       fontSize: 18,
@@ -110,9 +131,9 @@ class JobPost extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            if (isPostDetailed)
+            if (widget.isPostDetailed)
               Text(
-                job.description,
+                widget.job.description,
                 style: const TextStyle(
                   color: Color.fromARGB(255, 103, 99, 99),
                   fontSize: 16,
@@ -123,7 +144,7 @@ class JobPost extends StatelessWidget {
             Wrap(
               runSpacing: 4,
               spacing: 8,
-              children: job.tags.map((tag) {
+              children: widget.job.tags.map((tag) {
                 return Chip(
                   label: Text(
                     tag!,
@@ -153,7 +174,7 @@ class JobPost extends StatelessWidget {
                           size: 16, color: Color.fromARGB(255, 100, 95, 95)),
                       const SizedBox(width: 4),
                       Text(
-                        job.location,
+                        widget.job.location,
                         style: const TextStyle(
                             color: Color.fromARGB(255, 100, 95, 95)),
                       ),
@@ -166,7 +187,7 @@ class JobPost extends StatelessWidget {
                       const Icon(Icons.description,
                           size: 16, color: Color.fromARGB(255, 100, 95, 95)),
                       const SizedBox(width: 4),
-                      Text('Proposals: ${job.noOfPropsals}',
+                      Text('Proposals: ${widget.job.noOfPropsals}',
                           style: const TextStyle(
                               color: Color.fromARGB(255, 100, 95, 95))),
                     ],
@@ -182,7 +203,7 @@ class JobPost extends StatelessWidget {
                     size: 16, color: Color.fromARGB(255, 100, 95, 95)),
                 const SizedBox(width: 4),
                 Text(
-                  job.duration,
+                  widget.job.duration,
                   style:
                       const TextStyle(color: Color.fromARGB(255, 100, 95, 95)),
                 ),
@@ -192,5 +213,66 @@ class JobPost extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _checkIfSaved() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final freelancerEmail = userProvider.freelancer?.Email;
+
+    if (freelancerEmail != null) {
+      // Check if this post is already saved by the freelancer
+      QuerySnapshot result = await FirebaseFirestore.instance
+          .collection('Saved-Posts')
+          .where('postId', isEqualTo: widget.job.id)
+          .where('freelancerEmail', isEqualTo: freelancerEmail)
+          .get();
+
+      if (result.docs.isNotEmpty) {
+        setState(() {
+          isSaved = true; // Post is already saved
+        });
+      }
+    }
+  }
+
+  Future<void> _toggleSavePost() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final freelancerEmail = userProvider.freelancer?.Email;
+
+    if (freelancerEmail != null) {
+      if (isSaved) {
+        // Unsave the post
+        QuerySnapshot result = await FirebaseFirestore.instance
+            .collection('Saved-Posts')
+            .where('postId', isEqualTo: widget.job.id)
+            .where('freelancerEmail', isEqualTo: freelancerEmail)
+            .get();
+
+        if (result.docs.isNotEmpty) {
+          await result.docs.first.reference.delete();
+        }
+
+        setState(() {
+          isSaved = false; // Update the state to reflect the post is unsaved
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Post unsaved!')),
+        );
+      } else {
+        // Save the post
+        await FirebaseFirestore.instance.collection('Saved-Posts').add({
+          'postId': widget.job.id, 
+          'freelancerEmail': freelancerEmail,
+          'savedAt': Timestamp.now(),
+        });
+
+        setState(() {
+          isSaved = true; // Update the state to reflect the post is saved
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Post saved!')),
+        );
+      }
+    }
   }
 }

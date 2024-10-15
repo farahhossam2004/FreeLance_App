@@ -73,6 +73,7 @@ class _ClientJobsScreenState extends State<ClientJobsScreen> {
       jobs = snapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
         return JobModel(
+          id: doc.id,
           title: data['title'] ?? '',
           description: data['description'] ?? '',
           budget: data['budget'] ?? '',
