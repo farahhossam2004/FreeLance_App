@@ -118,7 +118,7 @@ class _ClientProfileState extends State<ClientProfile> {
 
                   // Profile Settings button
                   ProfileHelpers().getProfileEndButton(
-                      title: "Profile Settings",
+                      title: "Home",
                       context: context,
                       page: const HomeScreen(),
                       color: 'green'),

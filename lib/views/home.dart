@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final profileImageURL = userProvider.client != null
         ? userProvider.client!.imageURL.toString()
-        : userProvider.freelancer!.imageURL;
+        : userProvider.freelancer!.imageURL.toString();
     
     return Scaffold(
       key: _scaffoldKey,
