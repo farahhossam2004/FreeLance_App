@@ -16,13 +16,13 @@ void main() async {
 
   runApp(MultiProvider(
     providers: [ChangeNotifierProvider(create: (_) => UserProvider())],
-    child:  MaterialApp(
+    child: const MaterialApp(
       debugShowCheckedModeBanner: false,
       home:
           //TestProfile()
-          OtherFreelancerProfile(email: "ahmed@gmail.com",),
+          // OtherFreelancerProfile(email: "ahmed@gmail.com",),
           // HomeScreen(),
-          //Start(),
+          Start(),
           // ClientWall()
     ),
   ));

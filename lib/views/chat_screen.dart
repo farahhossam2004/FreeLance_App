@@ -136,26 +136,35 @@ class _ChatScreenState extends State<ChatScreen> {
     // _addMessage(textMessage);
     await _sendMessageToFirestore(textMessage);
   }
-
+  
   Future<void> _sendMessageToFirestore(types.Message message) async {
-    final data = {
-      'authorID': message.author.id,
-      'authorName': widget.user.firstName,
-      'createdAt': message.createdAt,
-    };
+  final data = {
+    'authorID': message.author.id,
+    'authorName': widget.user.firstName,
+    'createdAt': message.createdAt,
+  };
 
-    if (message is types.TextMessage) {
-      data['text'] = message.text;
-    } else if (message is types.ImageMessage) {
+  if (message is types.TextMessage) {
+    data['text'] = message.text;
+  } else if (message is types.ImageMessage) {
+    if (message.uri != null) {
       data['imageUrl'] = message.uri; // Store image URL
-      data['height'] = message.height;
-      data['width'] = message.width;
-    } else if (message is types.FileMessage) {
+      data['height'] = message.height ?? 0; // Handle potential null values
+      data['width'] = message.width ?? 0;
+    } else {
+      debugPrint("Error: ImageMessage URI is null");
+    }
+  } else if (message is types.FileMessage) {
+    if (message.uri != null && message.name != null) {
       data['fileUrl'] = message.uri; // Store file URL
       data['fileName'] = message.name;
-      data['fileSize'] = message.size;
+      data['fileSize'] = message.size ?? 0; // Handle null size
+    } else {
+      debugPrint("Error: FileMessage URI or Name is null");
     }
+  }
 
+  try {
     await conversations
         .doc(widget.conversationId)
         .collection('messages')
@@ -165,7 +174,42 @@ class _ChatScreenState extends State<ChatScreen> {
       'lastMessage': message is types.TextMessage ? message.text : 'File sent',
       'lastMessageAt': message.createdAt,
     });
+
+    debugPrint("Message sent to Firestore successfully.");
+  } catch (e) {
+    debugPrint("Error sending message to Firestore: $e");
   }
+}
+
+  // Future<void> _sendMessageToFirestore(types.Message message) async {
+  //   final data = {
+  //     'authorID': message.author.id,
+  //     'authorName': widget.user.firstName,
+  //     'createdAt': message.createdAt,
+  //   };
+
+  //   if (message is types.TextMessage) {
+  //     data['text'] = message.text;
+  //   } else if (message is types.ImageMessage) {
+  //     data['imageUrl'] = message.uri; // Store image URL
+  //     data['height'] = message.height;
+  //     data['width'] = message.width;
+  //   } else if (message is types.FileMessage) {
+  //     data['fileUrl'] = message.uri; // Store file URL
+  //     data['fileName'] = message.name;
+  //     data['fileSize'] = message.size;
+  //   }
+
+  //   await conversations
+  //       .doc(widget.conversationId)
+  //       .collection('messages')
+  //       .add(data);
+
+  //   await conversations.doc(widget.conversationId).update({
+  //     'lastMessage': message is types.TextMessage ? message.text : 'File sent',
+  //     'lastMessageAt': message.createdAt,
+  //   });
+  // }
 
   void _handleImageSelection() async {
     // Show a loading indicator dialog
@@ -347,64 +391,113 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
+  // void _handleFileSelection() async {
+  //   debugPrint("File selection initiated");
+  //   try {
+  //     final result = await FilePicker.platform.pickFiles(type: FileType.any);
+
+  //     if (result != null) {
+  //       if (kIsWeb) {
+  //         // Web-specific logic
+  //         if (result.files.single.bytes != null) {
+  //           debugPrint("File picked on web: ${result.files.single.name}");
+  //           final message = await _uploadFileToStorage(result.files.single);
+  //           await _sendMessageToFirestore(message);
+  //           // Store the bytes in a map or similar structure
+  //           // final message = types.FileMessage(
+  //           //   author: widget.user,
+  //           //   id: randomString(),
+  //           //   name: result.files.single.name,
+  //           //   size: result.files.single.size,
+  //           //   uri: 'web', // Use a placeholder for the web
+  //           //   metadata: {
+  //           //     'bytes': result.files.single.bytes,
+  //           //   },
+  //           // );
+
+  //           // _addMessage(message); // Update to add the message
+  //           debugPrint(
+  //               "File message created on web with size: ${message.size} bytes");
+  //         } else {
+  //           debugPrint("File selection on web failed, no bytes available.");
+  //         }
+  //       } else {
+  //         // Non-web logic
+  //         if (result.files.single.path != null) {
+  //           debugPrint("File picked on mobile: ${result.files.single.name}");
+  //           final message = await _uploadFileToStorage(result.files.single);
+  //           await _sendMessageToFirestore(message);
+  //           // final message = types.FileMessage(
+  //           //   author: widget.user,
+  //           //   id: randomString(),
+  //           //   name: result.files.single.name,
+  //           //   size: result.files.single.size,
+  //           //   uri: result.files.single.path!, // Use the file path
+  //           // );
+
+  //           // await _sendMessageToFirestore(message);
+  //           // _addMessage(message); // Update to add the message
+  //           debugPrint("File message created with path: ${message.uri}");
+  //         } else {
+  //           debugPrint("File path is null.");
+  //         }
+  //       }
+  //     } else {
+  //       debugPrint("No file selected or user canceled.");
+  //     }
+  //   } catch (e) {
+  //     debugPrint("Error during file selection: $e");
+  //   }
+  // }
   void _handleFileSelection() async {
-    debugPrint("File selection initiated");
-    try {
-      final result = await FilePicker.platform.pickFiles(type: FileType.any);
+  debugPrint("File selection initiated");
+  try {
+    final result = await FilePicker.platform.pickFiles(type: FileType.any);
 
-      if (result != null) {
-        if (kIsWeb) {
-          // Web-specific logic
-          if (result.files.single.bytes != null) {
-            debugPrint("File picked on web: ${result.files.single.name}");
-            final message = await _uploadFileToStorage(result.files.single);
-            await _sendMessageToFirestore(message);
-            // Store the bytes in a map or similar structure
-            // final message = types.FileMessage(
-            //   author: widget.user,
-            //   id: randomString(),
-            //   name: result.files.single.name,
-            //   size: result.files.single.size,
-            //   uri: 'web', // Use a placeholder for the web
-            //   metadata: {
-            //     'bytes': result.files.single.bytes,
-            //   },
-            // );
+    if (result != null && result.files.isNotEmpty) {
+      final selectedFile = result.files.single;
 
-            // _addMessage(message); // Update to add the message
-            debugPrint(
-                "File message created on web with size: ${message.size} bytes");
+      if (selectedFile.path == null && selectedFile.bytes == null) {
+        debugPrint("Error: Both file path and bytes are null.");
+        return;
+      }
+
+      if (kIsWeb) {
+        // Web-specific logic
+        if (selectedFile.bytes != null) {
+          debugPrint("File picked on web: ${selectedFile.name}");
+          final message = await _uploadFileToStorage(selectedFile);
+          if (message == null) {
+            debugPrint("Error: _uploadFileToStorage returned null");
           } else {
-            debugPrint("File selection on web failed, no bytes available.");
+            await _sendMessageToFirestore(message);
+            debugPrint("File message created on web with size: ${message.size} bytes");
           }
         } else {
-          // Non-web logic
-          if (result.files.single.path != null) {
-            debugPrint("File picked on mobile: ${result.files.single.name}");
-            final message = await _uploadFileToStorage(result.files.single);
-            await _sendMessageToFirestore(message);
-            // final message = types.FileMessage(
-            //   author: widget.user,
-            //   id: randomString(),
-            //   name: result.files.single.name,
-            //   size: result.files.single.size,
-            //   uri: result.files.single.path!, // Use the file path
-            // );
-
-            // await _sendMessageToFirestore(message);
-            // _addMessage(message); // Update to add the message
-            debugPrint("File message created with path: ${message.uri}");
-          } else {
-            debugPrint("File path is null.");
-          }
+          debugPrint("File selection on web failed, no bytes available.");
         }
       } else {
-        debugPrint("No file selected or user canceled.");
+        // Non-web logic
+        if (selectedFile.path != null) {
+          debugPrint("File picked on mobile: ${selectedFile.name}");
+          final message = await _uploadFileToStorage(selectedFile);
+          if (message == null) {
+            debugPrint("Error: _uploadFileToStorage returned null");
+          } else {
+            await _sendMessageToFirestore(message);
+            debugPrint("File message created with path: ${message.uri}");
+          }
+        } else {
+          debugPrint("Error: File path is null.");
+        }
       }
-    } catch (e) {
-      debugPrint("Error during file selection: $e");
+    } else {
+      debugPrint("No file selected or user canceled.");
     }
+  } catch (e) {
+    debugPrint("Error during file selection: $e");
   }
+}
 
   void _handleAttachmentPressed() {
     showModalBottomSheet(

@@ -17,11 +17,13 @@ class ChatsInboxScreen extends StatelessWidget {
     return Column(
       children: [
         const Padding(
-            padding: EdgeInsets.all(16),
-            child: Text(
-              'Inbox',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-            )),
+          padding: EdgeInsets.all(16),
+          
+          child: Text(
+            'Inbox',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+          ),
+        ),
         Expanded(
             child: StreamBuilder(
                 stream: userProvider.role == 'free_lancer'
@@ -84,8 +86,8 @@ class ChatsInboxScreen extends StatelessWidget {
                                       color: Colors.white)
                                   : null,
                             ),
-                            title: Text(otherUserChatName),
-                            subtitle: const Text('lastMessage'),
+                            title: Text(otherUserChatName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                            subtitle: const Text('Tap to chat'),
                             onTap: () {
                               navigateToChatScreen(context, currentUserEmail!,
                                   otherUserChatEmail, otherUserChatName,

@@ -66,89 +66,99 @@ class _RateState extends State<Rate> {
             Center(
               child: Row(
                 children: [
-                  GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          rates_choosed[0] = !rates_choosed[0];
-                          if (rates_choosed[0] == false) {
-                            rates_choosed[1] = false;
-                            rates_choosed[2] = false;
-                            rates_choosed[3] = false;
-                            rates_choosed[4] = false;
-                          }
-                        });
-                      },
-                      child: Starwidget(isActive: rates_choosed[0])),
-                  GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          rates_choosed[1] = !rates_choosed[1];
-                          if (rates_choosed[0] == false) {
+                  Expanded(
+                    child: GestureDetector(
+                        onTap: () {
+                          setState(() {
                             rates_choosed[0] = !rates_choosed[0];
-                          }
-                          if (rates_choosed[1] == false) {
-                            rates_choosed[2] = false;
-                            rates_choosed[3] = false;
-                            rates_choosed[4] = false;
-                          }
-                        });
-                      },
-                      child: Starwidget(isActive: rates_choosed[1])),
-                  GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          rates_choosed[2] = !rates_choosed[2];
-                          if (rates_choosed[1] == false) {
+                            if (rates_choosed[0] == false) {
+                              rates_choosed[1] = false;
+                              rates_choosed[2] = false;
+                              rates_choosed[3] = false;
+                              rates_choosed[4] = false;
+                            }
+                          });
+                        },
+                        child: Starwidget(isActive: rates_choosed[0])),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                        onTap: () {
+                          setState(() {
                             rates_choosed[1] = !rates_choosed[1];
-                          }
-                          if (rates_choosed[0] == false) {
-                            rates_choosed[0] = !rates_choosed[0];
-                          }
-                          if (rates_choosed[2] == false) {
-                            rates_choosed[3] = false;
-                            rates_choosed[4] = false;
-                          }
-                        });
-                      },
-                      child: Starwidget(isActive: rates_choosed[2])),
-                  GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          rates_choosed[3] = !rates_choosed[3];
-                          if (rates_choosed[1] == false) {
-                            rates_choosed[1] = !rates_choosed[1];
-                          }
-                          if (rates_choosed[0] == false) {
-                            rates_choosed[0] = !rates_choosed[0];
-                          }
-                          if (rates_choosed[2] == false) {
+                            if (rates_choosed[0] == false) {
+                              rates_choosed[0] = !rates_choosed[0];
+                            }
+                            if (rates_choosed[1] == false) {
+                              rates_choosed[2] = false;
+                              rates_choosed[3] = false;
+                              rates_choosed[4] = false;
+                            }
+                          });
+                        },
+                        child: Starwidget(isActive: rates_choosed[1])),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                        onTap: () {
+                          setState(() {
                             rates_choosed[2] = !rates_choosed[2];
-                          }
-                          if (rates_choosed[3] == false) {
-                            rates_choosed[4] = false;
-                          }
-                        });
-                      },
-                      child: Starwidget(isActive: rates_choosed[3])),
-                  GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          rates_choosed[4] = !rates_choosed[4];
-                          if (rates_choosed[1] == false) {
-                            rates_choosed[1] = !rates_choosed[1];
-                          }
-                          if (rates_choosed[0] == false) {
-                            rates_choosed[0] = !rates_choosed[0];
-                          }
-                          if (rates_choosed[2] == false) {
-                            rates_choosed[2] = !rates_choosed[2];
-                          }
-                          if (rates_choosed[3] == false) {
+                            if (rates_choosed[1] == false) {
+                              rates_choosed[1] = !rates_choosed[1];
+                            }
+                            if (rates_choosed[0] == false) {
+                              rates_choosed[0] = !rates_choosed[0];
+                            }
+                            if (rates_choosed[2] == false) {
+                              rates_choosed[3] = false;
+                              rates_choosed[4] = false;
+                            }
+                          });
+                        },
+                        child: Starwidget(isActive: rates_choosed[2])),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                        onTap: () {
+                          setState(() {
                             rates_choosed[3] = !rates_choosed[3];
-                          }
-                        });
-                      },
-                      child: Starwidget(isActive: rates_choosed[4])),
+                            if (rates_choosed[1] == false) {
+                              rates_choosed[1] = !rates_choosed[1];
+                            }
+                            if (rates_choosed[0] == false) {
+                              rates_choosed[0] = !rates_choosed[0];
+                            }
+                            if (rates_choosed[2] == false) {
+                              rates_choosed[2] = !rates_choosed[2];
+                            }
+                            if (rates_choosed[3] == false) {
+                              rates_choosed[4] = false;
+                            }
+                          });
+                        },
+                        child: Starwidget(isActive: rates_choosed[3])),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            rates_choosed[4] = !rates_choosed[4];
+                            if (rates_choosed[1] == false) {
+                              rates_choosed[1] = !rates_choosed[1];
+                            }
+                            if (rates_choosed[0] == false) {
+                              rates_choosed[0] = !rates_choosed[0];
+                            }
+                            if (rates_choosed[2] == false) {
+                              rates_choosed[2] = !rates_choosed[2];
+                            }
+                            if (rates_choosed[3] == false) {
+                              rates_choosed[3] = !rates_choosed[3];
+                            }
+                          });
+                        },
+                        child: Starwidget(isActive: rates_choosed[4])),
+                  ),
                 ],
               ),
             ),

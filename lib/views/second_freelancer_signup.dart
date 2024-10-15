@@ -72,6 +72,7 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
   List<String> selected_skills = [];
   List<String> selected_languages = [];
   List<String> Selected_joptitle = [];
+  List<String> skills = [];
   //========================================================
 
   @override
@@ -155,7 +156,19 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
                           onOptionsChanged: (List<String> newoptions) {
                             setState(() {
                               Selected_joptitle = newoptions;
+                              if (Selected_joptitle.isNotEmpty) {
+                                // Use the first index of the list to get the job title
+                                String jobTitle = Selected_joptitle.first;
+                                skills =
+                                    freelancerJobTitlesAndSkilss[jobTitle] ??
+                                        [];
+                              } else {
+                                // Clear skills if no job title is selected
+                                skills.clear();
+                              }
                             });
+                          
+                            
                           },
                         ),
                       ),
