@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:freelance_app/models/person_helpers.dart';
 import 'package:freelance_app/services/user_provider.dart';
 import 'package:freelance_app/views/chats_inbox_screen.dart';
 import 'package:freelance_app/views/rate.dart';
@@ -36,6 +37,9 @@ class OtherClientProfile extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
+
+            List<dynamic> array = data['rate'];
+            
             return Scaffold(
               appBar: AppBar(
                 backgroundColor: Colors.green,
@@ -53,7 +57,7 @@ class OtherClientProfile extends StatelessWidget {
                               profileImageURL: data['image_url'],
                               name: data['full_name'],
                               role: data['role'],
-                              rate: 0.0
+                              rate: PersonHelpers.CalculatePersonRate(array)
                               // data['rate']
                               ),
                           SizedBox(height: screenHeight / 20),
@@ -69,8 +73,8 @@ class OtherClientProfile extends StatelessWidget {
                                 item: data['Country'],
                               ),
                               ProfileHelpers().getProfileContainer(
-                                title: "Jobs",
-                                item: '0',
+                                title: "Reviews",
+                                item: array.length.toString(),
                               ),
                             ],
                           ),

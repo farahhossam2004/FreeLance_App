@@ -191,15 +191,44 @@ class _SignUpState extends State<SignUp> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: _pickImage,
-                      child: const Text('Select Profile Picture'),
+                    //=============================================================
+                    const SizedBox(height: 4),
+
+                    //============================================================
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton.icon(
+                        onPressed: _pickImage,
+                        icon: const CircleAvatar(
+                          radius: 12, // Adjust radius as needed
+                          backgroundColor: Colors.white,
+                          child: Icon(
+                            Icons.camera_alt,
+                            color: Colors.green,
+                            size: 16,
+                          ),
+                        ),
+                        label: const Text('Select Profile Picture' , style: TextStyle(color: Colors.white , fontSize: 18 , fontWeight: FontWeight.bold),),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromARGB(255, 44, 170, 49), // Button background color
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                8), 
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 20), // Adjust padding
+                        ),
+                      ),
                     ),
+
+                    //===============================================
                     const Divider(
                       color: Colors.black,
                       thickness: 1,
                     ),
+                    //=====================================================
+                    const SizedBox(height: 5,),
                     SignUpLoginHelper().getNextButton(
                       page: page,
                       context: context,
@@ -207,7 +236,7 @@ class _SignUpState extends State<SignUp> {
                       onTap: () async {
                         if (FormKey.currentState!.validate()) {
                           if (option == 1) {
-                              String? imageUrl = await _uploadImage(Email.text);
+                            String? imageUrl = await _uploadImage(Email.text);
                             page = SecondFreelancerSignup(
                               imageURL: imageUrl,
                               Email: Email.text,

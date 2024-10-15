@@ -90,8 +90,8 @@ class _ClientProfileState extends State<ClientProfile> {
                         item: _client!.country,
                       ),
                       ProfileHelpers().getProfileContainer(
-                        title: "Jobs",
-                        item: '0',
+                        title: "Reviews",
+                        item: _client!.getPersonrate.length.toString(),
                       ),
                     ],
                   ),

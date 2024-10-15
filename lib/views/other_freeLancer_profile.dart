@@ -35,7 +35,7 @@ class OtherFreelancerProfile extends StatelessWidget {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
 
-            
+            List<dynamic> array = data['rate'];
             
             return Scaffold(
               appBar: AppBar(
@@ -73,7 +73,7 @@ class OtherFreelancerProfile extends StatelessWidget {
                               ProfileHelpers().getProfileContainer(
                                   title: "Country", item: data['Country']),
                               ProfileHelpers().getProfileContainer(
-                                  title: "Jobs", item: '0'),
+                                  title: "Reviews", item: array.length.toString() ),
                               ProfileHelpers().getProfileContainer(
                                   title: "Price",
                                   item: data['Price'].toString()),

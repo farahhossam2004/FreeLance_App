@@ -8,76 +8,86 @@ class ProfileHelpers {
       String? profileImageURL,
       }) {
         
-    return Row(
-      children: [
-        //======================================================
-        CircleAvatar(
-          backgroundColor: Colors.blueGrey,
-          radius: 25,
-          backgroundImage: profileImageURL != null
-              ? NetworkImage(profileImageURL) 
-              : null,
-          child: profileImageURL == null
-              ? const Icon(Icons.person, color: Colors.white)
-              : null,
-        ),
-        //=======================================================
-        const SizedBox(
-          width: 20,
-        ),
-        //======================================================
-        Column(
-          children: [
-            Text(
-              
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              name,
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.green,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            //=====================================
-            Text(
-              role,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
-            )
-          ],
-        ),
-        //=====================================================
-        const Spacer(),
-        //=====================================================
-        Container(
-          height: 35,
-          width: 100,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              color: Colors.transparent,
-              border: Border.all(
-                color: Colors.black,
-                width: 2,
-              )),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return SizedBox(
+      height: 230,
+      width: 300,
+      child: Column(
+        children: [
+          //======================================================
+          CircleAvatar(
+            backgroundColor: Colors.blueGrey,
+            radius: 45,
+            backgroundImage: profileImageURL != null
+                ? NetworkImage(profileImageURL) 
+                : null,
+            child: profileImageURL == null
+                ? const Icon(Icons.person, color: Colors.white)
+                : null,
+          ),
+          //=======================================================
+          const SizedBox(
+            width: 20,
+          ),
+          //======================================================
+          Column(
             children: [
-              Text(
-                rate!.toString(),
-                style: const TextStyle(
-                    fontSize: 15, fontWeight: FontWeight.bold),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  name,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-              const Icon(
-                Icons.star,
-                color: Colors.amber,
-              ),
+              //=====================================
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(
+                  role,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
             ],
           ),
-        )
-      ],
+          //=====================================================
+          const Spacer(),
+          //=====================================================
+          Container(
+            height: 35,
+            width: 100,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                color: Colors.transparent,
+                border: Border.all(
+                  color: Colors.black,
+                  width: 2,
+                )),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  rate!.toString(),
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+                const Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 

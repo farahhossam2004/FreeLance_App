@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:freelance_app/firebase_options.dart';
 import 'package:freelance_app/services/user_provider.dart';
 import 'package:freelance_app/views/start.dart';
+import 'package:freelance_app/views/test_profile.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
