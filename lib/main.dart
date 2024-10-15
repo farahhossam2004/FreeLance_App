@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:freelance_app/firebase_options.dart';
 import 'package:freelance_app/services/user_provider.dart';
+import 'package:freelance_app/views/other_freeLancer_profile.dart';
 import 'package:freelance_app/views/start.dart';
 import 'package:freelance_app/views/test_profile.dart';
 import 'package:provider/provider.dart';
@@ -15,13 +16,13 @@ void main() async {
 
   runApp(MultiProvider(
     providers: [ChangeNotifierProvider(create: (_) => UserProvider())],
-    child: const MaterialApp(
+    child:  MaterialApp(
       debugShowCheckedModeBanner: false,
       home:
           //TestProfile()
-          // OtherFreelancerProfile(email: "memes2@gmail.com",),
+          OtherFreelancerProfile(email: "ahmed@gmail.com",),
           // HomeScreen(),
-          Start(),
+          //Start(),
           // ClientWall()
     ),
   ));

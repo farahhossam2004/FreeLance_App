@@ -8,14 +8,14 @@ class Starwidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 13),
       child: ClipPath(
         clipper: StarClipper(),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 600),
           color:isActive? Colors.orange : const Color.fromARGB(255, 216, 207, 207),
-          height: 50,
-          width: 60,
+          height: 40,
+          width: 50,
         ),
       ),
     );

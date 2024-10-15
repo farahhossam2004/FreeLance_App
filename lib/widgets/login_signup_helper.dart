@@ -3,10 +3,10 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 class SignUpLoginHelper {
   Widget getNextButton(
-      {
-      required Widget page,
+      {required Widget page,
       required BuildContext context,
       var FormKey,
       List<TextEditingController>? controllers,
@@ -35,46 +35,47 @@ class SignUpLoginHelper {
     );
   }
 
-  Widget getCustomLink( {
-  required GestureTapCallback? onTap,
-  required String nextPageString,
-  String? firstWord,
-}) {
-  return Center(
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        if (firstWord != null)
-          Text(
-            firstWord,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+  Widget getCustomLink({
+    required GestureTapCallback? onTap,
+    required String nextPageString,
+    String? firstWord,
+  }) {
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (firstWord != null)
+            Text(
+              firstWord,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          GestureDetector(
+            onTap: onTap,
+            child: Text(
+              nextPageString,
+              style: const TextStyle(
+                color: Color.fromARGB(255, 32, 189, 40),
+                fontSize: 17,
+                decoration: TextDecoration.underline,
+              ),
             ),
           ),
-        GestureDetector(
-          onTap: onTap,
-          child: Text(
-            nextPageString,
-            style: const TextStyle(
-              color: Color.fromARGB(255, 32, 189, 40),
-              fontSize: 17,
-              decoration: TextDecoration.underline,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 
   static void showAwesomeDialog(
       {required BuildContext context,
       required String title,
       required String description,
       required DialogType type,
-      Widget? page}) {
+      Widget? page,
+      GestureTapCallback? onTap}) {
     AwesomeDialog(
       context: context,
       dialogType: type,
@@ -86,6 +87,8 @@ class SignUpLoginHelper {
         if (page != null) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => page));
+        } else if (onTap != null) {
+          onTap;
         }
       },
     ).show();

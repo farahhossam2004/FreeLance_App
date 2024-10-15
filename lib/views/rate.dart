@@ -8,7 +8,6 @@ import 'package:freelance_app/widgets/starwidget.dart';
 import 'package:freelance_app/widgets/text_field.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-
 class Rate extends StatefulWidget {
   Rate({super.key, required this.email});
 
@@ -24,6 +23,7 @@ class _RateState extends State<Rate> {
 
   List<bool> rates_choosed = [false, false, false, false, false];
   bool isactive = false;
+  bool feedbackdone = false;
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -203,14 +203,15 @@ class _RateState extends State<Rate> {
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
                       numberofstars.toString(),
-                      style:
-                          const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 30, fontWeight: FontWeight.bold),
                     ),
                   ),
                   const Starwidget(isActive: true)
                 ],
               ),
             ),
+            //====================================================
             const SizedBox(
               height: 20,
             ),
@@ -224,29 +225,39 @@ class _RateState extends State<Rate> {
             const SizedBox(
               height: 60,
             ),
+            //=================================================
             SizedBox(
               height: 50,
               width: 200,
               child: ElevatedButton(
-                onPressed: () async {
-                  setState(() {
-                    isactive = !isactive;
-                  });
-                  await updateUserField(
-                      email: widget.email, rate: numberofstars);
+                onPressed: feedbackdone
+                    ? () {
+                        Navigator.pop(context);
+                      }
+                    : () async {
+                        setState(() {
+                          isactive = !isactive;
+                          feedbackdone = !feedbackdone;
+                        });
+                        await updateUserField(
+                            email: widget.email, rate: numberofstars);
 
-                  setState(() {
-                    isactive = !isactive;
-                  });
-                },
+                        setState(() {
+                          isactive = !isactive;
+                        });
+                      },
                 style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(
-                    const Color.fromARGB(255, 36, 148, 40),
-                  ),
+                  backgroundColor: feedbackdone
+                      ? WidgetStateProperty.all<Color>(
+                          const Color.fromARGB(255, 203, 18, 18),
+                        )
+                      : WidgetStateProperty.all<Color>(
+                          const Color.fromARGB(255, 36, 148, 40),
+                        ),
                 ),
-                child: const Text(
-                  "Send feedback",
-                  style: TextStyle(
+                child: Text(
+                  feedbackdone ? "Feedback Done" : "Send feedback",
+                  style: const TextStyle(
                       color: Color.fromARGB(255, 255, 255, 255),
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
