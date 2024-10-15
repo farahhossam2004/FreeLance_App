@@ -7,8 +7,6 @@ import 'package:freelance_app/views/client_wall.dart';
 import 'package:freelance_app/views/freelancer_wall.dart';
 import 'package:freelance_app/views/jobs_screen.dart';
 import 'package:freelance_app/widgets/bottom_nav_bar.dart';
-import 'package:freelance_app/widgets/filter_drawer.dart';
-import 'package:freelance_app/services/array_data_for_test.dart';
 import 'package:freelance_app/widgets/menu_drawer_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -25,12 +23,12 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _freelancerScreens = [
     const FreelancerWall(), // Home page
     const BookmarkedJobsPage(),
-    ChatsInboxScreen(conversations: conversations),
+    ChatsInboxScreen(),
   ];
   final List<Widget> _clientScreens = [
     const ClientWall(), // Home page
     const ClientJobsScreen(),
-    ChatsInboxScreen(conversations: conversations),
+    ChatsInboxScreen(),
   ];
 
   void _onTabSelected(int index) {
@@ -63,34 +61,34 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         // Conditionally show actions based on the selected screen
-        actions: _selectedScreenIndex == 0 && userProvider.freelancer != null
-            ? [
-                Builder(
-                  builder: (context) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.black, width: 1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 10),
-                      child: IconButton(
-                        onPressed: () {
-                          Scaffold.of(context).openEndDrawer();
-                        },
-                        icon: const Icon(Icons.filter_list),
-                      ),
-                    );
-                  },
-                ),
-              ]
-            : [], // No actions for other pages
+        // actions: _selectedScreenIndex == 0 && userProvider.freelancer != null
+        //     ? [
+        //         Builder(
+        //           builder: (context) {
+        //             return Container(
+        //               decoration: BoxDecoration(
+        //                 color: Colors.white,
+        //                 border: Border.all(color: Colors.black, width: 1),
+        //                 borderRadius: BorderRadius.circular(10),
+        //               ),
+        //               margin: const EdgeInsets.symmetric(
+        //                   vertical: 8, horizontal: 10),
+        //               child: IconButton(
+        //                 onPressed: () {
+        //                   Scaffold.of(context).openEndDrawer();
+        //                 },
+        //                 icon: const Icon(Icons.filter_list),
+        //               ),
+        //             );
+        //           },
+        //         ),
+            //   ]
+            // : [], // No actions for other pages
       ),
       drawer: MenuDrawerScreen(),
-      endDrawer: _selectedScreenIndex == 0 && userProvider.freelancer != null
-          ? const FilterDrawer()
-          : null,
+      // endDrawer: _selectedScreenIndex == 0 && userProvider.freelancer != null
+      //     ? const FilterDrawer()
+      //     : null,
       body: userProvider.freelancer != null
           ? _freelancerScreens[_selectedScreenIndex]
           : _clientScreens[_selectedScreenIndex],

@@ -1,14 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:freelance_app/models/chat_converstaion.dart';
 import 'package:freelance_app/services/user_provider.dart';
 import 'package:freelance_app/views/chat_screen.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:provider/provider.dart';
 
 class ChatsInboxScreen extends StatelessWidget {
-  const ChatsInboxScreen({super.key, required this.conversations});
-  final List<ChatConverstaion> conversations;
+  const ChatsInboxScreen({super.key});
+  // final List<ChatConverstaion> conversations;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +78,7 @@ class ChatsInboxScreen extends StatelessWidget {
                             title: Text(otherUserChatName),
                             subtitle: const Text('lastMessage'),
                             onTap: () {
-                              _navigateToChatScreen(context, currentUserEmail!,
+                              navigateToChatScreen(context, currentUserEmail!,
                                   otherUserChatEmail, otherUserChatName);
                               // _startConversation(
                               //     context, currentUserEmail!, freelancerEmail);
@@ -95,7 +94,7 @@ class ChatsInboxScreen extends StatelessWidget {
   }
 
   // Function to navigate to ChatScreen with the freelancer
-  Future<void> _navigateToChatScreen(BuildContext context, String mainUserEmail,
+  static Future<void> navigateToChatScreen(BuildContext context, String mainUserEmail,
       String otherUserEmail, String otherUserName) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     String userRole = userProvider.role.toString();

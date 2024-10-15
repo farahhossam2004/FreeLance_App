@@ -2,10 +2,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/person_helpers.dart';
+import 'package:freelance_app/services/user_provider.dart';
+import 'package:freelance_app/views/chats_inbox_screen.dart';
 import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/views/payment_view.dart';
 import 'package:freelance_app/views/rate.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
+import 'package:provider/provider.dart';
 class OtherFreelancerProfile extends StatelessWidget {
   OtherFreelancerProfile({super.key, required this.email});
   String? email;
@@ -210,6 +213,16 @@ class OtherFreelancerProfile extends StatelessWidget {
                                   title: "Contact",
                                   context: context,
                                   color: 'green',
+                                  onTap: () async{
+                                    final currentUserEmail = Provider.of<UserProvider>(context, listen: false).email;
+                                    await ChatsInboxScreen.navigateToChatScreen(
+                                    context,
+                                    currentUserEmail!, 
+                                    data['email'], 
+                                    data[
+                                        'full_name'] 
+                                    );
+                                  },
                                   page: const HomeScreen()),
 
                                   ProfileHelpers().getProfileEndButton(

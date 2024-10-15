@@ -1,9 +1,11 @@
 // ignore_for_file: must_be_immutable
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:freelance_app/views/home.dart';
+import 'package:freelance_app/services/user_provider.dart';
+import 'package:freelance_app/views/chats_inbox_screen.dart';
 import 'package:freelance_app/views/rate.dart';
 import 'package:freelance_app/widgets/profile_helpers.dart';
+import 'package:provider/provider.dart';
 
 class OtherClientProfile extends StatelessWidget {
   //=======================================================
@@ -12,10 +14,11 @@ class OtherClientProfile extends StatelessWidget {
   //=======================================================
   @override
   Widget build(BuildContext context) {
+    final currentUserEmail = Provider.of<UserProvider>(context).email;
+
     CollectionReference clients =
         FirebaseFirestore.instance.collection('Users');
 
-    
     double screenHeight = MediaQuery.of(context).size.height;
 
     return FutureBuilder<DocumentSnapshot>(
@@ -47,13 +50,11 @@ class OtherClientProfile extends StatelessWidget {
                         children: [
                           // Top Profile section
                           ProfileHelpers().getTopProfile(
-                            name:
-                                data['full_name'],
-                            role:
-                                data['role'],
-                            rate: 
-                                data['rate']
-                          ),
+                              name: data['full_name'],
+                              role: data['role'],
+                              rate: 0.0
+                              // data['rate']
+                              ),
                           SizedBox(height: screenHeight / 20),
                           const Divider(thickness: 1, color: Colors.grey),
                           SizedBox(height: screenHeight / 20),
@@ -64,8 +65,7 @@ class OtherClientProfile extends StatelessWidget {
                             children: [
                               ProfileHelpers().getProfileContainer(
                                 title: 'Country',
-                                item: data['Country']
-                                    ,
+                                item: data['Country'],
                               ),
                               ProfileHelpers().getProfileContainer(
                                 title: "Jobs",
@@ -97,17 +97,25 @@ class OtherClientProfile extends StatelessWidget {
 
                           // Profile Settings button
                           ProfileHelpers().getProfileEndButton(
-                            title: "Profile Settings",
-                            context: context,
-                            page: const HomeScreen(),
-                            color: 'green'
-                          ),
+                              title: "Contact",
+                              context: context,
+                              onTap: () async {
+                                await ChatsInboxScreen.navigateToChatScreen(
+                                    context,
+                                    currentUserEmail!, 
+                                    data['email'], 
+                                    data[
+                                        'full_name'] 
+                                    );
+                              },
+
+                              color: 'green'),
 
                           ProfileHelpers().getProfileEndButton(
-                                  title: "Rate",
-                                  context: context,
-                                  color: 'yellow',
-                                  page: Rate(email: data['email'])),
+                              title: "Rate",
+                              context: context,
+                              color: 'yellow',
+                              page: Rate(email: data['email'])),
                         ],
                       ),
                     ),
@@ -117,7 +125,9 @@ class OtherClientProfile extends StatelessWidget {
             );
           }
 
-          return const Text("loading",);
+          return const Text(
+            "loading",
+          );
         });
   }
 }

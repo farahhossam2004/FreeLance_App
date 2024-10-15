@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:freelance_app/views/other_freeLancer_profile.dart';
 import 'package:freelance_app/widgets/top_freelancer_card.dart';
 
 class TopFreelancersList extends StatelessWidget {
@@ -51,33 +52,34 @@ class TopFreelancersList extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               itemCount: freelancers.length > 8 ? 8 : freelancers.length,
               itemBuilder: (context, index) {
-                
-                  final freelancer = freelancers[index];
-                  final name = freelancer['full_name'];
-                  final about = freelancer['About me'];
-                  // final imagePath = freelancer['image'];
-                  final ratings = freelancer['rate'] as List<dynamic>;
+                final freelancer = freelancers[index];
+                final name = freelancer['full_name'];
+                final about = freelancer['About me'];
+                final email = freelancer['email'];
+                // final imagePath = freelancer['image'];
+                final ratings = freelancer['rate'] as List<dynamic>;
 
-                  final double totalRating = ratings.isNotEmpty
-                      ? ratings.reduce((a, b) => a + b) / ratings.length
-                      : 0.0;
+                final double totalRating = ratings.isNotEmpty
+                    ? ratings.reduce((a, b) => a + b) / ratings.length
+                    : 0.0;
 
-                  final String formattedRating = totalRating.toStringAsFixed(2);
-                  return Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: SizedBox(
-                      width: 180,
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: TopFreelancerCard(
-                          name: name,
-                          rating: formattedRating,
-                          description: about,
-                        ),
+                final String formattedRating = totalRating.toStringAsFixed(2);
+                return Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: SizedBox(
+                    width: 180,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => OtherFreelancerProfile(email: email)));
+                      },
+                      child: TopFreelancerCard(
+                        name: name,
+                        rating: formattedRating,
+                        description: about,
                       ),
                     ),
-                  );
-              
+                  ),
+                );
               });
         },
       ),

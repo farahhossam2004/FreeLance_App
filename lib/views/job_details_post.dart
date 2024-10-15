@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:freelance_app/models/job_model.dart';
+import 'package:freelance_app/services/user_provider.dart';
+import 'package:freelance_app/views/chats_inbox_screen.dart';
 import 'package:freelance_app/widgets/job_post.dart';
+import 'package:provider/provider.dart';
 
 class JobDetailsPost extends StatelessWidget {
   const JobDetailsPost({super.key, required this.job});
   final JobModel job;
+    
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +74,15 @@ class JobDetailsPost extends StatelessWidget {
               Flexible(
                 flex: 1,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async{
+                    final currentUserEmail = Provider.of<UserProvider>(context, listen: false).email;
+                    await ChatsInboxScreen.navigateToChatScreen(
+                                    context,
+                                    currentUserEmail!, 
+                                    job.clientEmail, 
+                                    job.clientName 
+                                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 246, 242, 242),
                     padding: const EdgeInsets.symmetric(vertical: 12.0),

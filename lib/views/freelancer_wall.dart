@@ -39,7 +39,7 @@ class _FreelancerWallState extends State<FreelancerWall> {
           title: data['title'] ?? '',
           description: data['description'] ?? '',
           budget: data['budget'] ?? '',
-          tags: List<String>.from(data['tags'] ?? []) , // Handle tags
+          tags: List<String>.from(data['tags'] ?? []), // Handle tags
           location: data['location'] ?? '',
           duration: data['duration'] ?? '',
           jobType: data['jobType'] ?? '',
@@ -49,7 +49,9 @@ class _FreelancerWallState extends State<FreelancerWall> {
         );
       }).toList();
 
-      setState(() {}); // Update the state to reflect the fetched jobs
+      if (mounted) {
+        setState(() {});
+      } // Update the state to reflect the fetched jobs
     } catch (e) {
       print("Error fetching jobs: $e");
     }
@@ -63,63 +65,61 @@ class _FreelancerWallState extends State<FreelancerWall> {
       return job.title.toLowerCase().contains(searchQuery.toLowerCase());
     }).toList();
 
-    return Scaffold(
-      body: Column(
-        children: [
-          CustomSearchBar(
-            controller: _searchController,
-            onSearchChanged: (value) {
-              setState(() {
-                searchQuery = value;
-              });
-            },
-          ),
-          const SizedBox(height: 5),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  // mainRole == 'Client'
-                  //     ? const ServicesForYou()
-                  //     : const SizedBox.shrink(),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Divider(
-                      color: Colors.black,
-                      thickness: 1,
-                    ),
+    return Column(
+      children: [
+        CustomSearchBar(
+          controller: _searchController,
+          onSearchChanged: (value) {
+            setState(() {
+              searchQuery = value;
+            });
+          },
+        ),
+        const SizedBox(height: 5),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // mainRole == 'Client'
+                //     ? const ServicesForYou()
+                //     : const SizedBox.shrink(),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Divider(
+                    color: Colors.black,
+                    thickness: 1,
                   ),
+                ),
 
-                  ListView.builder(
-                    shrinkWrap:
-                        true, // Necessary to prevent infinite height error
-                    physics: const NeverScrollableScrollPhysics(),
-                    // Disable internal scrolling for ListView
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  JobDetailsPost(job: filteredJobs[index]),
-                            ),
-                          );
-                        },
-                        child: JobPost(
-                          job: filteredJobs[index],
-                          isPostDetailed: false,
-                        ),
-                      );
-                    },
-                    itemCount: filteredJobs.length,
-                  ),
-                ],
-              ),
+                ListView.builder(
+                  shrinkWrap:
+                      true, // Necessary to prevent infinite height error
+                  physics: const NeverScrollableScrollPhysics(),
+                  // Disable internal scrolling for ListView
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                JobDetailsPost(job: filteredJobs[index]),
+                          ),
+                        );
+                      },
+                      child: JobPost(
+                        job: filteredJobs[index],
+                        isPostDetailed: false,
+                      ),
+                    );
+                  },
+                  itemCount: filteredJobs.length,
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

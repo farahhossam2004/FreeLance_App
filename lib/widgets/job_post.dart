@@ -181,18 +181,18 @@ class _JobPostState extends State<JobPost> {
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Row(
-                    children: [
-                      const Icon(Icons.description,
-                          size: 16, color: Color.fromARGB(255, 100, 95, 95)),
-                      const SizedBox(width: 4),
-                      Text('Proposals: ${widget.job.noOfPropsals}',
-                          style: const TextStyle(
-                              color: Color.fromARGB(255, 100, 95, 95))),
-                    ],
-                  ),
-                ),
+                // Expanded(
+                //   child: Row(
+                //     children: [
+                //       const Icon(Icons.description,
+                //           size: 16, color: Color.fromARGB(255, 100, 95, 95)),
+                //       const SizedBox(width: 4),
+                //       Text('Proposals: ${widget.job.noOfPropsals}',
+                //           style: const TextStyle(
+                //               color: Color.fromARGB(255, 100, 95, 95))),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
             const SizedBox(height: 12),

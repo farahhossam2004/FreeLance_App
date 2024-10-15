@@ -94,7 +94,9 @@ class _BookmarkedJobsPageState extends State<BookmarkedJobsPage> {
           }).toList();
         }
 
+        if (mounted) {
         setState(() {}); // Update the state to reflect the fetched saved jobs
+      } 
       } catch (e) {
         print("Error fetching saved posts: $e");
       }

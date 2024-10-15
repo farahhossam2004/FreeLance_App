@@ -77,14 +77,14 @@ class ProfileHelpers {
   Widget getProfileEndButton({
     required String title,
     required BuildContext context,
-    required Widget page,
+    Widget? page,
     required String color,
     GestureTapCallback? onTap,
   }) {
     return ElevatedButton(
         onPressed: onTap ?? () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => page));
+              context, MaterialPageRoute(builder: (context) => page!));
         },
         style: ButtonStyle(
           backgroundColor:  WidgetStateProperty.all<Color>(
