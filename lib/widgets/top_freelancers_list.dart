@@ -56,7 +56,8 @@ class TopFreelancersList extends StatelessWidget {
                 final name = freelancer['full_name'];
                 final about = freelancer['About me'];
                 final email = freelancer['email'];
-                // final imagePath = freelancer['image'];
+                final imageURL = freelancer['image_url'];
+
                 final ratings = freelancer['rate'] as List<dynamic>;
 
                 final double totalRating = ratings.isNotEmpty
@@ -70,9 +71,14 @@ class TopFreelancersList extends StatelessWidget {
                     width: 180,
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => OtherFreelancerProfile(email: email)));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    OtherFreelancerProfile(email: email)));
                       },
                       child: TopFreelancerCard(
+                        imagePath: imageURL,
                         name: name,
                         rating: formattedRating,
                         description: about,

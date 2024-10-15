@@ -42,6 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final profileImageURL = userProvider.client != null
+        ? userProvider.client!.imageURL.toString()
+        : userProvider.freelancer!.imageURL;
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -54,8 +57,15 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 Scaffold.of(context).openDrawer();
               },
-              child: const CircleAvatar(
-                backgroundImage: AssetImage('assets/profile.jpeg'),
+              child: CircleAvatar(
+                backgroundColor: Colors.blueGrey,
+                radius: 25,
+                backgroundImage: profileImageURL != null
+                    ? NetworkImage(profileImageURL)
+                    : null,
+                child: profileImageURL == null
+                    ? const Icon(Icons.person, color: Colors.white)
+                    : null,
               ),
             ),
           ),
@@ -82,8 +92,8 @@ class _HomeScreenState extends State<HomeScreen> {
         //             );
         //           },
         //         ),
-            //   ]
-            // : [], // No actions for other pages
+        //   ]
+        // : [], // No actions for other pages
       ),
       drawer: MenuDrawerScreen(),
       // endDrawer: _selectedScreenIndex == 0 && userProvider.freelancer != null

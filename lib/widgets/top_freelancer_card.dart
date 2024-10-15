@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 class TopFreelancerCard extends StatelessWidget {
   final String name;
   final String rating;
-  final String imagePath;
+  final String? imagePath;
   final String description;
 
   const TopFreelancerCard(
       {super.key,
       required this.name,
       required this.rating,
-      this.imagePath = 'assets/profile.jpeg', required this.description});
+      this.imagePath, required this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +20,22 @@ class TopFreelancerCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       
       ),
+
       child: Column(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.asset(
-              imagePath,
-              width: 120,
-              height: 120,
-              fit: BoxFit.cover,
-            ),
+            child: imagePath != null && imagePath!.isNotEmpty
+                ? Image.network( // Assuming you're fetching from Firestore
+                    imagePath!,
+                    width: 120,
+                    height: 120,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(Icons.broken_image); // Placeholder in case of an error
+                    },
+                  )
+                : const Icon(Icons.person, size: 120),
           ),
           Padding(
             padding: const EdgeInsets.all(8),

@@ -53,6 +53,7 @@ class ChatsInboxScreen extends StatelessWidget {
                           usersChats[index].data() as Map<String, dynamic>;
                       final otherUserChatEmail = otherUserChatData['email'];
                       final otherUserChatName = otherUserChatData['full_name'];
+                      final imageURL = otherUserChatData['image_url'];
                       // final lastMessage = otherUserChatName['lastMessage'];
 
                       return Padding(
@@ -72,14 +73,23 @@ class ChatsInboxScreen extends StatelessWidget {
                           child: ListTile(
                             contentPadding: const EdgeInsets.all(16),
                             tileColor: Colors.grey[300],
-                            leading: const CircleAvatar(
-                                // backgroundImage: AssetImage(conv.userAvatar),
-                                ),
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.blueGrey,
+                              radius: 25,
+                              backgroundImage: imageURL != null
+                                  ? NetworkImage(imageURL)
+                                  : null,
+                              child: imageURL == null
+                                  ? const Icon(Icons.person,
+                                      color: Colors.white)
+                                  : null,
+                            ),
                             title: Text(otherUserChatName),
                             subtitle: const Text('lastMessage'),
                             onTap: () {
                               navigateToChatScreen(context, currentUserEmail!,
-                                  otherUserChatEmail, otherUserChatName);
+                                  otherUserChatEmail, otherUserChatName,
+                                  imageURL: imageURL);
                               // _startConversation(
                               //     context, currentUserEmail!, freelancerEmail);
                             },
@@ -94,8 +104,9 @@ class ChatsInboxScreen extends StatelessWidget {
   }
 
   // Function to navigate to ChatScreen with the freelancer
-  static Future<void> navigateToChatScreen(BuildContext context, String mainUserEmail,
-      String otherUserEmail, String otherUserName) async {
+  static Future<void> navigateToChatScreen(BuildContext context,
+      String mainUserEmail, String otherUserEmail, String otherUserName,
+      {String imageURL = ''}) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     String userRole = userProvider.role.toString();
     // Check if a conversation between the client and freelancer exists
@@ -115,6 +126,7 @@ class ChatsInboxScreen extends StatelessWidget {
     if (conversationSnapshot.docs.isEmpty) {
       // No existing conversation, create a new one
       DocumentReference newConversation = await conversationRef.add({
+        'imageURL': imageURL,
         'clientId': userRole == 'client' ? mainUserEmail : otherUserEmail,
         'freelancerId':
             userRole == 'free_lancer' ? mainUserEmail : otherUserEmail,
@@ -133,6 +145,7 @@ class ChatsInboxScreen extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) => ChatScreen(
+          profileimageURL: imageURL,
           user: otherUser,
           conversationId: conversationId,
           userRole: userRole,
@@ -141,4 +154,3 @@ class ChatsInboxScreen extends StatelessWidget {
     );
   }
 }
-

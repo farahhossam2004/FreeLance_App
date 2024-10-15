@@ -52,6 +52,7 @@ class OtherFreelancerProfile extends StatelessWidget {
                         children: [
                           //==========================================
                           ProfileHelpers().getTopProfile(
+                            profileImageURL: data['image_url'],
                             name: data['full_name'],
                             role: data['jop_title'][0],
                             rate:  PersonHelpers.CalculatePersonRate(data['rate'] ),
@@ -216,6 +217,7 @@ class OtherFreelancerProfile extends StatelessWidget {
                                   onTap: () async{
                                     final currentUserEmail = Provider.of<UserProvider>(context, listen: false).email;
                                     await ChatsInboxScreen.navigateToChatScreen(
+                                      imageURL: data['image_url'],
                                     context,
                                     currentUserEmail!, 
                                     data['email'], 

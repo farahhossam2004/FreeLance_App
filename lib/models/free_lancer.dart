@@ -3,31 +3,30 @@
 import 'package:freelance_app/models/person.dart';
 
 class FreeLancer extends Person {
-  
   List<dynamic> skills;
   double price;
   String aboutMe;
   List<dynamic> languages;
   List<dynamic> joptitle;
-  
 
   factory FreeLancer.fromMap(Map<String, dynamic> data) {
     return FreeLancer(
-      personName: data['full_name'],
-      role: data['role'],
-      Email: data['email'],
-      country: data['Country'],
-      skills: data['Skills'],
-      price: data['Price'],
-      aboutMe: data['About me'],
-      languages: data['Languages'],
-      joptitle: data['jop_title'],
-      rate: data['rate']
-    );
+        imageURL: data['image_url'],
+        personName: data['full_name'],
+        role: data['role'],
+        Email: data['email'],
+        country: data['Country'],
+        skills: data['Skills'],
+        price: data['Price'],
+        aboutMe: data['About me'],
+        languages: data['Languages'],
+        joptitle: data['jop_title'],
+        rate: data['rate']);
   }
 
   FreeLancer(
-      {required super.personName,
+      {super.imageURL,
+      required super.personName,
       required super.role,
       required super.country,
       required this.skills,
@@ -36,8 +35,7 @@ class FreeLancer extends Person {
       required this.languages,
       required super.Email,
       required this.joptitle,
-      required super.rate
-      });
+      required super.rate});
 
   //getters
   List<dynamic> get getFreelancerskills => skills;

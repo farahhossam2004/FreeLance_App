@@ -35,6 +35,7 @@ class _FreelancerWallState extends State<FreelancerWall> {
       jobs = snapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
         return JobModel(
+          clientImage: data['clientImageURL'],
           id: doc.id,
           title: data['title'] ?? '',
           description: data['description'] ?? '',

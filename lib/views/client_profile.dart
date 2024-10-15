@@ -55,6 +55,7 @@ class _ClientProfileState extends State<ClientProfile> {
     }
 
     _client = clientProvider.client!;
+  // print("Client Image URL: ${_client!.imageURL}");
 
     return Scaffold(
       appBar: AppBar(
@@ -67,8 +68,10 @@ class _ClientProfileState extends State<ClientProfile> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Column(
                 children: [
+                
                   // Top Profile section
                   ProfileHelpers().getTopProfile(
+                    profileImageURL: _client!.imageURL,
                     name: _client!.personName,
                     role: _client!.role,
                     rate: PersonHelpers.CalculatePersonRate(

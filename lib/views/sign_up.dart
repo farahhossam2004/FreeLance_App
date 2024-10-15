@@ -1,8 +1,9 @@
-// ignore_for_file: non_constant_identifier_names, invalid_return_type_for_catch_error
+import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:freelance_app/services/array_data_for_test.dart';
 import 'package:freelance_app/views/client_profile.dart';
 import 'package:freelance_app/views/login.dart';
 import 'package:freelance_app/views/second_freelancer_signup.dart';
@@ -10,8 +11,10 @@ import 'package:freelance_app/views/start.dart';
 import 'package:freelance_app/widgets/drop_down_list.dart';
 import 'package:freelance_app/widgets/login_signup_helper.dart';
 import 'package:freelance_app/widgets/text_field.dart';
-import 'package:freelance_app/services/array_data_for_test.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+// import 'package:rflutter_alert/rflutter_alert.dart'; // Assuming you're using rflutter_alert for dialog boxes
 
 class SignUp extends StatefulWidget {
   final String role;
@@ -29,63 +32,83 @@ class _SignUpState extends State<SignUp> {
   var Password = TextEditingController();
   var CountryChoosed = TextEditingController();
   var FormKey = GlobalKey<FormState>();
-//=========================================================
-//=========================================================
-
   bool isLoading = false;
-  //=======================================
+
   Widget page = const Start();
   late int option;
+
+  File? _image;
+  final picker = ImagePicker();
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   @override
   void initState() {
     super.initState();
-    // Initialize the 'page' variable based on the role
     if (widget.role == 'FreeLancer') {
       option = 1;
     } else {
       option = 3;
     }
   }
-//===================================================================
+
+  // Pick image from gallery
+  Future<void> _pickImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      }
+    });
+  }
+
+  // Upload image to Firebase Storage and return the URL
+  Future<String?> _uploadImage(String userEmail) async {
+    if (_image == null) return null;
+
+    try {
+      Reference ref =
+          _storage.ref().child('users-profileImages/$userEmail.jpg');
+      UploadTask uploadTask = ref.putFile(_image!);
+      TaskSnapshot snapshot = await uploadTask;
+      String downloadUrl = await snapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      print('Error uploading image: $e');
+      return null;
+    }
+  }
+
+  CollectionReference clients = FirebaseFirestore.instance.collection('Users');
+  // Add client data to Firestore with the image URL
+  Future<void> addClient(String? imageUrl) async {
+    try {
+      await clients.doc(Email.text).set({
+        'full_name': "${Fname.text} ${Sname.text}",
+        'email': Email.text,
+        'Country': CountryChoosed.text,
+        'role': 'client',
+        'rate': [],
+        'image_url': imageUrl ?? '', // Store image URL
+      });
+    } catch (error) {
+      SignUpLoginHelper.showAwesomeDialog(
+          context: context,
+          title: 'Error occured',
+          description: 'Oops something went wrong :( , Try again later',
+          type: DialogType.error);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    //========================================================
-    // for text field width and height
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double textformheight = screenHeight / 20;
-    //=================================================
-    // Create a CollectionReference called users that references the firestore collection
-    CollectionReference clients =
-        FirebaseFirestore.instance.collection('Users');
-
-    Future<void> addClient() async {
-      try {
-        await clients.doc(Email.text).set({
-          'full_name': "${Fname.text} ${Sname.text}",
-          'email': Email.text,
-          'Country': CountryChoosed.text,
-          'role': 'client',
-          'rate': []
-        });
-      } catch (error) {
-        SignUpLoginHelper.showAwesomeDialog(
-            context: context,
-            title: 'Error occured',
-            description: 'oops something went wrong :( , Try again later',
-            type: DialogType.error);
-      }
-    }
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
       ),
-
-//=============================================================
-
       body: ModalProgressHUD(
         inAsyncCall: isLoading,
         child: SingleChildScrollView(
@@ -98,29 +121,24 @@ class _SignUpState extends State<SignUp> {
                     const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Center(
-                          child: Text(
-                        "Sign Up",
-                        style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 0, 0, 0)),
-                      )),
+                        child: Text(
+                          "Sign Up",
+                          style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 0, 0, 0)),
+                        ),
+                      ),
                     ),
-                    //==================================================
                     const Divider(
-                      color: Colors.black, // Color of the line
-                      thickness: 1, // Thickness of the line
+                      color: Colors.black,
+                      thickness: 1,
                     ),
-                    //==================================================
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    //==================================================
+                    const SizedBox(height: 15),
                     Column(
                       children: [
                         Row(
                           children: [
-                            //=====================================
                             CustomTextField(
                               text: "First name",
                               Textfieldheight: textformheight,
@@ -130,68 +148,58 @@ class _SignUpState extends State<SignUp> {
                               controller: Fname,
                               dataType: 'str',
                             ),
-                            //====================================
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            //==============================
+                            const SizedBox(width: 20),
                             CustomTextField(
-                                text: "Second name",
-                                Textfieldheight: textformheight,
-                                Textfieldwidth: screenWidth / 2 - 60,
-                                initialObsecureText: false,
-                                ErrorText: "Enter Your Second Name",
-                                controller: Sname,
-                                dataType: 'str')
+                              text: "Second name",
+                              Textfieldheight: textformheight,
+                              Textfieldwidth: screenWidth / 2 - 60,
+                              initialObsecureText: false,
+                              ErrorText: "Enter Your Second Name",
+                              controller: Sname,
+                              dataType: 'str',
+                            ),
                           ],
                         ),
-                        //=======================
                         CustomTextField(
-                            onChange: (data) {
-                              Email.text = data;
-                            },
-                            text: "Email",
-                            Textfieldheight: textformheight,
-                            Textfieldwidth: screenWidth,
-                            icon: Icons.email_outlined,
-                            initialObsecureText: false,
-                            ErrorText: "Enter Your Email",
-                            controller: Email,
-                            dataType: 'email'),
-                        //======================
+                          onChange: (data) => Email.text = data,
+                          text: "Email",
+                          Textfieldheight: textformheight,
+                          Textfieldwidth: screenWidth,
+                          icon: Icons.email_outlined,
+                          initialObsecureText: false,
+                          ErrorText: "Enter Your Email",
+                          controller: Email,
+                          dataType: 'email',
+                        ),
                         CustomTextField(
-                            onChange: (data) {
-                              Password.text = data;
-                            },
-                            text: "Password",
-                            Textfieldheight: textformheight,
-                            Textfieldwidth: screenWidth,
-                            icon: Icons.no_encryption,
-                            initialObsecureText: true,
-                            icontextfield: Icons.remove_red_eye_rounded,
-                            ErrorText: "Enter Your password",
-                            controller: Password,
-                            dataType: 'num'),
-                        //==============================================================
+                          onChange: (data) => Password.text = data,
+                          text: "Password",
+                          Textfieldheight: textformheight,
+                          Textfieldwidth: screenWidth,
+                          icon: Icons.no_encryption,
+                          initialObsecureText: true,
+                          icontextfield: Icons.remove_red_eye_rounded,
+                          ErrorText: "Enter Your password",
+                          controller: Password,
+                          dataType: 'num',
+                        ),
                         DropDownList(
                           items: countriesList,
                           title: 'Country',
-                          TextError: "Please choose ur Country",
+                          TextError: "Please choose your Country",
                           controller: CountryChoosed,
-                        )
+                        ),
                       ],
                     ),
-                    //=========================================
-                    const SizedBox(
-                      height: 10,
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: _pickImage,
+                      child: const Text('Select Profile Picture'),
                     ),
-                    //==========================================
                     const Divider(
-                      color: Colors.black, // Color of the line
-                      thickness: 1, // Thickness of the line
+                      color: Colors.black,
+                      thickness: 1,
                     ),
-                    //============================================
-                    // Next Button
                     SignUpLoginHelper().getNextButton(
                       page: page,
                       context: context,
@@ -199,7 +207,9 @@ class _SignUpState extends State<SignUp> {
                       onTap: () async {
                         if (FormKey.currentState!.validate()) {
                           if (option == 1) {
+                              String? imageUrl = await _uploadImage(Email.text);
                             page = SecondFreelancerSignup(
+                              imageURL: imageUrl,
                               Email: Email.text,
                               country: CountryChoosed.text,
                               password: Password.text,
@@ -214,14 +224,13 @@ class _SignUpState extends State<SignUp> {
                                 page: page);
                           } else {
                             try {
-                              isLoading = true;
-                              setState(() {});
+                              setState(() => isLoading = true);
                               await SignUpLoginHelper.UserRegister(
                                   Email.text, Password.text);
-                              await addClient();
-                              page = ClientProfile(
-                                email: Email.text,
-                              );
+                              String? imageUrl = await _uploadImage(Email.text);
+                              // print(imageUrl);
+                              await addClient(imageUrl);
+                              page = ClientProfile(email: Email.text);
                               SignUpLoginHelper.showAwesomeDialog(
                                   context: context,
                                   title: 'Successfully registered',
@@ -264,12 +273,12 @@ class _SignUpState extends State<SignUp> {
                     ),
                     //==========================================================
                     SignUpLoginHelper().getCustomLink(
-                      onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Login()));
-                    },nextPageString:  "Login",
-                    firstWord:  "Do you Have an Account ?  "
-                    ),
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => Login()));
+                        },
+                        nextPageString: "Login",
+                        firstWord: "Do you Have an Account ?  "),
                     //==================================
                   ],
                 ),

@@ -10,7 +10,8 @@ class Client extends Person {
       required super.role,
       required super.country,
       required super.Email,
-      required super.rate});
+      required super.rate,
+      super.imageURL});
 
   factory Client.fromMap(Map<String, dynamic> data) {
     return Client(
@@ -18,7 +19,8 @@ class Client extends Person {
       role: data['role'],
       Email: data['email'],
       country: data['Country'],
-      rate: data['rate'] 
+      rate: data['rate'],
+      imageURL : data['image_url']
     );
   }
 }

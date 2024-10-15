@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -21,8 +23,10 @@ class ChatScreen extends StatefulWidget {
   final types.User user;
   final String conversationId; // A unique ID for the conversation.
   final String userRole;
-  const ChatScreen(
+  String? profileimageURL;
+  ChatScreen(
       {super.key,
+      this.profileimageURL,
       required this.user,
       required this.conversationId,
       required this.userRole});
@@ -52,73 +56,75 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _loadMessages() {
-  // Listen to the Firestore collection in real-time
-  conversations
-      .doc(widget.conversationId)
-      .collection('messages')
-      .orderBy('createdAt', descending: true)
-      .snapshots()
-      .listen((messageSnapshot) {
-    final messages = messageSnapshot.docs.map((doc) {
-      final data = doc.data() as Map<String, dynamic>;
+    // Listen to the Firestore collection in real-time
+    conversations
+        .doc(widget.conversationId)
+        .collection('messages')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .listen((messageSnapshot) {
+      final messages = messageSnapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
 
-      // Check if the message is an image, text, or file message
-      if (data.containsKey('imageUrl')) {
-        // Handle image message
-        return types.ImageMessage(
-          name: data['imageName'] ?? 'Unknown image name',
-          size: data['imageSize'] ?? 0,
-          author: types.User(
-            id: data['authorID'],
-            firstName: data['authorName'],
-          ),
-          id: doc.id,
-          uri: data['imageUrl'],
-          createdAt: data['createdAt'] ?? DateTime.now().millisecondsSinceEpoch,
-        );
-      } else if (data.containsKey('fileUrl')) {
-        // Handle file message
-        return types.FileMessage(
-          author: types.User(
-            id: data['authorID'],
-            firstName: data['authorName'],
-          ),
-          id: doc.id,
-          name: data['fileName'] ?? 'Unknown file name',
-          size: data['fileSize'] ?? 0,
-          uri: data['fileUrl'],
-          createdAt: data['createdAt'] ?? DateTime.now().millisecondsSinceEpoch,
-          metadata: {
-            'fileUrl': data['fileUrl'],
-            'fileName': data['fileName'],
-            'fileSize': data['fileSize'],
-          },
-        );
-      } else {
-        // Handle text message
-        return types.TextMessage(
-          author: types.User(
-            id: data['authorID'],
-            firstName: data['authorName'],
-          ),
-          id: doc.id,
-          text: data['text'],
-          createdAt: data['createdAt'] ?? DateTime.now().millisecondsSinceEpoch,
-        );
+        // Check if the message is an image, text, or file message
+        if (data.containsKey('imageUrl')) {
+          // Handle image message
+          return types.ImageMessage(
+            name: data['imageName'] ?? 'Unknown image name',
+            size: data['imageSize'] ?? 0,
+            author: types.User(
+              id: data['authorID'],
+              firstName: data['authorName'],
+            ),
+            id: doc.id,
+            uri: data['imageUrl'],
+            createdAt:
+                data['createdAt'] ?? DateTime.now().millisecondsSinceEpoch,
+          );
+        } else if (data.containsKey('fileUrl')) {
+          // Handle file message
+          return types.FileMessage(
+            author: types.User(
+              id: data['authorID'],
+              firstName: data['authorName'],
+            ),
+            id: doc.id,
+            name: data['fileName'] ?? 'Unknown file name',
+            size: data['fileSize'] ?? 0,
+            uri: data['fileUrl'],
+            createdAt:
+                data['createdAt'] ?? DateTime.now().millisecondsSinceEpoch,
+            metadata: {
+              'fileUrl': data['fileUrl'],
+              'fileName': data['fileName'],
+              'fileSize': data['fileSize'],
+            },
+          );
+        } else {
+          // Handle text message
+          return types.TextMessage(
+            author: types.User(
+              id: data['authorID'],
+              firstName: data['authorName'],
+            ),
+            id: doc.id,
+            text: data['text'],
+            createdAt:
+                data['createdAt'] ?? DateTime.now().millisecondsSinceEpoch,
+          );
+        }
+      }).toList();
+
+      if (mounted) {
+        setState(() {
+          _messages.clear();
+          _messages.addAll(messages);
+        });
       }
-    }).toList();
-
-    if (mounted) {
-      setState(() {
-        _messages.clear();
-        _messages.addAll(messages);
-      });
-    }
-  }).onError((error) {
-    debugPrint('Error fetching messages: $error');
-  });
-}
-
+    }).onError((error) {
+      debugPrint('Error fetching messages: $error');
+    });
+  }
 
   void _handleSendPressed(types.PartialText message) async {
     final textMessage = types.TextMessage(
@@ -129,7 +135,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
     // _addMessage(textMessage);
     await _sendMessageToFirestore(textMessage);
-
   }
 
   Future<void> _sendMessageToFirestore(types.Message message) async {
@@ -163,100 +168,104 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _handleImageSelection() async {
-  // Show a loading indicator dialog
-  showDialog(
-    context: context,
-    barrierDismissible: false, // Prevent dismissing the dialog when tapping outside
-    builder: (context) => const AlertDialog(
-      content: Row(
-        children: [
-          CircularProgressIndicator(),
-          SizedBox(width: 10),
-          Text("Sending..."),
-        ],
+    // Show a loading indicator dialog
+    showDialog(
+      context: context,
+      barrierDismissible:
+          false, // Prevent dismissing the dialog when tapping outside
+      builder: (context) => const AlertDialog(
+        content: Row(
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(width: 10),
+            Text("Sending..."),
+          ],
+        ),
       ),
-    ),
-  );
+    );
 
-  try {
-    if (kIsWeb) {
-      // Web-specific logic: Use FilePicker for web
-      final result = await FilePicker.platform.pickFiles(type: FileType.image);
+    try {
+      if (kIsWeb) {
+        // Web-specific logic: Use FilePicker for web
+        final result =
+            await FilePicker.platform.pickFiles(type: FileType.image);
 
-      if (result != null && result.files.single.bytes != null) {
-        debugPrint("Image selected on web: ${result.files.single.name}");
+        if (result != null && result.files.single.bytes != null) {
+          debugPrint("Image selected on web: ${result.files.single.name}");
 
-        // Upload image to Firebase Storage
-        final fileName = result.files.single.name;
-        final storageRef =
-            FirebaseStorage.instance.ref().child('chat_images/$fileName');
+          // Upload image to Firebase Storage
+          final fileName = result.files.single.name;
+          final storageRef =
+              FirebaseStorage.instance.ref().child('chat_images/$fileName');
 
-        final uploadTask = storageRef.putData(result.files.single.bytes!);
-        final taskSnapshot = await uploadTask.whenComplete(() {});
-        final downloadUrl = await taskSnapshot.ref.getDownloadURL();
+          final uploadTask = storageRef.putData(result.files.single.bytes!);
+          final taskSnapshot = await uploadTask.whenComplete(() {});
+          final downloadUrl = await taskSnapshot.ref.getDownloadURL();
 
-        // Create the ImageMessage with the current timestamp
-        final message = types.ImageMessage(
-          author: widget.user,
-          id: randomString(),
-          name: fileName,
-          size: result.files.single.size,
-          uri: downloadUrl,
-          createdAt: DateTime.now().millisecondsSinceEpoch, // Use the current timestamp
-          height: 300, // Set default height and width for web
-          width: 300,
-        );
+          // Create the ImageMessage with the current timestamp
+          final message = types.ImageMessage(
+            author: widget.user,
+            id: randomString(),
+            name: fileName,
+            size: result.files.single.size,
+            uri: downloadUrl,
+            createdAt: DateTime.now()
+                .millisecondsSinceEpoch, // Use the current timestamp
+            height: 300, // Set default height and width for web
+            width: 300,
+          );
 
-        await _sendMessageToFirestore(message);
-        // Close the modal bottom sheet
-        Navigator.pop(context);
+          await _sendMessageToFirestore(message);
+          // Close the modal bottom sheet
+          Navigator.pop(context);
+        } else {
+          debugPrint("No image selected or user canceled.");
+        }
       } else {
-        debugPrint("No image selected or user canceled.");
-      }
-    } else {
-      // Mobile-specific logic: Use ImagePicker for mobile platforms
-      final result = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 70,
-        maxHeight: 1440,
-      );
-
-      if (result != null) {
-        final bytes = await result.readAsBytes();
-        final fileName = result.name;
-        final storageRef =
-            FirebaseStorage.instance.ref().child('chat_images/$fileName');
-
-        final uploadTask = storageRef.putData(bytes);
-        final taskSnapshot = await uploadTask.whenComplete(() {});
-        final downloadUrl = await taskSnapshot.ref.getDownloadURL();
-
-        // Create the ImageMessage with the current timestamp
-        final image = await decodeImageFromList(bytes);
-
-        final message = types.ImageMessage(
-          author: widget.user,
-          id: randomString(),
-          name: fileName,
-          size: bytes.length,
-          uri: downloadUrl,
-          height: image.height.toDouble(),
-          width: image.width.toDouble(),
-          createdAt: DateTime.now().millisecondsSinceEpoch, // Use the current timestamp
+        // Mobile-specific logic: Use ImagePicker for mobile platforms
+        final result = await ImagePicker().pickImage(
+          source: ImageSource.gallery,
+          imageQuality: 70,
+          maxHeight: 1440,
         );
 
-        await _sendMessageToFirestore(message);
-        // Close the modal bottom sheet
-        Navigator.pop(context);
+        if (result != null) {
+          final bytes = await result.readAsBytes();
+          final fileName = result.name;
+          final storageRef =
+              FirebaseStorage.instance.ref().child('chat_images/$fileName');
+
+          final uploadTask = storageRef.putData(bytes);
+          final taskSnapshot = await uploadTask.whenComplete(() {});
+          final downloadUrl = await taskSnapshot.ref.getDownloadURL();
+
+          // Create the ImageMessage with the current timestamp
+          final image = await decodeImageFromList(bytes);
+
+          final message = types.ImageMessage(
+            author: widget.user,
+            id: randomString(),
+            name: fileName,
+            size: bytes.length,
+            uri: downloadUrl,
+            height: image.height.toDouble(),
+            width: image.width.toDouble(),
+            createdAt: DateTime.now()
+                .millisecondsSinceEpoch, // Use the current timestamp
+          );
+
+          await _sendMessageToFirestore(message);
+          // Close the modal bottom sheet
+          Navigator.pop(context);
+        }
       }
+    } catch (e) {
+      debugPrint("Error: $e");
+    } finally {
+      // Hide the loading dialog
+      Navigator.of(context).pop(); // Close the loading dialog
     }
-  } catch (e) {
-    debugPrint("Error: $e");
-  } finally {
-    // Hide the loading dialog
-    Navigator.of(context).pop(); // Close the loading dialog
   }
-}
 
 // void _handleMessageTap(BuildContext _, types.Message message) async {
 //     if (message is types.FileMessage) {
@@ -339,63 +348,63 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _handleFileSelection() async {
-  debugPrint("File selection initiated");
-  try {
-    final result = await FilePicker.platform.pickFiles(type: FileType.any);
+    debugPrint("File selection initiated");
+    try {
+      final result = await FilePicker.platform.pickFiles(type: FileType.any);
 
-    if (result != null) {
-      if (kIsWeb) {
-        // Web-specific logic
-        if (result.files.single.bytes != null) {
-          debugPrint("File picked on web: ${result.files.single.name}");
-          final message = await _uploadFileToStorage(result.files.single);
+      if (result != null) {
+        if (kIsWeb) {
+          // Web-specific logic
+          if (result.files.single.bytes != null) {
+            debugPrint("File picked on web: ${result.files.single.name}");
+            final message = await _uploadFileToStorage(result.files.single);
             await _sendMessageToFirestore(message);
-          // Store the bytes in a map or similar structure
-          // final message = types.FileMessage(
-          //   author: widget.user,
-          //   id: randomString(),
-          //   name: result.files.single.name,
-          //   size: result.files.single.size,
-          //   uri: 'web', // Use a placeholder for the web
-          //   metadata: {
-          //     'bytes': result.files.single.bytes,
-          //   },
-          // );
+            // Store the bytes in a map or similar structure
+            // final message = types.FileMessage(
+            //   author: widget.user,
+            //   id: randomString(),
+            //   name: result.files.single.name,
+            //   size: result.files.single.size,
+            //   uri: 'web', // Use a placeholder for the web
+            //   metadata: {
+            //     'bytes': result.files.single.bytes,
+            //   },
+            // );
 
-          // _addMessage(message); // Update to add the message
-          debugPrint("File message created on web with size: ${message.size} bytes");
+            // _addMessage(message); // Update to add the message
+            debugPrint(
+                "File message created on web with size: ${message.size} bytes");
+          } else {
+            debugPrint("File selection on web failed, no bytes available.");
+          }
         } else {
-          debugPrint("File selection on web failed, no bytes available.");
+          // Non-web logic
+          if (result.files.single.path != null) {
+            debugPrint("File picked on mobile: ${result.files.single.name}");
+            final message = await _uploadFileToStorage(result.files.single);
+            await _sendMessageToFirestore(message);
+            // final message = types.FileMessage(
+            //   author: widget.user,
+            //   id: randomString(),
+            //   name: result.files.single.name,
+            //   size: result.files.single.size,
+            //   uri: result.files.single.path!, // Use the file path
+            // );
+
+            // await _sendMessageToFirestore(message);
+            // _addMessage(message); // Update to add the message
+            debugPrint("File message created with path: ${message.uri}");
+          } else {
+            debugPrint("File path is null.");
+          }
         }
       } else {
-        // Non-web logic
-        if (result.files.single.path != null) {
-          debugPrint("File picked on mobile: ${result.files.single.name}");
-          final message = await _uploadFileToStorage(result.files.single);
-            await _sendMessageToFirestore(message);
-          // final message = types.FileMessage(
-          //   author: widget.user,
-          //   id: randomString(),
-          //   name: result.files.single.name,
-          //   size: result.files.single.size,
-          //   uri: result.files.single.path!, // Use the file path
-          // );
-
-        // await _sendMessageToFirestore(message);
-          // _addMessage(message); // Update to add the message
-          debugPrint("File message created with path: ${message.uri}");
-        } else {
-          debugPrint("File path is null.");
-        }
+        debugPrint("No file selected or user canceled.");
       }
-    } else {
-      debugPrint("No file selected or user canceled.");
+    } catch (e) {
+      debugPrint("Error during file selection: $e");
     }
-  } catch (e) {
-    debugPrint("Error during file selection: $e");
   }
-}
-
 
   void _handleAttachmentPressed() {
     showModalBottomSheet(
@@ -469,9 +478,16 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          const CircleAvatar(
-            backgroundImage: AssetImage('assets/profile.jpeg'),
-          ),
+          CircleAvatar(
+          backgroundColor: Colors.blueGrey,
+          radius: 25,
+          backgroundImage: widget.profileimageURL != null
+              ? NetworkImage(widget.profileimageURL.toString()) 
+              : null,
+          child:widget.profileimageURL == null
+              ? const Icon(Icons.person, color: Colors.white)
+              : null,
+        ),
           const SizedBox(
             width: 8,
           ),
@@ -563,61 +579,66 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildFileMessage(types.FileMessage message) {
-  final isCurrentUser = message.author.id == widget.user.id;
+    final isCurrentUser = message.author.id == widget.user.id;
 
-  if (kIsWeb && message.metadata != null && message.metadata!['bytes'] != null) {
-    // Web rendering logic for downloading the file
-    return Align(
-      alignment: isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        margin: const EdgeInsets.symmetric(vertical: 4),
-        decoration: BoxDecoration(
-          color: isCurrentUser ? Colors.green : Colors.grey[300],
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '${message.name}',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: () {
-                downloadFileFromBytes(message.metadata!['bytes'], message.name);
-              },
-              child: const Text(
-                "Download",
-                style: TextStyle(color: Colors.green),
+    if (kIsWeb &&
+        message.metadata != null &&
+        message.metadata!['bytes'] != null) {
+      // Web rendering logic for downloading the file
+      return Align(
+        alignment: isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          margin: const EdgeInsets.symmetric(vertical: 4),
+          decoration: BoxDecoration(
+            color: isCurrentUser ? Colors.green : Colors.grey[300],
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${message.name}',
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-            ),
-          ],
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: () {
+                  downloadFileFromBytes(
+                      message.metadata!['bytes'], message.name);
+                },
+                child: const Text(
+                  "Download",
+                  style: TextStyle(color: Colors.green),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
-  } else {
-    return Align(
-      alignment: isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        margin: const EdgeInsets.symmetric(vertical: 4),
-        decoration: BoxDecoration(
-          color: isCurrentUser ? Colors.green : Colors.grey[300],
-          borderRadius: BorderRadius.circular(8),
+      );
+    } else {
+      return Align(
+        alignment: isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          margin: const EdgeInsets.symmetric(vertical: 4),
+          decoration: BoxDecoration(
+            color: isCurrentUser ? Colors.green : Colors.grey[300],
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            message.name,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.white),
+          ),
         ),
-        child: Text(
-          message.name,
-          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-      ),
-    );
+      );
+    }
   }
-}
 
-Future<types.FileMessage> _uploadFileToStorage(PlatformFile file) async {
-    final storageRef = FirebaseStorage.instance.ref().child('chat_files/${file.name}');
+  Future<types.FileMessage> _uploadFileToStorage(PlatformFile file) async {
+    final storageRef =
+        FirebaseStorage.instance.ref().child('chat_files/${file.name}');
     await storageRef.putData(file.bytes!);
     final downloadUrl = await storageRef.getDownloadURL();
 
@@ -629,7 +650,6 @@ Future<types.FileMessage> _uploadFileToStorage(PlatformFile file) async {
       uri: downloadUrl,
     );
   }
-
 
   Widget buildImageMessage(types.ImageMessage message) {
     return Container(

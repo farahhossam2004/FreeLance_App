@@ -79,6 +79,7 @@ class _BookmarkedJobsPageState extends State<BookmarkedJobsPage> {
           savedJobs = jobsSnapshot.docs.map((doc) {
             final data = doc.data() as Map<String, dynamic>;
             return JobModel(
+              clientImage: data['clientImageURL'],
               id: doc.id, // Firestore document ID
               title: data['title'] ?? '',
               description: data['description'] ?? '',

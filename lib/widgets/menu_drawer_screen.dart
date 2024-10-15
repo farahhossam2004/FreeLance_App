@@ -17,7 +17,9 @@ class MenuDrawerScreen extends StatelessWidget {
     final userProvider = Provider.of<UserProvider>(context);
     Client? clientData = userProvider.client;
     FreeLancer? freeLancerData = userProvider.freelancer;
-
+    final profileImageURL = userProvider.client != null
+        ? userProvider.client!.imageURL.toString()
+        : userProvider.freelancer!.imageURL;
     return Drawer(
       child: Column(
         children: [
@@ -28,9 +30,16 @@ class MenuDrawerScreen extends StatelessWidget {
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             accountEmail: null,
-            currentAccountPicture: const CircleAvatar(
-              backgroundImage: AssetImage('assets/profile.jpeg'),
-            ),
+            currentAccountPicture: CircleAvatar(
+                backgroundColor: Colors.blueGrey,
+                radius: 25,
+                backgroundImage: profileImageURL != null
+                    ? NetworkImage(profileImageURL)
+                    : null,
+                child: profileImageURL == null
+                    ? const Icon(Icons.person, color: Colors.white)
+                    : null,
+              ),
           ),
           ListTile(
             leading: const Icon(Icons.person),

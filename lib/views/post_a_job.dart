@@ -183,6 +183,7 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
     if (formKey.currentState?.validate() ?? false) {
       // Collect all data
       final jobData = JobModel(
+          clientImage: clientProvider.client!.imageURL,
           id: '',
           title: titleController.text,
           description: descriptionController.text,
@@ -197,6 +198,7 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
 
       try {
         await FirebaseFirestore.instance.collection('Jobs-Posts').add({
+          'clientImageURL' : clientProvider.client!.imageURL,
           'title': titleController.text,
           'description': descriptionController.text,
           'budget': budgetController.text,

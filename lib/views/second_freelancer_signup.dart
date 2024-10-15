@@ -12,15 +12,18 @@ import 'package:freelance_app/widgets/profile_helpers.dart';
 import 'package:freelance_app/widgets/text_field.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:freelance_app/services/array_data_for_test.dart';
+
 class SecondFreelancerSignup extends StatefulWidget {
   final String first_name;
   final String second_name;
   final String Email;
   final String password;
   final String country;
+  final String? imageURL;
 
   SecondFreelancerSignup(
       {super.key,
+      this.imageURL,
       required this.Email,
       required this.first_name,
       required this.country,
@@ -45,6 +48,7 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
   Future<void> addFreeLancer() async {
     try {
       await clients.doc(widget.Email).set({
+        'image_url': widget.imageURL,
         'full_name': "${widget.first_name} ${widget.second_name}",
         'email': widget.Email,
         'Country': widget.country,
@@ -54,7 +58,7 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
         'Languages': selected_languages,
         'About me': aboutme.text,
         'Price': currentSliderValue,
-        'jop_title':Selected_joptitle
+        'jop_title': Selected_joptitle
       });
     } catch (error) {
       SignUpLoginHelper.showAwesomeDialog(
@@ -67,7 +71,7 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
 
   List<String> selected_skills = [];
   List<String> selected_languages = [];
-  List<String> Selected_joptitle=[];
+  List<String> Selected_joptitle = [];
   //========================================================
 
   @override
@@ -236,7 +240,7 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
                             if (selected_languages.isEmpty ||
                                 selected_skills.isEmpty ||
                                 currentSliderValue == 0 ||
-                                Selected_joptitle.isEmpty||
+                                Selected_joptitle.isEmpty ||
                                 aboutme.text.isEmpty) {
                               SignUpLoginHelper.showAwesomeDialog(
                                   context: context,

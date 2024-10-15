@@ -5,14 +5,21 @@ class ProfileHelpers {
       {required String name,
       required String role,
       double? rate,
+      String? profileImageURL,
       }) {
         
     return Row(
       children: [
         //======================================================
-        const CircleAvatar(
+        CircleAvatar(
           backgroundColor: Colors.blueGrey,
           radius: 25,
+          backgroundImage: profileImageURL != null
+              ? NetworkImage(profileImageURL) 
+              : null,
+          child: profileImageURL == null
+              ? const Icon(Icons.person, color: Colors.white)
+              : null,
         ),
         //=======================================================
         const SizedBox(

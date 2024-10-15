@@ -73,6 +73,7 @@ class _FreeLancerProfileState extends State<FreeLancerProfile> {
                 children: [
                   //==========================================
                   ProfileHelpers().getTopProfile(
+                    profileImageURL: _freeLancer!.imageURL,
                     name: _freeLancer!.personName,
                     role: _freeLancer!.getfreeLancerJopTitle[0],
                     rate: PersonHelpers.CalculatePersonRate(

@@ -14,17 +14,18 @@ class JobPost extends StatefulWidget {
   State<JobPost> createState() => _JobPostState();
 }
 
-
 class _JobPostState extends State<JobPost> {
-   bool isSaved = false; // Track whether the post is saved
+  bool isSaved = false; // Track whether the post is saved
 
   @override
   void initState() {
     super.initState();
     _checkIfSaved(); // Check if the post is saved when the widget is initialized
   }
+
   @override
   Widget build(BuildContext context) {
+    // print(widget.job.clientImage);
     return Card(
       elevation: 4,
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
@@ -44,11 +45,18 @@ class _JobPostState extends State<JobPost> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                OtherClientProfile(email: widget.job.clientEmail)));
+                            builder: (context) => OtherClientProfile(
+                                email: widget.job.clientEmail)));
                   },
-                  child: const CircleAvatar(
-                    backgroundImage: AssetImage('assets/profile.jpeg'),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.blueGrey,
+                    radius: 25,
+                    backgroundImage: widget.job.clientImage != null
+                        ? NetworkImage(widget.job.clientImage.toString())
+                        : null,
+                    child: widget.job.clientImage == null
+                        ? const Icon(Icons.person, color: Colors.white)
+                        : null,
                   ),
                 ),
                 const SizedBox(
@@ -107,10 +115,16 @@ class _JobPostState extends State<JobPost> {
                 ),
                 IconButton(
                   icon: Icon(
-                    isSaved ? Icons.bookmark : Icons.bookmark_add_outlined, // Change icon based on save status
-                    color: isSaved ? const Color.fromARGB(255, 72, 82, 65) : Colors.grey,
+                    isSaved
+                        ? Icons.bookmark
+                        : Icons
+                            .bookmark_add_outlined, // Change icon based on save status
+                    color: isSaved
+                        ? const Color.fromARGB(255, 72, 82, 65)
+                        : Colors.grey,
                   ),
-                  onPressed: _toggleSavePost,),
+                  onPressed: _toggleSavePost,
+                ),
               ],
             ),
             const SizedBox(height: 12),
@@ -261,7 +275,7 @@ class _JobPostState extends State<JobPost> {
       } else {
         // Save the post
         await FirebaseFirestore.instance.collection('Saved-Posts').add({
-          'postId': widget.job.id, 
+          'postId': widget.job.id,
           'freelancerEmail': freelancerEmail,
           'savedAt': Timestamp.now(),
         });

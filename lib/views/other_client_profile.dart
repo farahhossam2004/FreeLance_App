@@ -50,6 +50,7 @@ class OtherClientProfile extends StatelessWidget {
                         children: [
                           // Top Profile section
                           ProfileHelpers().getTopProfile(
+                              profileImageURL: data['image_url'],
                               name: data['full_name'],
                               role: data['role'],
                               rate: 0.0
@@ -101,11 +102,11 @@ class OtherClientProfile extends StatelessWidget {
                               context: context,
                               onTap: () async {
                                 await ChatsInboxScreen.navigateToChatScreen(
+                                    imageURL: data['image_url'],
                                     context,
                                     currentUserEmail!, 
                                     data['email'], 
-                                    data[
-                                        'full_name'] 
+                                    data['full_name'] 
                                     );
                               },
 
