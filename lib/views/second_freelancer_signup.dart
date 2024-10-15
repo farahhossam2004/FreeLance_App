@@ -4,6 +4,8 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:freelance_app/views/home.dart';
+import 'package:freelance_app/views/login.dart';
 import 'package:freelance_app/views/start.dart';
 import 'package:freelance_app/widgets/custom_multiple_dropdownlist.dart';
 import 'package:freelance_app/widgets/customslider.dart';
@@ -273,7 +275,8 @@ class _SecondFreelancerSignupState extends State<SecondFreelancerSignup> {
                                       title: 'Successfully registered',
                                       description: 'Welcome, Good Luck!',
                                       type: DialogType.success,
-                                      page: const Start());
+                                      page:  Login()
+                                      );
                                 } on FirebaseAuthException catch (e) {
                                   if (e.code == 'weak-password') {
                                     SignUpLoginHelper.showAwesomeDialog(

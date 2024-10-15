@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:freelance_app/services/array_data_for_test.dart';
 import 'package:freelance_app/views/client_profile.dart';
+import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/views/login.dart';
 import 'package:freelance_app/views/second_freelancer_signup.dart';
 import 'package:freelance_app/views/start.dart';
@@ -259,13 +260,14 @@ class _SignUpState extends State<SignUp> {
                               String? imageUrl = await _uploadImage(Email.text);
                               // print(imageUrl);
                               await addClient(imageUrl);
-                              page = ClientProfile(email: Email.text);
+                              
                               SignUpLoginHelper.showAwesomeDialog(
                                   context: context,
                                   title: 'Successfully registered',
                                   description: 'Welcome, Good Luck!',
                                   type: DialogType.success,
-                                  page: page);
+                                  page: Login()
+                                  );
                             } on FirebaseAuthException catch (e) {
                               if (e.code == 'weak-password') {
                                 SignUpLoginHelper.showAwesomeDialog(

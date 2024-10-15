@@ -4,8 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:freelance_app/services/user_provider.dart';
-import 'package:freelance_app/views/client_profile.dart';
-import 'package:freelance_app/views/free_lancer.dart';
+import 'package:freelance_app/views/home.dart';
 import 'package:freelance_app/views/start.dart';
 import 'package:freelance_app/widgets/login_signup_helper.dart';
 import 'package:freelance_app/widgets/text_field.dart';
@@ -180,9 +179,8 @@ class _LoginState extends State<Login> {
           title: 'Succussefully logged in',
           description: 'Welcome back!',
           type: DialogType.success,
-          page: clientProvider.client != null
-              ? ClientProfile(email: Email.text)
-              : FreeLancerProfile(email: Email.text));
+          page: const HomeScreen()
+          );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         SignUpLoginHelper.showAwesomeDialog(

@@ -45,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final profileImageURL = userProvider.client != null
         ? userProvider.client!.imageURL.toString()
         : userProvider.freelancer!.imageURL;
+    
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
