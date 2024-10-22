@@ -18,8 +18,10 @@ class MenuDrawerScreen extends StatelessWidget {
     Client? clientData = userProvider.client;
     FreeLancer? freeLancerData = userProvider.freelancer;
     final profileImageURL = userProvider.client != null
-        ? userProvider.client!.imageURL.toString()
-        : userProvider.freelancer!.imageURL.toString();
+    ? userProvider.client!.imageURL.toString()
+    : userProvider.freelancer != null
+        ? userProvider.freelancer!.imageURL.toString()
+        : ' ';
     return Drawer(
       child: Column(
         children: [

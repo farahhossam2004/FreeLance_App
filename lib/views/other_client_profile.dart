@@ -34,6 +34,13 @@ class OtherClientProfile extends StatelessWidget {
             return const Text("client doesn't exist");
           }
 
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
           if (snapshot.connectionState == ConnectionState.done) {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;

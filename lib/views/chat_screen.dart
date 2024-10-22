@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:freelance_app/views/other_client_profile.dart';
 import 'package:freelance_app/widgets/custom_message_bubble.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
@@ -571,16 +572,21 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          CircleAvatar(
-          backgroundColor: Colors.blueGrey,
-          radius: 25,
-          backgroundImage: widget.profileimageURL != null
-              ? NetworkImage(widget.profileimageURL.toString()) 
-              : null,
-          child:widget.profileimageURL == null
-              ? const Icon(Icons.person, color: Colors.white)
-              : null,
-        ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context )=> OtherClientProfile(email: widget.user.id) ));
+            },
+            child: CircleAvatar(
+            backgroundColor: Colors.blueGrey,
+            radius: 25,
+            backgroundImage: widget.profileimageURL != null
+                ? NetworkImage(widget.profileimageURL.toString()) 
+                : null,
+            child:widget.profileimageURL == null
+                ? const Icon(Icons.person, color: Colors.white)
+                : null,
+                    ),
+          ),
           const SizedBox(
             width: 8,
           ),

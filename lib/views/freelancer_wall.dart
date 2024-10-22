@@ -20,7 +20,7 @@ class _FreelancerWallState extends State<FreelancerWall> {
   final TextEditingController _searchController = TextEditingController();
   String searchQuery = '';
   List<JobModel> jobs = [];
-
+  bool isLoading = true;
   void initState() {
     super.initState();
     fetchJobs(); // Fetch jobs when the widget is initialized
@@ -51,7 +51,9 @@ class _FreelancerWallState extends State<FreelancerWall> {
       }).toList();
 
       if (mounted) {
-        setState(() {});
+        setState(() {
+          isLoading = false; 
+        });
       } // Update the state to reflect the fetched jobs
     } catch (e) {
       print("Error fetching jobs: $e");
@@ -78,7 +80,12 @@ class _FreelancerWallState extends State<FreelancerWall> {
         ),
         const SizedBox(height: 5),
         Expanded(
-          child: SingleChildScrollView(
+          child: isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(), // Show loading indicator
+                )
+              :
+          SingleChildScrollView(
             child: Column(
               children: [
                 // mainRole == 'Client'

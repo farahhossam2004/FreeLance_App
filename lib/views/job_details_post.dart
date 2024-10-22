@@ -39,37 +39,37 @@ class JobDetailsPost extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
-                flex: 1,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(vertical: 12.0),
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Send a Proposal',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 12,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Icon(
-                        Icons.send,
-                        color: Colors.white,
-                        size: 12,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              // Flexible(
+              //   flex: 1,
+              //   child: ElevatedButton(
+              //     onPressed: () {},
+              //     style: ElevatedButton.styleFrom(
+              //       backgroundColor: Colors.green,
+              //       padding: const EdgeInsets.symmetric(vertical: 12.0),
+              //     ),
+              //     // child: const Row(
+              //     //   mainAxisAlignment: MainAxisAlignment.center,
+              //     //   children: [
+              //     //     Text(
+              //     //       'Send a Proposal',
+              //     //       style: TextStyle(
+              //     //         fontWeight: FontWeight.bold,
+              //     //         color: Colors.white,
+              //     //         fontSize: 12,
+              //     //       ),
+              //     //     ),
+              //     //     SizedBox(
+              //     //       width: 5,
+              //     //     ),
+              //     //     Icon(
+              //     //       Icons.send,
+              //     //       color: Colors.white,
+              //     //       size: 12,
+              //     //     ),
+              //     //   ],
+              //     // ),
+              //   ),
+              // ),
               const SizedBox(width: 10),
               Flexible(
                 flex: 1,
@@ -84,7 +84,7 @@ class JobDetailsPost extends StatelessWidget {
                                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 246, 242, 242),
+                    backgroundColor: Colors.green,
                     padding: const EdgeInsets.symmetric(vertical: 12.0),
                   ),
                   child: const Row(
@@ -94,17 +94,17 @@ class JobDetailsPost extends StatelessWidget {
                         'Contact the client',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.green,
-                          fontSize: 12,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontSize: 15,
                         ),
                       ),
                       SizedBox(
-                        width: 5,
+                        width: 8,
                       ),
                       Icon(
-                        Icons.contact_page,
-                        color: Colors.green,
-                        size: 12,
+                        Icons.chat_bubble_outline,
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        size: 16,
                       ),
                     ],
                   ),

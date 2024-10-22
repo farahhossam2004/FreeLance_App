@@ -21,7 +21,7 @@ class FreelancerInServiceCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
               color: Color.fromARGB(255, 209, 126, 1)),
         ),
-        subtitle: Text(about),
+        subtitle: Text(about,maxLines: 2, overflow: TextOverflow.ellipsis,),
         trailing: const Icon(
           Icons.arrow_forward_ios,
           color: Color.fromARGB(255, 209, 126, 1),
